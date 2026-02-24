@@ -285,10 +285,6 @@
         }
         .status-paid { background: #E3FCEF; color: #00B894; }
         .status-pending { background: #FFF3CD; color: #856404; }
-        /* NEW: Payment badges */
-        .payment-cash { background: #E3FCEF; color: #00B894; }
-        .payment-card { background: #E0F2FE; color: #0369A1; }
-        .payment-paypal { background: #F3E8FF; color: #6B21A8; }
         /* --- Inputs --- */
         .search-input {
             width: 100%;
@@ -478,20 +474,6 @@
                         <button class="btn-pill" id="endOfDayBtn" style="width:auto;padding:10px 20px;font-size:13px;">📋 End of Day PDF</button>
                     </div>
                 </div>
-                
-                <!-- DATE FILTERS WITH CALENDAR (added only here) -->
-                <div style="display:flex;gap:15px;margin-bottom:25px;flex-wrap:wrap;align-items:end;">
-                    <div>
-                        <label style="display:block;font-size:13px;font-weight:600;color:var(--muted-text);margin-bottom:6px;">From Date</label>
-                        <input type="date" id="historyFrom" style="padding:11px 16px;border-radius:14px;border:1.5px solid #F1F3F5;background:#F8F9FA;width:180px;">
-                    </div>
-                    <div>
-                        <label style="display:block;font-size:13px;font-weight:600;color:var(--muted-text);margin-bottom:6px;">To Date</label>
-                        <input type="date" id="historyTo" style="padding:11px 16px;border-radius:14px;border:1.5px solid #F1F3F5;background:#F8F9FA;width:180px;">
-                    </div>
-                    <button onclick="applyHistoryDateFilter()" class="btn-pill" style="width:auto;padding:11px 28px;">Apply Filter</button>
-                    <button onclick="clearHistoryDateFilter()" class="btn-pill" style="width:auto;padding:11px 28px;background:#e9ecef;color:#333;">Clear</button>
-                </div>
                
                 <!-- Collapsible Today Section -->
                 <div class="collapsible-section" style="margin-bottom: 30px;">
@@ -510,7 +492,6 @@
                                         <th>Items</th>
                                         <th>Customer</th>
                                         <th>Total</th>
-                                        <th>Payment</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -536,7 +517,6 @@
                                         <th>Items</th>
                                         <th>Customer</th>
                                         <th>Total</th>
-                                        <th>Payment</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -564,7 +544,6 @@
                                 <th>Cell</th>
                                 <th>Items</th>
                                 <th>Total</th>
-                                <th>Payment</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -627,12 +606,11 @@
         const db = getDatabase(app);
         const inventoryRef = ref(db, 'inventory');
         const salesRef = ref(db, 'sales');
+        const kioskRef = ref(db, 'kioskOrders'); // Separate node for kiosk to avoid mixing with POS
         let inventoryData = {};
         let cart = [];
-        let currentCashOrder = null;
-        let selectedPaymentType = 'Cash'; // default for POS
-
-        // Clock
+        let currentCashOrder = null; // Store temp order for cash modal
+        // --- Clock ---
         function updateTime() {
             const now = new Date();
             document.getElementById('clock').innerText = now.toLocaleTimeString('en-ZA', {hour:'2-digit', minute:'2-digit'});
@@ -640,27 +618,29 @@
         }
         setInterval(updateTime, 1000);
         updateTime();
-
-        // Navigation
+        // --- Navigation ---
         window.navigate = (targetId) => {
+            // Update Nav UI
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.querySelector(`.nav-item[data-target="${targetId}"]`).classList.add('active');
+           
+            // Update View
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById(targetId).classList.add('active');
+            // Close mobile menu
             document.getElementById('sidebar').classList.remove('open');
+            // Refresh data
             if(targetId === 'view-history') renderSalesHistory();
             if(targetId === 'view-kiosk') renderKioskOrders();
         };
         window.toggleMenu = () => {
             document.getElementById('sidebar').classList.toggle('open');
         };
-
-        // Inventory
+        // --- Inventory & POS ---
         onValue(inventoryRef, (snapshot) => {
             inventoryData = snapshot.val() || {};
             renderProductGrid();
         });
-
         function renderProductGrid(filter = '') {
             const container = document.getElementById('productGrid');
             container.innerHTML = '';
@@ -668,7 +648,8 @@
             Object.keys(inventoryData).forEach(key => {
                 const item = inventoryData[key];
                 if (filter && !item.name.toLowerCase().includes(filter.toLowerCase())) return;
-                if (item.qty <= 0) return;
+                if (item.qty <= 0) return; // Out of stock
+               
                 const card = document.createElement('div');
                 card.className = 'product-card';
                 card.style.animationDelay = `${delay}ms`;
@@ -686,31 +667,36 @@
                 delay += 50;
             });
         }
-
         document.getElementById('productSearch').addEventListener('input', (e) => renderProductGrid(e.target.value));
-
         window.addToCart = (key) => {
             const item = inventoryData[key];
             const existing = cart.find(i => i.key === key);
-            if (existing) existing.qty++; else cart.push({...item, key, qty: 1});
+            if (existing) {
+                existing.qty++;
+            } else {
+                cart.push({...item, key, qty: 1});
+            }
             renderCart();
             showToast(`Added ${item.name}`);
         };
-
         window.removeFromCart = (index) => {
             cart.splice(index, 1);
             renderCart();
         };
-
         function renderCart() {
             const container = document.getElementById('cartItems');
             const countBadge = document.getElementById('cartCount');
             const totalDisplay = document.getElementById('cartTotal');
+           
             container.innerHTML = '';
             let total = 0;
             let itemCount = 0;
             if (cart.length === 0) {
-                container.innerHTML = `<div style="text-align:center; padding: 40px 20px; color: var(--muted-text);"><p>Cart is empty</p><p style="font-size: 12px; margin-top: 5px;">Add items to start</p></div>`;
+                container.innerHTML = `
+                    <div style="text-align:center; padding: 40px 20px; color: var(--muted-text);">
+                        <p>Cart is empty</p>
+                        <p style="font-size: 12px; margin-top: 5px;">Add items to start</p>
+                    </div>`;
             } else {
                 cart.forEach((item, index) => {
                     const itemTotal = parseFloat(item.price) * item.qty;
@@ -734,59 +720,48 @@
             countBadge.innerText = itemCount;
             totalDisplay.innerText = `R ${total.toFixed(2)}`;
         }
-
-        // Checkout Modal with Payment Selection
+        // --- Checkout Flow ---
         document.getElementById('checkoutBtn').addEventListener('click', () => {
             if (!cart.length) return showToast('Cart is empty');
+           
             let html = `<div style="margin-bottom:20px;">`;
             let total = 0;
+           
             cart.forEach(item => {
                 const t = parseFloat(item.price) * item.qty;
                 total += t;
-                html += `<div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #f0f0f0;"><span>${item.name} <small style="color:#666">×${item.qty}</small></span><span style="font-weight:700">R ${t.toFixed(2)}</span></div>`;
+                html += `
+                    <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #f0f0f0;">
+                        <span>${item.name} <small style="color:#666">×${item.qty}</small></span>
+                        <span style="font-weight:700">R ${t.toFixed(2)}</span>
+                    </div>
+                `;
             });
             html += `</div>`;
-            html += `<div style="display:flex; justify-content:space-between; font-size:20px; font-weight:800; margin-top:10px;"><span>Total</span><span>R ${total.toFixed(2)}</span></div>`;
-            
-            // Payment selection
             html += `
-                <div style="margin-top:25px;">
-                    <label style="display:block;font-weight:600;margin-bottom:10px;">Payment Method</label>
-                    <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                        <button onclick="selectPaymentType(this,'Cash')" class="btn-pill" style="flex:1;background:#E3FCEF;color:#00B894;">Cash</button>
-                        <button onclick="selectPaymentType(this,'Card')" class="btn-pill" style="flex:1;background:#E0F2FE;color:#0369A1;">Card</button>
-                        <button onclick="selectPaymentType(this,'PayPal')" class="btn-pill" style="flex:1;background:#F3E8FF;color:#6B21A8;">PayPal</button>
-                    </div>
+                <div style="display:flex; justify-content:space-between; font-size:20px; font-weight:800; margin-top:10px;">
+                    <span>Total</span>
+                    <span>R ${total.toFixed(2)}</span>
                 </div>
             `;
+           
             document.getElementById('checkoutModalBody').innerHTML = html;
             document.getElementById('checkoutModal').style.display = 'flex';
-            selectedPaymentType = 'Cash'; // default
         });
-
-        window.selectPaymentType = (btn, type) => {
-            document.querySelectorAll('#checkoutModal button').forEach(b => {
-                if (b.onclick && b.onclick.toString().includes('selectPaymentType')) {
-                    b.style.background = b.style.color ? '' : '#F0F0F0';
-                    b.style.color = b.style.color ? '' : '#333';
-                }
-            });
-            btn.style.background = type === 'Cash' ? '#E3FCEF' : type === 'Card' ? '#E0F2FE' : '#F3E8FF';
-            btn.style.color = type === 'Cash' ? '#00B894' : type === 'Card' ? '#0369A1' : '#6B21A8';
-            selectedPaymentType = type;
-        };
-
         window.closeModal = (id) => {
             document.getElementById(id).style.display = 'none';
         };
-
         window.confirmSale = async () => {
             const now = Date.now();
             const orderId = "POS-" + String(now).slice(-6);
+           
             try {
+                // Process each item in cart
                 for (const item of cart) {
+                    // 1. Update Inventory
                     const newQty = Math.max(0, inventoryData[item.key].qty - item.qty);
                     await update(ref(db, `inventory/${item.key}`), { qty: newQty });
+                    // 2. Record Sale
                     await push(salesRef, {
                         name: item.name,
                         price: item.price,
@@ -795,80 +770,48 @@
                         timestamp: now,
                         customer: "Walk-in",
                         orderNumber: orderId,
-                        status: "paid",
-                        paymentType: selectedPaymentType   // <-- payment type saved
+                        status: "paid"
                     });
                 }
-                showToast(`✅ Sale Complete: ${orderId} (${selectedPaymentType})`);
+               
+                showToast(`✅ Sale Complete: ${orderId}`);
                 cart = [];
                 renderCart();
                 closeModal('checkoutModal');
-                renderSalesHistory();
             } catch (e) {
+                console.error(e);
                 showToast("❌ Error processing sale");
             }
         };
-
-        // Sales History with date filter
-        let historyFilterFrom = null;
-        let historyFilterTo = null;
-
+        // --- Sales History ---
         function renderSalesHistory() {
             onValue(salesRef, (snapshot) => {
                 const data = snapshot.val() || {};
-                let allSales = Object.values(data).sort((a,b) => b.timestamp - a.timestamp);
-
-                // Apply date filter
-                if (historyFilterFrom || historyFilterTo) {
-                    allSales = allSales.filter(s => {
-                        if (historyFilterFrom && s.timestamp < historyFilterFrom) return false;
-                        if (historyFilterTo && s.timestamp > historyFilterTo) return false;
-                        return true;
-                    });
-                }
-
+                const allSales = Object.values(data).sort((a,b) => b.timestamp - a.timestamp);
+               
                 const today = new Date();
                 today.setHours(0,0,0,0);
+               
                 const todaySales = allSales.filter(s => s.timestamp >= today.getTime());
-
+               
                 renderTable(todaySales, 'todaySalesBody', true);
                 renderTable(allSales, 'allSalesBody', false);
             }, {onlyOnce:true});
         }
-
-        window.applyHistoryDateFilter = () => {
-            const fromStr = document.getElementById('historyFrom').value;
-            const toStr = document.getElementById('historyTo').value;
-            historyFilterFrom = fromStr ? new Date(fromStr).getTime() : null;
-            historyFilterTo = toStr ? new Date(toStr).getTime() + 86399999 : null;
-            renderSalesHistory();
-        };
-
-        window.clearHistoryDateFilter = () => {
-            document.getElementById('historyFrom').value = '';
-            document.getElementById('historyTo').value = '';
-            historyFilterFrom = null;
-            historyFilterTo = null;
-            renderSalesHistory();
-        };
-
         function renderTable(sales, elementId, isToday) {
             const tbody = document.getElementById(elementId);
             tbody.innerHTML = '';
+           
             if(sales.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:20px; color:#999;">No sales found</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:20px; color:#999;">No sales found</td></tr>`;
                 return;
             }
             sales.forEach(sale => {
                 const orderNum = sale.orderNumber || "ORD-" + String(sale.timestamp).slice(-6);
-                const dateStr = isToday ? new Date(sale.timestamp).toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'}) : new Date(sale.timestamp).toLocaleDateString('en-ZA');
-                const payment = sale.paymentType || 'Cash';
-                let paymentHTML = '';
-                if(payment === 'Cash') paymentHTML = `<span class="status-badge payment-cash">Cash</span>`;
-                else if(payment === 'Card') paymentHTML = `<span class="status-badge payment-card">Card</span>`;
-                else if(payment === 'PayPal') paymentHTML = `<span class="status-badge payment-paypal">PayPal</span>`;
-                else paymentHTML = `<span class="status-badge payment-cash">Cash</span>`;
-
+                const dateStr = isToday
+                    ? new Date(sale.timestamp).toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'})
+                    : new Date(sale.timestamp).toLocaleDateString('en-ZA');
+               
                 const row = document.createElement('tr');
                 row.className = 'item-row';
                 row.innerHTML = `
@@ -877,17 +820,14 @@
                     <td><strong>${sale.name}</strong></td>
                     <td>${sale.customer || 'Walk-in'}</td>
                     <td style="font-weight:800;">R ${parseFloat(sale.revenue).toFixed(2)}</td>
-                    <td>${paymentHTML}</td>
                     <td><span class="status-badge ${sale.status === 'paid' ? 'status-paid' : 'status-pending'}">${sale.status || 'Completed'}</span></td>
                 `;
                 tbody.appendChild(row);
             });
         }
-
-        // Search fully functional
+        // Filter Listeners
         document.getElementById('todaySearch').addEventListener('input', (e) => filterTable('todaySalesBody', e.target.value));
         document.getElementById('allTimeSearch').addEventListener('input', (e) => filterTable('allSalesBody', e.target.value));
-
         function filterTable(tbodyId, query) {
             const rows = document.getElementById(tbodyId).getElementsByTagName('tr');
             for (let row of rows) {
@@ -895,26 +835,28 @@
                 row.style.display = text.includes(query.toLowerCase()) ? '' : 'none';
             }
         }
-
-        // Kiosk Orders
-        document.getElementById('kioskSearch').addEventListener('input', (e) => renderKioskOrders(e.target.value));
-
-        function renderKioskOrders(filter = '') {
+        // Collapsible Logic
+        window.toggleCollapse = (header) => {
+            header.classList.toggle('active');
+            const content = header.nextElementSibling;
+            content.classList.toggle('open');
+        };
+        // --- Kiosk Orders (Cash Handling) ---
+        // Note: In a real app, Kiosk orders would be written to a separate 'kioskOrders' node
+        // with status 'pending_cash'. Here we simulate reading from salesRef where customer != Walk-in and status != paid
+       
+        function renderKioskOrders() {
+            // Ideally fetch from kioskRef, but simulating with salesRef for this demo structure
             onValue(salesRef, (snapshot) => {
                 const data = snapshot.val() || {};
-                let orders = Object.values(data)
+                const orders = Object.values(data)
                     .filter(s => s.customer !== "Walk-in" && s.status !== 'paid')
                     .sort((a,b) => b.timestamp - a.timestamp);
-                if (filter) {
-                    orders = orders.filter(s => 
-                        (s.orderNumber || '').toLowerCase().includes(filter.toLowerCase()) ||
-                        (s.customer || '').toLowerCase().includes(filter.toLowerCase())
-                    );
-                }
+               
                 const tbody = document.getElementById('kioskBody');
                 tbody.innerHTML = '';
                 if(orders.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:#999;">No pending kiosk orders</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:30px; color:#999;">No pending kiosk orders</td></tr>`;
                     return;
                 }
                 orders.forEach(order => {
@@ -928,21 +870,21 @@
                         <td>${order.cell || '-'}</td>
                         <td>${order.name} ×${order.qty}</td>
                         <td style="font-weight:800;color:#00B894;">R ${parseFloat(order.revenue).toFixed(2)}</td>
-                        <td><span class="status-badge payment-cash">Cash (Awaiting)</span></td>
                         <td><button class="btn-pill btn-secondary" style="width:auto;padding:8px 16px;font-size:12px;" onclick="openCashModal('${order.timestamp}')">Collect Cash</button></td>
                     `;
                     tbody.appendChild(row);
                 });
             }, {onlyOnce:true});
         }
-
         window.openCashModal = (timestamp) => {
+            // Find order
             onValue(salesRef, (snapshot) => {
                 const data = snapshot.val();
                 const order = Object.values(data).find(o => o.timestamp == timestamp);
                 if(order) {
-                    currentCashOrder = order;
+                    currentCashOrder = order; // Store for confirmation
                     const orderNum = order.orderNumber || "KSK-" + String(order.timestamp).slice(-6);
+                   
                     const html = `
                         <div style="text-align:center; margin-bottom:20px;">
                             <div style="font-size:40px; margin-bottom:10px;">👤</div>
@@ -974,90 +916,89 @@
                 }
             }, {onlyOnce:true});
         };
-
         window.confirmCashCollection = async () => {
             if(!currentCashOrder) return;
-            onValue(salesRef, async (snapshot) => {
-                const data = snapshot.val();
-                const key = Object.keys(data).find(k => data[k].timestamp === currentCashOrder.timestamp);
-                if(key) {
-                    await update(ref(db, `sales/${key}`), { status: 'paid', paymentType: 'Cash' });
-                    showToast('✅ Cash Collected & Order Updated');
-                    closeModal('cashModal');
-                    renderKioskOrders();
-                    renderSalesHistory();
-                }
-            }, {onlyOnce:true});
+           
+            try {
+                // Update the order status to paid
+                // In a real app, you'd use the specific key, here we search by timestamp for demo
+                onValue(salesRef, async (snapshot) => {
+                    const data = snapshot.val();
+                    const key = Object.keys(data).find(k => data[k].timestamp === currentCashOrder.timestamp);
+                   
+                    if(key) {
+                        await update(ref(db, `sales/${key}`), { status: 'paid' });
+                        showToast('✅ Cash Collected & Order Updated');
+                        closeModal('cashModal');
+                        renderKioskOrders();
+                        renderSalesHistory();
+                    }
+                }, {onlyOnce:true});
+               
+            } catch (e) {
+                console.error(e);
+                showToast("❌ Error updating order");
+            }
         };
-
-        // End of Day PDF
+        // --- End of Day PDF ---
         document.getElementById('endOfDayBtn').addEventListener('click', () => {
             onValue(salesRef, (snapshot) => {
                 const data = snapshot.val() || {};
                 const today = new Date();
                 today.setHours(0,0,0,0);
+               
                 const todaySales = Object.values(data).filter(s => s.timestamp >= today.getTime());
                 const total = todaySales.reduce((sum, s) => sum + parseFloat(s.revenue || 0), 0);
+               
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
+               
                 doc.setFillColor(255, 215, 0);
                 doc.rect(0, 0, 210, 30, 'F');
                 doc.setTextColor(0,0,0);
                 doc.setFontSize(22);
                 doc.text("AURA POS - END OF DAY", 20, 20);
+               
                 doc.setFontSize(12);
                 doc.setTextColor(100);
                 doc.text(`Date: ${new Date().toLocaleDateString('en-ZA')}`, 20, 40);
                 doc.text(`Cashier: Terminal 1`, 20, 48);
+               
                 doc.setFontSize(16);
                 doc.setTextColor(0);
                 doc.text(`Total Revenue: R ${total.toFixed(2)}`, 20, 65);
                 doc.setFontSize(12);
                 doc.text(`Transactions: ${todaySales.length}`, 20, 73);
+               
                 let y = 90;
                 doc.setFontSize(10);
                 doc.setTextColor(100);
+               
                 todaySales.forEach(s => {
                     const ord = s.orderNumber || "ORD-" + String(s.timestamp).slice(-6);
                     const time = new Date(s.timestamp).toLocaleTimeString('en-ZA');
-                    const pay = s.paymentType || 'Cash';
-                    doc.text(`${ord} | ${time} | ${s.customer} | ${s.name} - R ${s.revenue} | ${pay}`, 20, y);
+                    doc.text(`${ord} | ${time} | ${s.customer} | ${s.name} - R ${s.revenue}`, 20, y);
                     y += 8;
                     if (y > 280) { doc.addPage(); y = 20; }
                 });
+               
                 doc.save(`AuraPOS_EOD_${new Date().toISOString().slice(0,10)}.pdf`);
                 showToast('📄 PDF Downloaded');
             }, {onlyOnce:true});
-        };
-
-        // Collapsible
-        window.toggleCollapse = (header) => {
-            header.classList.toggle('active');
-            const content = header.nextElementSibling;
-            content.classList.toggle('open');
-        };
-
-        // Toast
+        });
+        // --- Toast ---
         function showToast(msg) {
             const t = document.getElementById('toast');
             t.innerHTML = msg;
             t.classList.add('show');
             setTimeout(() => t.classList.remove('show'), 3000);
         }
-
         // Close modals on outside click
         window.onclick = (event) => {
             if (event.target.classList.contains('modal-overlay')) {
                 event.target.style.display = 'none';
             }
         }
-
-        // Init
-        window.addEventListener('load', () => {
-            renderProductGrid();
-            renderSalesHistory();
-            renderKioskOrders();
-        });
     </script>
 </body>
-</html>
+</html>t
