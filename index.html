@@ -297,14 +297,7 @@
         .status-paid { background: #E3FCEF; color: #00B894; }
         .status-pending { background: #FFF3CD; color: #856404; }
 
-        .payment-icon {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            font-size: 13px;
-        }
-
-        /* --- Inputs & Filters --- */
+        /* --- Inputs --- */
         .search-input {
             width: 100%;
             max-width: 300px;
@@ -316,26 +309,6 @@
             transition: border-color 0.3s;
         }
         .search-input:focus { outline: none; border-color: #FFD700; }
-
-        .date-filter {
-            padding: 12px 18px;
-            border-radius: 16px;
-            border: 1.5px solid #F1F3F5;
-            background: #F8F9FA;
-            font-size: 14px;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--dark-text);
-            min-width: 150px;
-        }
-
-        .controls-row {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
 
         /* --- Modals --- */
         .modal-overlay {
@@ -437,8 +410,6 @@
             main { margin-left: 0; width: 100%; padding-top: 80px; }
             .hamburger { display: block; }
             .product-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
-            .controls-row { flex-direction: column; align-items: stretch; }
-            .search-input, .date-filter { width: 100%; max-width: 100%; }
         }
         @media (max-width: 768px) {
             .header-flex { flex-direction: column; align-items: flex-start; }
@@ -525,34 +496,22 @@
                     </div>
                 </div>
                 
-                <!-- Controls Row with Date Filter -->
-                <div class="controls-row">
-                    <input type="text" id="historySearch" class="search-input" placeholder="🔍 Search by Order #, Customer, or Product...">
-                    <select id="historyDateFilter" class="date-filter" onchange="renderSalesHistory()">
-                        <option value="today">Today</option>
-                        <option value="yesterday">Yesterday</option>
-                        <option value="week">Last 7 Days</option>
-                        <option value="month">This Month</option>
-                        <option value="all">All Time</option>
-                    </select>
-                </div>
-                
                 <!-- Collapsible Today Section -->
                 <div class="collapsible-section" style="margin-bottom: 30px;">
                     <div class="collapsible-header active" onclick="toggleCollapse(this)">
-                        <h3>📅 Filtered Sales</h3>
+                        <h3>📅 Today's Sales</h3>
                         <span class="toggle-icon">▼</span>
                     </div>
                     <div class="collapsible-content open">
+                        <input type="text" id="todaySearch" class="search-input" placeholder="Filter today's orders..." style="margin-bottom:15px; width:100%; max-width:100%;">
                         <div style="overflow-x:auto;">
                             <table>
                                 <thead>
                                     <tr>
                                         <th>Order #</th>
-                                        <th>Date/Time</th>
+                                        <th>Time</th>
                                         <th>Items</th>
                                         <th>Customer</th>
-                                        <th>Payment</th>
                                         <th>Total</th>
                                         <th>Status</th>
                                     </tr>
@@ -579,7 +538,6 @@
                                         <th>Date</th>
                                         <th>Items</th>
                                         <th>Customer</th>
-                                        <th>Payment</th>
                                         <th>Total</th>
                                         <th>Status</th>
                                     </tr>
@@ -596,30 +554,18 @@
         <div id="view-kiosk" class="view">
             <div class="card">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-                    <h3>Kiosk Orders • Awaiting Payment</h3>
+                    <h3>Kiosk Orders • Awaiting Cash</h3>
+                    <input type="text" id="kioskSearch" class="search-input" placeholder="Search Order # or Name">
                 </div>
-                
-                <!-- Controls Row with Date Filter -->
-                <div class="controls-row">
-                    <input type="text" id="kioskSearch" class="search-input" placeholder="🔍 Search Order # or Customer Name...">
-                    <select id="kioskDateFilter" class="date-filter" onchange="renderKioskOrders()">
-                        <option value="today">Today</option>
-                        <option value="yesterday">Yesterday</option>
-                        <option value="week">Last 7 Days</option>
-                        <option value="all">All Time</option>
-                    </select>
-                </div>
-
                 <div style="overflow-x:auto;">
                     <table>
                         <thead>
                             <tr>
                                 <th>Order #</th>
-                                <th>Date/Time</th>
+                                <th>Time</th>
                                 <th>Customer</th>
                                 <th>Cell</th>
                                 <th>Items</th>
-                                <th>Method</th>
                                 <th>Total</th>
                                 <th>Action</th>
                             </tr>
@@ -631,7 +577,7 @@
         </div>
     </main>
 
-    <!-- Checkout Modal with Payment Methods -->
+    <!-- Checkout Modal -->
     <div id="checkoutModal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
@@ -641,14 +587,9 @@
             <div class="modal-body" id="checkoutModalBody">
                 <!-- Dynamic Content -->
             </div>
-            <div class="modal-footer" style="flex-direction: column;">
-                <p style="font-size: 12px; color: var(--muted-text); margin-bottom: 10px; text-align: center;">Select Payment Method</p>
-                <div style="display: flex; gap: 10px; width: 100%;">
-                    <button class="btn-pill" onclick="confirmSale('cash')" style="flex:1; background: #333; color: #fff;">💵 Cash</button>
-                    <button class="btn-pill" onclick="confirmSale('card')" style="flex:1;">💳 Card</button>
-                    <button class="btn-pill" onclick="confirmSale('paypal')" style="flex:1; background: #0070BA; color: #fff;">🅿️ PayPal</button>
-                </div>
-                <button class="btn-pill" onclick="closeModal('checkoutModal')" style="background:#e9ecef;color:#333;box-shadow:none; margin-top:10px;">Cancel</button>
+            <div class="modal-footer">
+                <button class="btn-pill" onclick="closeModal('checkoutModal')" style="flex:1;background:#e9ecef;color:#333;box-shadow:none;">Cancel</button>
+                <button class="btn-pill" onclick="confirmSale()" style="flex:1;">✅ Confirm Sale</button>
             </div>
         </div>
     </div>
@@ -668,7 +609,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn-pill" onclick="closeModal('cashModal')" style="flex:1;background:#e9ecef;color:#333;box-shadow:none;">Cancel</button>
-                <button class="btn-pill" onclick="confirmCashCollection()" style="flex:1;">✅ Confirm Cash Received</button>
+                <button class="btn-pill" onclick="confirmCashCollection()" style="flex:1;">✅ Mark as Paid</button>
             </div>
         </div>
     </div>
@@ -677,7 +618,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, onValue, update, push } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, onValue, update, push, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAxBT0oESoL62oz_x_Z8cMtdENWZPx4tMI",
@@ -693,11 +634,11 @@
         const db = getDatabase(app);
         const inventoryRef = ref(db, 'inventory');
         const salesRef = ref(db, 'sales');
+        const kioskRef = ref(db, 'kioskOrders'); // Separate node for kiosk to avoid mixing with POS
 
         let inventoryData = {};
         let cart = [];
-        let currentCashOrder = null;
-        let allSalesData = [];
+        let currentCashOrder = null; // Store temp order for cash modal
 
         // --- Clock ---
         function updateTime() {
@@ -710,11 +651,18 @@
 
         // --- Navigation ---
         window.navigate = (targetId) => {
+            // Update Nav UI
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.querySelector(`.nav-item[data-target="${targetId}"]`).classList.add('active');
+            
+            // Update View
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById(targetId).classList.add('active');
+
+            // Close mobile menu
             document.getElementById('sidebar').classList.remove('open');
+
+            // Refresh data
             if(targetId === 'view-history') renderSalesHistory();
             if(targetId === 'view-kiosk') renderKioskOrders();
         };
@@ -736,7 +684,7 @@
             Object.keys(inventoryData).forEach(key => {
                 const item = inventoryData[key];
                 if (filter && !item.name.toLowerCase().includes(filter.toLowerCase())) return;
-                if (item.qty <= 0) return;
+                if (item.qty <= 0) return; // Out of stock
                 
                 const card = document.createElement('div');
                 card.className = 'product-card';
@@ -761,8 +709,11 @@
         window.addToCart = (key) => {
             const item = inventoryData[key];
             const existing = cart.find(i => i.key === key);
-            if (existing) existing.qty++;
-            else cart.push({...item, key, qty: 1});
+            if (existing) {
+                existing.qty++;
+            } else {
+                cart.push({...item, key, qty: 1});
+            }
             renderCart();
             showToast(`Added ${item.name}`);
         };
@@ -792,6 +743,7 @@
                     const itemTotal = parseFloat(item.price) * item.qty;
                     total += itemTotal;
                     itemCount += item.qty;
+
                     const div = document.createElement('div');
                     div.className = 'cart-item';
                     div.innerHTML = `
@@ -807,15 +759,18 @@
                     container.appendChild(div);
                 });
             }
+
             countBadge.innerText = itemCount;
             totalDisplay.innerText = `R ${total.toFixed(2)}`;
         }
 
-        // --- Checkout Flow with Payment Methods ---
+        // --- Checkout Flow ---
         document.getElementById('checkoutBtn').addEventListener('click', () => {
             if (!cart.length) return showToast('Cart is empty');
+            
             let html = `<div style="margin-bottom:20px;">`;
             let total = 0;
+            
             cart.forEach(item => {
                 const t = parseFloat(item.price) * item.qty;
                 total += t;
@@ -823,13 +778,17 @@
                     <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #f0f0f0;">
                         <span>${item.name} <small style="color:#666">×${item.qty}</small></span>
                         <span style="font-weight:700">R ${t.toFixed(2)}</span>
-                    </div>`;
+                    </div>
+                `;
             });
-            html += `</div>
+            html += `</div>`;
+            html += `
                 <div style="display:flex; justify-content:space-between; font-size:20px; font-weight:800; margin-top:10px;">
                     <span>Total</span>
                     <span>R ${total.toFixed(2)}</span>
-                </div>`;
+                </div>
+            `;
+            
             document.getElementById('checkoutModalBody').innerHTML = html;
             document.getElementById('checkoutModal').style.display = 'flex';
         });
@@ -838,13 +797,18 @@
             document.getElementById(id).style.display = 'none';
         };
 
-        window.confirmSale = async (method) => {
+        window.confirmSale = async () => {
             const now = Date.now();
             const orderId = "POS-" + String(now).slice(-6);
+            
             try {
+                // Process each item in cart
                 for (const item of cart) {
+                    // 1. Update Inventory
                     const newQty = Math.max(0, inventoryData[item.key].qty - item.qty);
                     await update(ref(db, `inventory/${item.key}`), { qty: newQty });
+
+                    // 2. Record Sale
                     await push(salesRef, {
                         name: item.name,
                         price: item.price,
@@ -853,12 +817,11 @@
                         timestamp: now,
                         customer: "Walk-in",
                         orderNumber: orderId,
-                        status: "completed",
-                        paymentMethod: method,
-                        source: "pos"
+                        status: "paid"
                     });
                 }
-                showToast(`✅ Sale Complete: ${orderId} (${method.toUpperCase()})`);
+                
+                showToast(`✅ Sale Complete: ${orderId}`);
                 cart = [];
                 renderCart();
                 closeModal('checkoutModal');
@@ -868,130 +831,62 @@
             }
         };
 
-        // --- Date Filter Helper ---
-        function getDateRange(filterType) {
-            const now = new Date();
-            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            let startDate, endDate;
-            switch(filterType) {
-                case 'today':
-                    startDate = today.getTime();
-                    endDate = now.getTime();
-                    break;
-                case 'yesterday':
-                    startDate = today.getTime() - (24 * 60 * 60 * 1000);
-                    endDate = today.getTime() - 1;
-                    break;
-                case 'week':
-                    startDate = today.getTime() - (7 * 24 * 60 * 60 * 1000);
-                    endDate = now.getTime();
-                    break;
-                case 'month':
-                    startDate = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
-                    endDate = now.getTime();
-                    break;
-                case 'all':
-                default:
-                    startDate = 0;
-                    endDate = now.getTime();
-            }
-            return { startDate, endDate };
-        }
-
-        // --- Sales History with Date Filters and Payment Methods ---
+        // --- Sales History ---
         function renderSalesHistory() {
             onValue(salesRef, (snapshot) => {
                 const data = snapshot.val() || {};
-                allSalesData = Object.values(data).sort((a,b) => b.timestamp - a.timestamp);
-                filterAndRenderHistory();
-                renderAllTimeSales();
+                const allSales = Object.values(data).sort((a,b) => b.timestamp - a.timestamp);
+                
+                const today = new Date();
+                today.setHours(0,0,0,0);
+                
+                const todaySales = allSales.filter(s => s.timestamp >= today.getTime());
+                
+                renderTable(todaySales, 'todaySalesBody', true);
+                renderTable(allSales, 'allSalesBody', false);
             }, {onlyOnce:true});
         }
 
-        function filterAndRenderHistory() {
-            const filterType = document.getElementById('historyDateFilter').value;
-            const searchQuery = document.getElementById('historySearch').value.toLowerCase();
-            const { startDate, endDate } = getDateRange(filterType);
+        function renderTable(sales, elementId, isToday) {
+            const tbody = document.getElementById(elementId);
+            tbody.innerHTML = '';
             
-            const tbody = document.getElementById('todaySalesBody');
-            tbody.innerHTML = '';
-
-            const filtered = allSalesData.filter(sale => {
-                const inDateRange = sale.timestamp >= startDate && sale.timestamp <= endDate;
-                const matchesSearch = !searchQuery || 
-                    (sale.orderNumber && sale.orderNumber.toLowerCase().includes(searchQuery)) ||
-                    (sale.customer && sale.customer.toLowerCase().includes(searchQuery)) ||
-                    (sale.name && sale.name.toLowerCase().includes(searchQuery));
-                return inDateRange && matchesSearch;
-            });
-
-            if(filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:30px; color:#999;">No sales found</td></tr>`;
+            if(sales.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:20px; color:#999;">No sales found</td></tr>`;
                 return;
             }
 
-            filtered.forEach(sale => {
+            sales.forEach(sale => {
                 const orderNum = sale.orderNumber || "ORD-" + String(sale.timestamp).slice(-6);
-                const dateStr = new Date(sale.timestamp).toLocaleString('en-ZA', {
-                    day: '2-digit', month: 'short', hour:'2-digit', minute:'2-digit'
-                });
-                const paymentIcon = sale.paymentMethod === 'cash' ? '💵' : 
-                                   sale.paymentMethod === 'paypal' ? '🅿️' : '💳';
+                const dateStr = isToday 
+                    ? new Date(sale.timestamp).toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'})
+                    : new Date(sale.timestamp).toLocaleDateString('en-ZA');
+                
                 const row = document.createElement('tr');
                 row.className = 'item-row';
                 row.innerHTML = `
                     <td><span class="order-badge">${orderNum}</span></td>
                     <td>${dateStr}</td>
-                    <td><strong>${sale.name}</strong> ×${sale.qty}</td>
+                    <td><strong>${sale.name}</strong></td>
                     <td>${sale.customer || 'Walk-in'}</td>
-                    <td><span class="payment-icon">${paymentIcon} ${sale.paymentMethod || 'card'}</span></td>
                     <td style="font-weight:800;">R ${parseFloat(sale.revenue).toFixed(2)}</td>
-                    <td><span class="status-badge status-paid">Completed</span></td>
+                    <td><span class="status-badge ${sale.status === 'paid' ? 'status-paid' : 'status-pending'}">${sale.status || 'Completed'}</span></td>
                 `;
                 tbody.appendChild(row);
             });
         }
 
-        function renderAllTimeSales() {
-            const searchQuery = document.getElementById('allTimeSearch').value.toLowerCase();
-            const tbody = document.getElementById('allSalesBody');
-            tbody.innerHTML = '';
+        // Filter Listeners
+        document.getElementById('todaySearch').addEventListener('input', (e) => filterTable('todaySalesBody', e.target.value));
+        document.getElementById('allTimeSearch').addEventListener('input', (e) => filterTable('allSalesBody', e.target.value));
 
-            const filtered = allSalesData.filter(sale => {
-                const matchesSearch = !searchQuery || 
-                    (sale.orderNumber && sale.orderNumber.toLowerCase().includes(searchQuery)) ||
-                    (sale.customer && sale.customer.toLowerCase().includes(searchQuery)) ||
-                    (sale.name && sale.name.toLowerCase().includes(searchQuery));
-                return matchesSearch;
-            });
-
-            if(filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:20px; color:#999;">No sales found</td></tr>`;
-                return;
+        function filterTable(tbodyId, query) {
+            const rows = document.getElementById(tbodyId).getElementsByTagName('tr');
+            for (let row of rows) {
+                const text = row.innerText.toLowerCase();
+                row.style.display = text.includes(query.toLowerCase()) ? '' : 'none';
             }
-
-            filtered.forEach(sale => {
-                const orderNum = sale.orderNumber || "ORD-" + String(sale.timestamp).slice(-6);
-                const dateStr = new Date(sale.timestamp).toLocaleDateString('en-ZA');
-                const paymentIcon = sale.paymentMethod === 'cash' ? '💵' : 
-                                   sale.paymentMethod === 'paypal' ? '🅿️' : '💳';
-                const row = document.createElement('tr');
-                row.className = 'item-row';
-                row.innerHTML = `
-                    <td><span class="order-badge">${orderNum}</span></td>
-                    <td>${dateStr}</td>
-                    <td><strong>${sale.name}</strong> ×${sale.qty}</td>
-                    <td>${sale.customer || 'Walk-in'}</td>
-                    <td><span class="payment-icon">${paymentIcon} ${sale.paymentMethod || 'card'}</span></td>
-                    <td style="font-weight:800;">R ${parseFloat(sale.revenue).toFixed(2)}</td>
-                    <td><span class="status-badge status-paid">Completed</span></td>
-                `;
-                tbody.appendChild(row);
-            });
         }
-
-        document.getElementById('historySearch').addEventListener('input', filterAndRenderHistory);
-        document.getElementById('allTimeSearch').addEventListener('input', renderAllTimeSales);
 
         // Collapsible Logic
         window.toggleCollapse = (header) => {
@@ -1000,128 +895,104 @@
             content.classList.toggle('open');
         };
 
-        // --- Kiosk Orders with Date Filters and Search ---
+        // --- Kiosk Orders (Cash Handling) ---
+        // Note: In a real app, Kiosk orders would be written to a separate 'kioskOrders' node 
+        // with status 'pending_cash'. Here we simulate reading from salesRef where customer != Walk-in and status != paid
+        
         function renderKioskOrders() {
+            // Ideally fetch from kioskRef, but simulating with salesRef for this demo structure
             onValue(salesRef, (snapshot) => {
                 const data = snapshot.val() || {};
-                allSalesData = Object.values(data);
-                filterAndRenderKiosk();
+                const orders = Object.values(data)
+                    .filter(s => s.customer !== "Walk-in" && s.status !== 'paid')
+                    .sort((a,b) => b.timestamp - a.timestamp);
+                
+                const tbody = document.getElementById('kioskBody');
+                tbody.innerHTML = '';
+
+                if(orders.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:30px; color:#999;">No pending kiosk orders</td></tr>`;
+                    return;
+                }
+
+                orders.forEach(order => {
+                    const orderNum = order.orderNumber || "KSK-" + String(order.timestamp).slice(-6);
+                    const row = document.createElement('tr');
+                    row.className = 'item-row';
+                    row.innerHTML = `
+                        <td><span class="order-badge">${orderNum}</span></td>
+                        <td>${new Date(order.timestamp).toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'})}</td>
+                        <td><strong>${order.customer}</strong></td>
+                        <td>${order.cell || '-'}</td>
+                        <td>${order.name} ×${order.qty}</td>
+                        <td style="font-weight:800;color:#00B894;">R ${parseFloat(order.revenue).toFixed(2)}</td>
+                        <td><button class="btn-pill btn-secondary" style="width:auto;padding:8px 16px;font-size:12px;" onclick="openCashModal('${order.timestamp}')">Collect Cash</button></td>
+                    `;
+                    tbody.appendChild(row);
+                });
             }, {onlyOnce:true});
         }
 
-        function filterAndRenderKiosk() {
-            const filterType = document.getElementById('kioskDateFilter').value;
-            const searchQuery = document.getElementById('kioskSearch').value.toLowerCase();
-            const { startDate, endDate } = getDateRange(filterType);
-            
-            const tbody = document.getElementById('kioskBody');
-            tbody.innerHTML = '';
-
-            const filtered = allSalesData.filter(sale => {
-                const isKiosk = sale.source === 'kiosk' || (sale.customer !== "Walk-in" && sale.status !== 'completed');
-                const inDateRange = sale.timestamp >= startDate && sale.timestamp <= endDate;
-                const matchesSearch = !searchQuery || 
-                    (sale.orderNumber && sale.orderNumber.toLowerCase().includes(searchQuery)) ||
-                    (sale.customer && sale.customer.toLowerCase().includes(searchQuery));
-                return isKiosk && inDateRange && matchesSearch;
-            });
-
-            if(filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:#999;">No pending kiosk orders</td></tr>`;
-                return;
-            }
-
-            filtered.forEach(order => {
-                const orderNum = order.orderNumber || "KSK-" + String(order.timestamp).slice(-6);
-                const dateStr = new Date(order.timestamp).toLocaleString('en-ZA', {
-                    day: '2-digit', month: 'short', hour:'2-digit', minute:'2-digit'
-                });
-                const method = order.paymentMethod || 'pending';
-                const methodLabel = method === 'cash' ? '💵 Cash' : 
-                                   method === 'paypal' ? '🅿️ PayPal' : 
-                                   method === 'card' ? '💳 Card' : '⏳ Pending';
-                
-                const row = document.createElement('tr');
-                row.className = 'item-row';
-                row.innerHTML = `
-                    <td><span class="order-badge">${orderNum}</span></td>
-                    <td>${dateStr}</td>
-                    <td><strong>${order.customer}</strong></td>
-                    <td>${order.cell || '-'}</td>
-                    <td>${order.name} ×${order.qty}</td>
-                    <td>${methodLabel}</td>
-                    <td style="font-weight:800;">R ${parseFloat(order.revenue).toFixed(2)}</td>
-                    <td>
-                        ${method === 'cash' ? 
-                            `<button class="btn-pill btn-secondary" style="width:auto;padding:8px 16px;font-size:12px;" onclick="openCashModal('${order.timestamp}')">Collect Cash</button>` :
-                            `<span style="font-size:12px; color:#666;">${method === 'paypal' ? 'Online Paid' : 'Awaiting'}</span>`
-                        }
-                    </td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        document.getElementById('kioskSearch').addEventListener('input', filterAndRenderKiosk);
-
-        // --- Cash Collection Modal ---
         window.openCashModal = (timestamp) => {
-            const order = allSalesData.find(o => o.timestamp == timestamp);
-            if(order) {
-                currentCashOrder = order;
-                const orderNum = order.orderNumber || "KSK-" + String(order.timestamp).slice(-6);
-                document.getElementById('cashModalBody').innerHTML = `
-                    <div style="text-align:center; margin-bottom:20px;">
-                        <div style="font-size:40px; margin-bottom:10px;">👤</div>
-                        <h2 style="margin:0;">${order.customer}</h2>
-                        <p style="color:#666; margin:5px 0;">${order.cell || 'No cell provided'}</p>
-                        <span class="order-badge" style="margin-top:10px; font-size:16px;">${orderNum}</span>
-                    </div>
-                    <div style="background:#f8f9fa; padding:15px; border-radius:12px; margin-bottom:20px;">
-                        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-                            <span>Item:</span>
-                            <span style="font-weight:600">${order.name}</span>
+            // Find order
+            onValue(salesRef, (snapshot) => {
+                const data = snapshot.val();
+                const order = Object.values(data).find(o => o.timestamp == timestamp);
+                if(order) {
+                    currentCashOrder = order; // Store for confirmation
+                    const orderNum = order.orderNumber || "KSK-" + String(order.timestamp).slice(-6);
+                    
+                    const html = `
+                        <div style="text-align:center; margin-bottom:20px;">
+                            <div style="font-size:40px; margin-bottom:10px;">👤</div>
+                            <h2 style="margin:0;">${order.customer}</h2>
+                            <p style="color:#666; margin:5px 0;">${order.cell || 'No cell provided'}</p>
+                            <span class="order-badge" style="margin-top:10px;">${orderNum}</span>
                         </div>
-                        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-                            <span>Quantity:</span>
-                            <span style="font-weight:600">${order.qty}</span>
+                        <div style="background:#f8f9fa; padding:15px; border-radius:12px; margin-bottom:20px;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                                <span>Item:</span>
+                                <span style="font-weight:600">${order.name}</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                                <span>Quantity:</span>
+                                <span style="font-weight:600">${order.qty}</span>
+                            </div>
+                            <hr style="border:0; border-top:1px solid #ddd; margin:10px 0;">
+                            <div style="display:flex; justify-content:space-between; font-size:18px; font-weight:800;">
+                                <span>Amount Due:</span>
+                                <span style="color:#000;">R ${parseFloat(order.revenue).toFixed(2)}</span>
+                            </div>
                         </div>
-                        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-                            <span>Payment Method:</span>
-                            <span style="font-weight:600">Cash</span>
+                        <div style="background:#FFF9E6; border:1px solid #FFD700; padding:10px; border-radius:8px; font-size:12px; text-align:center;">
+                            ⚠️ Please collect cash from customer before confirming
                         </div>
-                        <hr style="border:0; border-top:1px solid #ddd; margin:10px 0;">
-                        <div style="display:flex; justify-content:space-between; font-size:18px; font-weight:800;">
-                            <span>Amount Due:</span>
-                            <span style="color:#000;">R ${parseFloat(order.revenue).toFixed(2)}</span>
-                        </div>
-                    </div>
-                    <div style="background:#FFF9E6; border:1px solid #FFD700; padding:10px; border-radius:8px; font-size:12px; text-align:center;">
-                        ⚠️ Please collect cash from customer before confirming
-                    </div>
-                `;
-                document.getElementById('cashModal').style.display = 'flex';
-            }
+                    `;
+                    document.getElementById('cashModalBody').innerHTML = html;
+                    document.getElementById('cashModal').style.display = 'flex';
+                }
+            }, {onlyOnce:true});
         };
 
         window.confirmCashCollection = async () => {
             if(!currentCashOrder) return;
+            
             try {
+                // Update the order status to paid
+                // In a real app, you'd use the specific key, here we search by timestamp for demo
                 onValue(salesRef, async (snapshot) => {
                     const data = snapshot.val();
                     const key = Object.keys(data).find(k => data[k].timestamp === currentCashOrder.timestamp);
+                    
                     if(key) {
-                        await update(ref(db, `sales/${key}`), { 
-                            status: 'completed', 
-                            paymentReceived: true,
-                            paymentTimestamp: Date.now()
-                        });
-                        showToast('✅ Cash Collected & Order Completed');
+                        await update(ref(db, `sales/${key}`), { status: 'paid' });
+                        showToast('✅ Cash Collected & Order Updated');
                         closeModal('cashModal');
                         renderKioskOrders();
                         renderSalesHistory();
                     }
                 }, {onlyOnce:true});
+                
             } catch (e) {
                 console.error(e);
                 showToast("❌ Error updating order");
@@ -1130,40 +1001,49 @@
 
         // --- End of Day PDF ---
         document.getElementById('endOfDayBtn').addEventListener('click', () => {
-            const filterType = document.getElementById('historyDateFilter').value;
-            const { startDate, endDate } = getDateRange(filterType);
-            const filtered = allSalesData.filter(s => s.timestamp >= startDate && s.timestamp <= endDate);
-            const total = filtered.reduce((sum, s) => sum + parseFloat(s.revenue || 0), 0);
-            
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            doc.setFillColor(255, 215, 0);
-            doc.rect(0, 0, 210, 30, 'F');
-            doc.setTextColor(0,0,0);
-            doc.setFontSize(22);
-            doc.text("AURA POS - SALES REPORT", 20, 20);
-            doc.setFontSize(12);
-            doc.setTextColor(100);
-            doc.text(`Date Range: ${new Date(startDate).toLocaleDateString()} - ${new Date(endDate).toLocaleDateString()}`, 20, 40);
-            doc.text(`Cashier: Terminal 1`, 20, 48);
-            doc.setFontSize(16);
-            doc.setTextColor(0);
-            doc.text(`Total Revenue: R ${total.toFixed(2)}`, 20, 65);
-            doc.setFontSize(12);
-            doc.text(`Transactions: ${filtered.length}`, 20, 73);
-            let y = 90;
-            doc.setFontSize(10);
-            doc.setTextColor(100);
-            filtered.forEach(s => {
-                const ord = s.orderNumber || "ORD-" + String(s.timestamp).slice(-6);
-                const time = new Date(s.timestamp).toLocaleTimeString('en-ZA');
-                const method = s.paymentMethod || 'card';
-                doc.text(`${ord} | ${time} | ${method.toUpperCase()} | ${s.customer} | R ${s.revenue}`, 20, y);
-                y += 8;
-                if (y > 280) { doc.addPage(); y = 20; }
-            });
-            doc.save(`AuraPOS_Report_${new Date().toISOString().slice(0,10)}.pdf`);
-            showToast('📄 PDF Downloaded');
+            onValue(salesRef, (snapshot) => {
+                const data = snapshot.val() || {};
+                const today = new Date();
+                today.setHours(0,0,0,0);
+                
+                const todaySales = Object.values(data).filter(s => s.timestamp >= today.getTime());
+                const total = todaySales.reduce((sum, s) => sum + parseFloat(s.revenue || 0), 0);
+                
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                
+                doc.setFillColor(255, 215, 0);
+                doc.rect(0, 0, 210, 30, 'F');
+                doc.setTextColor(0,0,0);
+                doc.setFontSize(22);
+                doc.text("AURA POS - END OF DAY", 20, 20);
+                
+                doc.setFontSize(12);
+                doc.setTextColor(100);
+                doc.text(`Date: ${new Date().toLocaleDateString('en-ZA')}`, 20, 40);
+                doc.text(`Cashier: Terminal 1`, 20, 48);
+                
+                doc.setFontSize(16);
+                doc.setTextColor(0);
+                doc.text(`Total Revenue: R ${total.toFixed(2)}`, 20, 65);
+                doc.setFontSize(12);
+                doc.text(`Transactions: ${todaySales.length}`, 20, 73);
+                
+                let y = 90;
+                doc.setFontSize(10);
+                doc.setTextColor(100);
+                
+                todaySales.forEach(s => {
+                    const ord = s.orderNumber || "ORD-" + String(s.timestamp).slice(-6);
+                    const time = new Date(s.timestamp).toLocaleTimeString('en-ZA');
+                    doc.text(`${ord} | ${time} | ${s.customer} | ${s.name} - R ${s.revenue}`, 20, y);
+                    y += 8;
+                    if (y > 280) { doc.addPage(); y = 20; }
+                });
+                
+                doc.save(`AuraPOS_EOD_${new Date().toISOString().slice(0,10)}.pdf`);
+                showToast('📄 PDF Downloaded');
+            }, {onlyOnce:true});
         });
 
         // --- Toast ---
@@ -1174,6 +1054,7 @@
             setTimeout(() => t.classList.remove('show'), 3000);
         }
 
+        // Close modals on outside click
         window.onclick = (event) => {
             if (event.target.classList.contains('modal-overlay')) {
                 event.target.style.display = 'none';
