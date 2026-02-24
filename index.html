@@ -58,7 +58,7 @@
             overflow-y: auto;
             transition: transform 0.3s ease;
         }
-      
+     
         .hamburger {
             display: none;
             position: fixed;
@@ -99,7 +99,7 @@
             color: #000;
         }
         .logo-text { font-size: 24px; font-weight: 800; letter-spacing: -1px; }
-      
+     
         .nav-item {
             padding: 14px 20px;
             margin-bottom: 10px;
@@ -251,7 +251,7 @@
         .cart-item-actions { text-align: right; }
         .cart-item-price { font-weight: 800; color: #000; }
         .btn-remove { background: none; border: none; color: #D63031; font-size: 11px; cursor: pointer; margin-top: 4px; }
-      
+     
         .cart-total {
             padding: 24px;
             border-top: 2px solid #F1F3F5;
@@ -445,7 +445,7 @@
         }
         .item-row td:first-child { border-left: 1px solid #F1F3F5; border-top-left-radius: 16px; border-bottom-left-radius: 16px; }
         .item-row td:last-child { border-right: 1px solid #F1F3F5; border-top-right-radius: 16px; border-bottom-right-radius: 16px; }
-      
+     
         .order-badge {
             background: #FFD700;
             color: #000;
@@ -727,7 +727,7 @@
                         <button class="btn-pill" id="endOfDayBtn" style="width:auto;padding:10px 20px;font-size:13px;">📋 End of Day PDF</button>
                     </div>
                 </div>
-              
+             
                 <!-- Collapsible Today Section -->
                 <div class="collapsible-section" style="margin-bottom: 30px;">
                     <div class="collapsible-header active" onclick="toggleCollapse(this)">
@@ -862,7 +862,7 @@
             messagingSenderId: "708458917827",
             appId: "1:708458917827:web:375de278577df0adcf9776"
         };
-      
+     
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         const inventoryRef = ref(db, 'inventory');
@@ -904,20 +904,20 @@
         // --- Right Panel Functions ---
         window.openCheckout = () => {
             if (!cart.length) return showToast('Cart is empty');
-           
+          
             // Calculate total
             amountDue = cart.reduce((sum, item) => sum + (parseFloat(item.price) * item.qty), 0);
             amountPaid = 0;
             inputBuffer = '';
             currentPaymentMethod = 'cash';
-           
+          
             // Update display
             updateDisplay();
-           
+          
             // Reset payment method buttons
             document.querySelectorAll('.method-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.method-btn')[0].classList.add('active');
-           
+          
             // Open panel
             document.getElementById('rightPanel').classList.add('open');
             document.getElementById('overlay').classList.add('active');
@@ -935,7 +935,7 @@
             currentPaymentMethod = method;
             document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-           
+          
             if (method === 'card') {
                 amountPaid = amountDue;
                 inputBuffer = amountDue.toFixed(2);
@@ -975,11 +975,11 @@
             document.getElementById('displayDue').innerText = 'R ' + amountDue.toFixed(2);
             document.getElementById('displayPaid').innerText = 'R ' + amountPaid.toFixed(2);
             document.getElementById('displayTotal').innerText = 'R ' + amountDue.toFixed(2);
-           
+          
             const change = amountPaid - amountDue;
             const changeLine = document.getElementById('changeLine');
             const changeDisplay = document.getElementById('displayChange');
-           
+          
             if (change >= 0 && amountPaid > 0) {
                 changeLine.style.display = 'flex';
                 changeDisplay.innerText = 'R ' + change.toFixed(2);
@@ -1006,7 +1006,7 @@
                 for (const item of cart) {
                     const newQty = Math.max(0, inventoryData[item.key].qty - item.qty);
                     await update(ref(db, `inventory/${item.key}`), { qty: newQty });
-                   
+                  
                     await push(salesRef, {
                         name: item.name,
                         price: item.price,
@@ -1033,12 +1033,12 @@
                         <button onclick="printReceipt('${orderId}', ${amountPaid}, ${change}); closeRightPanel();" class="btn-pill" style="margin-top:30px;">🖨️ Print Receipt</button>
                     </div>
                 `;
-               
+              
                 document.querySelector('.right-panel-body').innerHTML = successHtml;
                 document.querySelector('.right-panel-footer').innerHTML = `
                     <button class="btn-pill" onclick="resetPanel(); closeRightPanel();" style="width:100%;">Done</button>
                 `;
-               
+              
                 showToast(`✅ Sale Complete: ${orderId}`);
                 cart = [];
                 renderCart();
@@ -1172,7 +1172,7 @@
             const container = document.getElementById('cartItems');
             const countBadge = document.getElementById('cartCount');
             const totalDisplay = document.getElementById('cartTotal');
-          
+         
             container.innerHTML = '';
             let total = 0;
             let itemCount = 0;
@@ -1210,12 +1210,12 @@
             onValue(salesRef, (snapshot) => {
                 const data = snapshot.val() || {};
                 const allSales = Object.values(data).sort((a,b) => b.timestamp - a.timestamp);
-              
+             
                 const today = new Date();
                 today.setHours(0,0,0,0);
-              
+             
                 const todaySales = allSales.filter(s => s.timestamp >= today.getTime());
-              
+             
                 renderTable(todaySales, 'todaySalesBody', true);
                 renderTable(allSales, 'allSalesBody', false);
             }, {onlyOnce:true});
@@ -1223,7 +1223,7 @@
         function renderTable(sales, elementId, isToday) {
             const tbody = document.getElementById(elementId);
             tbody.innerHTML = '';
-          
+         
             if(sales.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:20px; color:#999;">No sales found</td></tr>`;
                 return;
@@ -1233,7 +1233,7 @@
                 const dateStr = isToday
                     ? new Date(sale.timestamp).toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'})
                     : new Date(sale.timestamp).toLocaleDateString('en-ZA');
-              
+             
                 const row = document.createElement('tr');
                 row.className = 'item-row';
                 row.innerHTML = `
@@ -1271,7 +1271,7 @@
                 const orders = Object.values(data)
                     .filter(s => s.customer !== "Walk-in" && s.status !== 'paid')
                     .sort((a,b) => b.timestamp - a.timestamp);
-              
+             
                 const tbody = document.getElementById('kioskBody');
                 tbody.innerHTML = '';
                 if(orders.length === 0) {
@@ -1279,7 +1279,7 @@
                     return;
                 }
                 orders.forEach(order => {
-                    const orderNum = order.orderNumber ? `#${order.orderNumber}` : "KSK-" + String(order.timestamp).slice(-6);
+                    const orderNum = order.orderNumber ? `#${order.orderNumber}` : `#${String(order.timestamp).slice(-6)}`;
                     const row = document.createElement('tr');
                     row.className = 'item-row';
                     row.innerHTML = `
@@ -1304,9 +1304,9 @@
                     currentCashOrder = order;
                     currentDue = parseFloat(order.revenue || 0);
                     paidStr = '';
-                   
-                    const orderNum = order.orderNumber ? `#${order.orderNumber}` : "KSK-" + String(order.timestamp).slice(-6);
-                   
+                  
+                    const orderNum = order.orderNumber ? `#${order.orderNumber}` : `#${String(order.timestamp).slice(-6)}`;
+                  
                     // Build the panel content
                     const bodyHtml = `
                         <div style="text-align:center; margin-bottom:25px;">
@@ -1330,7 +1330,7 @@
                             </div>
                         </div>
                         <p style="text-align:center;font-size:13px;color:#666;margin-bottom:15px;">Enter amount received from customer</p>
-                       
+                      
                         <!-- Quick Amounts -->
                         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));gap:10px;margin-bottom:25px;">
                             <button onclick="setKioskQuickAmount(50)" class="btn-pill" style="background:#fff;color:#000;border:2px solid #eee;padding:12px 0;font-size:14px;">R 50</button>
@@ -1338,7 +1338,7 @@
                             <button onclick="setKioskQuickAmount(200)" class="btn-pill" style="background:#fff;color:#000;border:2px solid #eee;padding:12px 0;font-size:14px;">R 200</button>
                             <button onclick="setKioskExact()" class="btn-pill" style="background:#fff;color:#000;border:2px solid #eee;padding:12px 0;font-size:14px;">Exact</button>
                         </div>
-                       
+                      
                         <!-- Dial Pad -->
                         <div style="background:#fff;border-radius:20px;padding:20px;box-shadow:inset 0 2px 10px rgba(0,0,0,0.03);">
                             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
@@ -1358,16 +1358,16 @@
                             <button onclick="backspaceKioskPaidInput()" style="margin-top:12px;width:100%;padding:16px;background:#F1F3F5;border:none;border-radius:16px;font-size:18px;font-weight:600;">⌫ Backspace</button>
                         </div>
                     `;
-                   
+                  
                     const footerHtml = `
                         <button class="btn-pill" onclick="confirmKioskPayment()" id="confirmKioskBtn" style="margin-bottom:10px;">✅ Mark as Paid</button>
                         <button class="btn-pill" onclick="closeRightPanel()" style="background:#e9ecef;color:#333;box-shadow:none;">Cancel</button>
                     `;
-                   
+                  
                     document.getElementById('kioskPaymentBody').innerHTML = bodyHtml;
                     document.getElementById('kioskPaymentFooter').innerHTML = footerHtml;
                     updateKioskPaidDisplay();
-                   
+                  
                     // Open panel
                     document.getElementById('kioskPaymentPanel').classList.add('open');
                     document.getElementById('overlay').classList.add('active');
@@ -1422,10 +1422,10 @@
                 onValue(salesRef, async (snapshot) => {
                     const data = snapshot.val();
                     const key = Object.keys(data).find(k => data[k].timestamp === currentCashOrder.timestamp);
-                  
+                 
                     if(key) {
                         await update(ref(db, `sales/${key}`), { status: 'paid' });
-                       
+                      
                         // Show success screen with Print Receipt option
                         const successHtml = `
                             <div style="text-align:center;padding:40px 20px;">
@@ -1440,7 +1440,7 @@
                         document.getElementById('kioskPaymentFooter').innerHTML = `
                             <button class="btn-pill" onclick="closeRightPanel()" style="width:100%;background:#e9ecef;color:#333;box-shadow:none;">Done</button>
                         `;
-                       
+                      
                         renderKioskOrders();
                         renderSalesHistory();
                     }
@@ -1453,7 +1453,7 @@
         window.printKioskReceipt = () => {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-           
+          
             doc.setFillColor(255, 215, 0);
             doc.rect(0, 0, 210, 35, 'F');
             doc.setTextColor(0);
@@ -1461,15 +1461,15 @@
             doc.text("AURA POS", 105, 18, { align: "center" });
             doc.setFontSize(14);
             doc.text("KIOSK RECEIPT", 105, 28, { align: "center" });
-           
+          
             doc.setFontSize(11);
             doc.setTextColor(80);
-            const orderNum = currentCashOrder.orderNumber ? `#${currentCashOrder.orderNumber}` : "KSK-" + String(currentCashOrder.timestamp).slice(-6);
+            const orderNum = currentCashOrder.orderNumber ? `#${currentCashOrder.orderNumber}` : `#${String(currentCashOrder.timestamp).slice(-6)}`;
             doc.text(`Order # ${orderNum}`, 20, 50);
             doc.text(new Date().toLocaleDateString('en-ZA') + " " + new Date().toLocaleTimeString('en-ZA', {hour:'2-digit', minute:'2-digit'}), 20, 58);
             doc.text(`Customer: ${currentCashOrder.customer}`, 20, 66);
             doc.text(`Cashier: ${cashierName} (${employeeId})`, 20, 74);
-           
+          
             let y = 90;
             doc.setFontSize(10);
             doc.text("────────────────────────────────────", 20, y);
@@ -1481,37 +1481,37 @@
             y += 6;
             doc.text("────────────────────────────────────", 20, y);
             y += 10;
-           
+          
             const unitPrice = parseFloat(currentCashOrder.price).toFixed(2);
             const total = (parseFloat(currentCashOrder.price) * currentCashOrder.qty).toFixed(2);
             doc.text(currentCashOrder.name.substring(0, 25), 20, y);
             doc.text(currentCashOrder.qty.toString(), 95, y);
             doc.text("R " + unitPrice, 125, y);
             doc.text("R " + total, 170, y);
-           
+          
             y += 15;
             const revenue = parseFloat(currentCashOrder.revenue).toFixed(2);
             doc.setFontSize(14);
             doc.setFont(undefined, 'bold');
             doc.text("TOTAL", 20, y);
             doc.text("R " + revenue, 170, y);
-           
+          
             y += 12;
             doc.setFontSize(11);
             doc.setFont(undefined, 'normal');
             doc.text("AMOUNT PAID", 20, y);
             doc.text("R " + paidStr, 170, y);
-           
+          
             y += 8;
             const changeVal = parseFloat(paidStr) - parseFloat(revenue);
             doc.text("CHANGE", 20, y);
             doc.text("R " + changeVal.toFixed(2), 170, y);
-           
+          
             y += 20;
             doc.setFontSize(10);
             doc.text("Thank you for shopping with AuraPOS!", 105, y, { align: "center" });
             doc.text("Johannesburg, ZA", 105, y + 8, { align: "center" });
-           
+          
             doc.save(`AuraPOS_Kiosk_Receipt_${orderNum}.pdf`);
             showToast('📄 Receipt downloaded');
         };
@@ -1519,7 +1519,7 @@
         window.printReceipt = (orderId, amountPaid = 0, change = 0) => {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-           
+          
             doc.setFillColor(255, 215, 0);
             doc.rect(0, 0, 210, 35, 'F');
             doc.setTextColor(0);
@@ -1527,14 +1527,14 @@
             doc.text("AURA POS", 105, 18, { align: "center" });
             doc.setFontSize(14);
             doc.text("RECEIPT", 105, 28, { align: "center" });
-           
+          
             doc.setFontSize(11);
             doc.setTextColor(80);
             doc.text(`Order # ${orderId || "POS-" + Date.now()}`, 20, 50);
             doc.text(new Date().toLocaleDateString('en-ZA') + " " + new Date().toLocaleTimeString('en-ZA', {hour:'2-digit', minute:'2-digit'}), 20, 58);
             doc.text(`Customer: Walk-in`, 20, 66);
             doc.text(`Cashier: ${cashierName} (${employeeId})`, 20, 74);
-           
+          
             let y = 90;
             doc.setFontSize(10);
             doc.text("────────────────────────────────────", 20, y);
@@ -1546,7 +1546,7 @@
             y += 6;
             doc.text("────────────────────────────────────", 20, y);
             y += 10;
-           
+          
             // Print cart items
             cart.forEach(item => {
                 const unitPrice = parseFloat(item.price).toFixed(2);
@@ -1557,29 +1557,29 @@
                 doc.text("R " + total, 170, y);
                 y += 8;
             });
-           
+          
             y += 10;
             const total = cart.reduce((sum, item) => sum + (parseFloat(item.price) * item.qty), 0);
             doc.setFontSize(14);
             doc.setFont(undefined, 'bold');
             doc.text("TOTAL", 20, y);
             doc.text("R " + total.toFixed(2), 170, y);
-           
+          
             y += 12;
             doc.setFontSize(11);
             doc.setFont(undefined, 'normal');
             doc.text("AMOUNT PAID", 20, y);
             doc.text("R " + (amountPaid || total).toFixed(2), 170, y);
-           
+          
             y += 8;
             doc.text("CHANGE", 20, y);
             doc.text("R " + (change || 0).toFixed(2), 170, y);
-           
+          
             y += 20;
             doc.setFontSize(10);
             doc.text("Thank you for shopping with AuraPOS!", 105, y, { align: "center" });
             doc.text("Johannesburg, ZA", 105, y + 8, { align: "center" });
-           
+          
             doc.save(`AuraPOS_Receipt_${orderId || Date.now()}.pdf`);
             showToast('📄 Receipt downloaded');
         };
@@ -1589,34 +1589,34 @@
                 const data = snapshot.val() || {};
                 const today = new Date();
                 today.setHours(0,0,0,0);
-              
+             
                 const todaySales = Object.values(data).filter(s => s.timestamp >= today.getTime());
                 const total = todaySales.reduce((sum, s) => sum + parseFloat(s.revenue || 0), 0);
-              
+             
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
-              
+             
                 doc.setFillColor(255, 215, 0);
                 doc.rect(0, 0, 210, 30, 'F');
                 doc.setTextColor(0,0,0);
                 doc.setFontSize(22);
                 doc.text("AURA POS - END OF DAY", 20, 20);
-              
+             
                 doc.setFontSize(12);
                 doc.setTextColor(100);
                 doc.text(`Date: ${new Date().toLocaleDateString('en-ZA')}`, 20, 40);
                 doc.text(`Cashier: ${cashierName || 'Terminal 1'}`, 20, 48);
-              
+             
                 doc.setFontSize(16);
                 doc.setTextColor(0);
                 doc.text(`Total Revenue: R ${total.toFixed(2)}`, 20, 65);
                 doc.setFontSize(12);
                 doc.text(`Transactions: ${todaySales.length}`, 20, 73);
-              
+             
                 let y = 90;
                 doc.setFontSize(10);
                 doc.setTextColor(100);
-              
+             
                 todaySales.forEach(s => {
                     const ord = s.orderNumber || "ORD-" + String(s.timestamp).slice(-6);
                     const time = new Date(s.timestamp).toLocaleTimeString('en-ZA');
@@ -1624,7 +1624,7 @@
                     y += 8;
                     if (y > 280) { doc.addPage(); y = 20; }
                 });
-              
+             
                 doc.save(`AuraPOS_EOD_${new Date().toISOString().slice(0,10)}.pdf`);
                 showToast('📄 PDF Downloaded');
             }, {onlyOnce:true});
