@@ -167,7 +167,6 @@
             border-radius: 24px;
             box-shadow: var(--card-shadow);
             transition: transform 0.3s ease;
-            margin-bottom: 20px;
         }
         .card:hover { transform: translateY(-2px); }
 
@@ -264,37 +263,6 @@
             justify-content: space-between; 
         }
 
-        /* --- Filters & Controls --- */
-        .controls-bar {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .search-input {
-            flex: 1;
-            min-width: 200px;
-            padding: 12px 18px;
-            border-radius: 16px;
-            border: 1.5px solid #F1F3F5;
-            background: #F8F9FA;
-            font-size: 14px;
-            transition: border-color 0.3s;
-        }
-        .search-input:focus { outline: none; border-color: #FFD700; }
-        
-        .date-filter {
-            padding: 12px 18px;
-            border-radius: 16px;
-            border: 1.5px solid #F1F3F5;
-            background: #F8F9FA;
-            font-size: 14px;
-            cursor: pointer;
-            font-weight: 600;
-            color: var(--dark-text);
-        }
-
         /* --- Tables --- */
         table { width: 100%; border-collapse: separate; border-spacing: 0 12px; }
         th { text-align: left; padding: 0 20px; color: var(--muted-text); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -328,13 +296,45 @@
         }
         .status-paid { background: #E3FCEF; color: #00B894; }
         .status-pending { background: #FFF3CD; color: #856404; }
-        
+
         .payment-icon {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            font-weight: 600;
+            gap: 4px;
             font-size: 13px;
+        }
+
+        /* --- Inputs & Filters --- */
+        .search-input {
+            width: 100%;
+            max-width: 300px;
+            padding: 12px 18px;
+            border-radius: 16px;
+            border: 1.5px solid #F1F3F5;
+            background: #F8F9FA;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        .search-input:focus { outline: none; border-color: #FFD700; }
+
+        .date-filter {
+            padding: 12px 18px;
+            border-radius: 16px;
+            border: 1.5px solid #F1F3F5;
+            background: #F8F9FA;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--dark-text);
+            min-width: 150px;
+        }
+
+        .controls-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
         }
 
         /* --- Modals --- */
@@ -385,6 +385,26 @@
             color: var(--muted-text);
         }
 
+        /* --- Collapsible Section --- */
+        .collapsible-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 10px 0;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #F1F3F5;
+        }
+        .collapsible-header h3 { margin: 0; }
+        .toggle-icon { transition: transform 0.3s; font-size: 12px; }
+        .collapsible-header.active .toggle-icon { transform: rotate(180deg); }
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+        }
+        .collapsible-content.open { max-height: 2000px; }
+
         /* --- View Logic --- */
         .view { display: none; animation: fadeIn 0.5s; }
         .view.active { display: block; }
@@ -417,8 +437,8 @@
             main { margin-left: 0; width: 100%; padding-top: 80px; }
             .hamburger { display: block; }
             .product-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
-            .controls-bar { flex-direction: column; align-items: stretch; }
-            .search-input, .date-filter { width: 100%; }
+            .controls-row { flex-direction: column; align-items: stretch; }
+            .search-input, .date-filter { width: 100%; max-width: 100%; }
         }
         @media (max-width: 768px) {
             .header-flex { flex-direction: column; align-items: flex-start; }
@@ -500,10 +520,13 @@
             <div class="card">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:15px;">
                     <h3>Sales History</h3>
-                    <button class="btn-pill" id="endOfDayBtn" style="width:auto;padding:10px 20px;font-size:13px;">📋 End of Day PDF</button>
+                    <div style="display:flex;gap:10px;">
+                        <button class="btn-pill" id="endOfDayBtn" style="width:auto;padding:10px 20px;font-size:13px;">📋 End of Day PDF</button>
+                    </div>
                 </div>
                 
-                <div class="controls-bar">
+                <!-- Controls Row with Date Filter -->
+                <div class="controls-row">
                     <input type="text" id="historySearch" class="search-input" placeholder="🔍 Search by Order #, Customer, or Product...">
                     <select id="historyDateFilter" class="date-filter" onchange="renderSalesHistory()">
                         <option value="today">Today</option>
@@ -513,22 +536,58 @@
                         <option value="all">All Time</option>
                     </select>
                 </div>
+                
+                <!-- Collapsible Today Section -->
+                <div class="collapsible-section" style="margin-bottom: 30px;">
+                    <div class="collapsible-header active" onclick="toggleCollapse(this)">
+                        <h3>📅 Filtered Sales</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content open">
+                        <div style="overflow-x:auto;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Order #</th>
+                                        <th>Date/Time</th>
+                                        <th>Items</th>
+                                        <th>Customer</th>
+                                        <th>Payment</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="todaySalesBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
 
-                <div style="overflow-x:auto;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Order #</th>
-                                <th>Date/Time</th>
-                                <th>Customer</th>
-                                <th>Items</th>
-                                <th>Payment</th>
-                                <th>Total</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody id="historyTableBody"></tbody>
-                    </table>
+                <!-- Collapsible All Time Section -->
+                <div class="collapsible-section">
+                    <div class="collapsible-header" onclick="toggleCollapse(this)">
+                        <h3>📚 All Time Sales</h3>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <input type="text" id="allTimeSearch" class="search-input" placeholder="Search all history..." style="margin-bottom:15px; width:100%; max-width:100%;">
+                        <div style="overflow-x:auto;">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Order #</th>
+                                        <th>Date</th>
+                                        <th>Items</th>
+                                        <th>Customer</th>
+                                        <th>Payment</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="allSalesBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -540,7 +599,8 @@
                     <h3>Kiosk Orders • Awaiting Payment</h3>
                 </div>
                 
-                <div class="controls-bar">
+                <!-- Controls Row with Date Filter -->
+                <div class="controls-row">
                     <input type="text" id="kioskSearch" class="search-input" placeholder="🔍 Search Order # or Customer Name...">
                     <select id="kioskDateFilter" class="date-filter" onchange="renderKioskOrders()">
                         <option value="today">Today</option>
@@ -564,14 +624,14 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        <tbody id="kioskTableBody"></tbody>
+                        <tbody id="kioskBody"></tbody>
                     </table>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Checkout Modal -->
+    <!-- Checkout Modal with Payment Methods -->
     <div id="checkoutModal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
@@ -636,8 +696,8 @@
 
         let inventoryData = {};
         let cart = [];
-        let currentCashOrder = null; 
-        let allSalesData = []; // Cache for filtering
+        let currentCashOrder = null;
+        let allSalesData = [];
 
         // --- Clock ---
         function updateTime() {
@@ -655,7 +715,6 @@
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById(targetId).classList.add('active');
             document.getElementById('sidebar').classList.remove('open');
-
             if(targetId === 'view-history') renderSalesHistory();
             if(targetId === 'view-kiosk') renderKioskOrders();
         };
@@ -752,7 +811,7 @@
             totalDisplay.innerText = `R ${total.toFixed(2)}`;
         }
 
-        // --- Checkout Flow ---
+        // --- Checkout Flow with Payment Methods ---
         document.getElementById('checkoutBtn').addEventListener('click', () => {
             if (!cart.length) return showToast('Cart is empty');
             let html = `<div style="margin-bottom:20px;">`;
@@ -781,14 +840,11 @@
 
         window.confirmSale = async (method) => {
             const now = Date.now();
-            // Generate Order Number: POS for cashier, but if it were a kiosk it would use the same logic
             const orderId = "POS-" + String(now).slice(-6);
-            
             try {
                 for (const item of cart) {
                     const newQty = Math.max(0, inventoryData[item.key].qty - item.qty);
                     await update(ref(db, `inventory/${item.key}`), { qty: newQty });
-
                     await push(salesRef, {
                         name: item.name,
                         price: item.price,
@@ -796,7 +852,7 @@
                         revenue: (parseFloat(item.price) * item.qty).toFixed(2),
                         timestamp: now,
                         customer: "Walk-in",
-                        orderNumber: orderId, // Unified ID
+                        orderNumber: orderId,
                         status: "completed",
                         paymentMethod: method,
                         source: "pos"
@@ -812,12 +868,11 @@
             }
         };
 
-        // --- Sales History with Date Filters ---
+        // --- Date Filter Helper ---
         function getDateRange(filterType) {
             const now = new Date();
             const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             let startDate, endDate;
-
             switch(filterType) {
                 case 'today':
                     startDate = today.getTime();
@@ -843,11 +898,13 @@
             return { startDate, endDate };
         }
 
+        // --- Sales History with Date Filters and Payment Methods ---
         function renderSalesHistory() {
             onValue(salesRef, (snapshot) => {
                 const data = snapshot.val() || {};
                 allSalesData = Object.values(data).sort((a,b) => b.timestamp - a.timestamp);
                 filterAndRenderHistory();
+                renderAllTimeSales();
             }, {onlyOnce:true});
         }
 
@@ -856,7 +913,7 @@
             const searchQuery = document.getElementById('historySearch').value.toLowerCase();
             const { startDate, endDate } = getDateRange(filterType);
             
-            const tbody = document.getElementById('historyTableBody');
+            const tbody = document.getElementById('todaySalesBody');
             tbody.innerHTML = '';
 
             const filtered = allSalesData.filter(sale => {
@@ -878,17 +935,53 @@
                 const dateStr = new Date(sale.timestamp).toLocaleString('en-ZA', {
                     day: '2-digit', month: 'short', hour:'2-digit', minute:'2-digit'
                 });
-                
                 const paymentIcon = sale.paymentMethod === 'cash' ? '💵' : 
                                    sale.paymentMethod === 'paypal' ? '🅿️' : '💳';
-                
                 const row = document.createElement('tr');
                 row.className = 'item-row';
                 row.innerHTML = `
                     <td><span class="order-badge">${orderNum}</span></td>
                     <td>${dateStr}</td>
-                    <td>${sale.customer || 'Walk-in'}</td>
                     <td><strong>${sale.name}</strong> ×${sale.qty}</td>
+                    <td>${sale.customer || 'Walk-in'}</td>
+                    <td><span class="payment-icon">${paymentIcon} ${sale.paymentMethod || 'card'}</span></td>
+                    <td style="font-weight:800;">R ${parseFloat(sale.revenue).toFixed(2)}</td>
+                    <td><span class="status-badge status-paid">Completed</span></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function renderAllTimeSales() {
+            const searchQuery = document.getElementById('allTimeSearch').value.toLowerCase();
+            const tbody = document.getElementById('allSalesBody');
+            tbody.innerHTML = '';
+
+            const filtered = allSalesData.filter(sale => {
+                const matchesSearch = !searchQuery || 
+                    (sale.orderNumber && sale.orderNumber.toLowerCase().includes(searchQuery)) ||
+                    (sale.customer && sale.customer.toLowerCase().includes(searchQuery)) ||
+                    (sale.name && sale.name.toLowerCase().includes(searchQuery));
+                return matchesSearch;
+            });
+
+            if(filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:20px; color:#999;">No sales found</td></tr>`;
+                return;
+            }
+
+            filtered.forEach(sale => {
+                const orderNum = sale.orderNumber || "ORD-" + String(sale.timestamp).slice(-6);
+                const dateStr = new Date(sale.timestamp).toLocaleDateString('en-ZA');
+                const paymentIcon = sale.paymentMethod === 'cash' ? '💵' : 
+                                   sale.paymentMethod === 'paypal' ? '🅿️' : '💳';
+                const row = document.createElement('tr');
+                row.className = 'item-row';
+                row.innerHTML = `
+                    <td><span class="order-badge">${orderNum}</span></td>
+                    <td>${dateStr}</td>
+                    <td><strong>${sale.name}</strong> ×${sale.qty}</td>
+                    <td>${sale.customer || 'Walk-in'}</td>
                     <td><span class="payment-icon">${paymentIcon} ${sale.paymentMethod || 'card'}</span></td>
                     <td style="font-weight:800;">R ${parseFloat(sale.revenue).toFixed(2)}</td>
                     <td><span class="status-badge status-paid">Completed</span></td>
@@ -898,12 +991,20 @@
         }
 
         document.getElementById('historySearch').addEventListener('input', filterAndRenderHistory);
+        document.getElementById('allTimeSearch').addEventListener('input', renderAllTimeSales);
 
-        // --- Kiosk Orders with Date Filters ---
+        // Collapsible Logic
+        window.toggleCollapse = (header) => {
+            header.classList.toggle('active');
+            const content = header.nextElementSibling;
+            content.classList.toggle('open');
+        };
+
+        // --- Kiosk Orders with Date Filters and Search ---
         function renderKioskOrders() {
             onValue(salesRef, (snapshot) => {
                 const data = snapshot.val() || {};
-                allSalesData = Object.values(data); // Reuse global cache or separate if needed
+                allSalesData = Object.values(data);
                 filterAndRenderKiosk();
             }, {onlyOnce:true});
         }
@@ -913,10 +1014,9 @@
             const searchQuery = document.getElementById('kioskSearch').value.toLowerCase();
             const { startDate, endDate } = getDateRange(filterType);
             
-            const tbody = document.getElementById('kioskTableBody');
+            const tbody = document.getElementById('kioskBody');
             tbody.innerHTML = '';
 
-            // Filter: Source is 'kiosk' OR paymentMethod is pending/not set, and not completed
             const filtered = allSalesData.filter(sale => {
                 const isKiosk = sale.source === 'kiosk' || (sale.customer !== "Walk-in" && sale.status !== 'completed');
                 const inDateRange = sale.timestamp >= startDate && sale.timestamp <= endDate;
@@ -936,7 +1036,6 @@
                 const dateStr = new Date(order.timestamp).toLocaleString('en-ZA', {
                     day: '2-digit', month: 'short', hour:'2-digit', minute:'2-digit'
                 });
-                
                 const method = order.paymentMethod || 'pending';
                 const methodLabel = method === 'cash' ? '💵 Cash' : 
                                    method === 'paypal' ? '🅿️ PayPal' : 
@@ -955,7 +1054,7 @@
                     <td>
                         ${method === 'cash' ? 
                             `<button class="btn-pill btn-secondary" style="width:auto;padding:8px 16px;font-size:12px;" onclick="openCashModal('${order.timestamp}')">Collect Cash</button>` :
-                            `<span style="font-size:12px; color:#666;">Awaiting Online</span>`
+                            `<span style="font-size:12px; color:#666;">${method === 'paypal' ? 'Online Paid' : 'Awaiting'}</span>`
                         }
                     </td>
                 `;
@@ -971,7 +1070,6 @@
             if(order) {
                 currentCashOrder = order;
                 const orderNum = order.orderNumber || "KSK-" + String(order.timestamp).slice(-6);
-                
                 document.getElementById('cashModalBody').innerHTML = `
                     <div style="text-align:center; margin-bottom:20px;">
                         <div style="font-size:40px; margin-bottom:10px;">👤</div>
@@ -1008,7 +1106,6 @@
 
         window.confirmCashCollection = async () => {
             if(!currentCashOrder) return;
-            
             try {
                 onValue(salesRef, async (snapshot) => {
                     const data = snapshot.val();
@@ -1035,34 +1132,28 @@
         document.getElementById('endOfDayBtn').addEventListener('click', () => {
             const filterType = document.getElementById('historyDateFilter').value;
             const { startDate, endDate } = getDateRange(filterType);
-            
             const filtered = allSalesData.filter(s => s.timestamp >= startDate && s.timestamp <= endDate);
             const total = filtered.reduce((sum, s) => sum + parseFloat(s.revenue || 0), 0);
             
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-            
             doc.setFillColor(255, 215, 0);
             doc.rect(0, 0, 210, 30, 'F');
             doc.setTextColor(0,0,0);
             doc.setFontSize(22);
             doc.text("AURA POS - SALES REPORT", 20, 20);
-            
             doc.setFontSize(12);
             doc.setTextColor(100);
             doc.text(`Date Range: ${new Date(startDate).toLocaleDateString()} - ${new Date(endDate).toLocaleDateString()}`, 20, 40);
             doc.text(`Cashier: Terminal 1`, 20, 48);
-            
             doc.setFontSize(16);
             doc.setTextColor(0);
             doc.text(`Total Revenue: R ${total.toFixed(2)}`, 20, 65);
             doc.setFontSize(12);
             doc.text(`Transactions: ${filtered.length}`, 20, 73);
-            
             let y = 90;
             doc.setFontSize(10);
             doc.setTextColor(100);
-            
             filtered.forEach(s => {
                 const ord = s.orderNumber || "ORD-" + String(s.timestamp).slice(-6);
                 const time = new Date(s.timestamp).toLocaleTimeString('en-ZA');
@@ -1071,7 +1162,6 @@
                 y += 8;
                 if (y > 280) { doc.addPage(); y = 20; }
             });
-            
             doc.save(`AuraPOS_Report_${new Date().toISOString().slice(0,10)}.pdf`);
             showToast('📄 PDF Downloaded');
         });
