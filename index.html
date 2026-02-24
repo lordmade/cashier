@@ -25,7 +25,6 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-        /* --- Animations --- */
         @keyframes slideInLeft {
             from { transform: translateX(-100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
@@ -42,7 +41,6 @@
             0% { transform: scale(0.9); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
-        /* --- Sidebar & Mobile Menu --- */
         .sidebar {
             width: 280px;
             min-width: 280px;
@@ -58,7 +56,6 @@
             overflow-y: auto;
             transition: transform 0.3s ease;
         }
-     
         .hamburger {
             display: none;
             position: fixed;
@@ -99,7 +96,6 @@
             color: #000;
         }
         .logo-text { font-size: 24px; font-weight: 800; letter-spacing: -1px; }
-     
         .nav-item {
             padding: 14px 20px;
             margin-bottom: 10px;
@@ -128,7 +124,6 @@
         main.shifted {
             width: calc(100% - 280px - 420px);
         }
-        /* --- Header --- */
         .header-flex {
             display: flex;
             justify-content: space-between;
@@ -162,7 +157,6 @@
             70% { box-shadow: 0 0 0 6px rgba(0, 184, 148, 0); }
             100% { box-shadow: 0 0 0 0 rgba(0, 184, 148, 0); }
         }
-        /* --- Cards & Layout --- */
         .card {
             background: var(--white);
             padding: clamp(20px, 3vw, 30px);
@@ -191,7 +185,6 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
         .btn-secondary:hover { box-shadow: 0 12px 24px rgba(0,0,0,0.15); }
-        /* --- Product Grid --- */
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -218,7 +211,6 @@
             font-size: 12px;
             border-radius: 12px;
         }
-        /* --- Cart --- */
         .cart-panel {
             background: var(--white);
             border-radius: 24px;
@@ -251,7 +243,6 @@
         .cart-item-actions { text-align: right; }
         .cart-item-price { font-weight: 800; color: #000; }
         .btn-remove { background: none; border: none; color: #D63031; font-size: 11px; cursor: pointer; margin-top: 4px; }
-     
         .cart-total {
             padding: 24px;
             border-top: 2px solid #F1F3F5;
@@ -260,7 +251,6 @@
             display: flex;
             justify-content: space-between;
         }
-        /* --- Right Slide Panel (Cashier Terminal) --- */
         .right-panel {
             position: fixed;
             top: 0;
@@ -431,7 +421,6 @@
             opacity: 1;
             visibility: visible;
         }
-        /* --- Tables --- */
         table { width: 100%; border-collapse: separate; border-spacing: 0 12px; }
         th { text-align: left; padding: 0 20px; color: var(--muted-text); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
         .item-row { cursor: pointer; transition: transform 0.2s; }
@@ -445,7 +434,6 @@
         }
         .item-row td:first-child { border-left: 1px solid #F1F3F5; border-top-left-radius: 16px; border-bottom-left-radius: 16px; }
         .item-row td:last-child { border-right: 1px solid #F1F3F5; border-top-right-radius: 16px; border-bottom-right-radius: 16px; }
-     
         .order-badge {
             background: #FFD700;
             color: #000;
@@ -464,7 +452,6 @@
         }
         .status-paid { background: #E3FCEF; color: #00B894; }
         .status-pending { background: #FFF3CD; color: #856404; }
-        /* --- Inputs --- */
         .search-input {
             width: 100%;
             max-width: 300px;
@@ -476,7 +463,6 @@
             transition: border-color 0.3s;
         }
         .search-input:focus { outline: none; border-color: #FFD700; }
-        /* --- Modals --- */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -523,7 +509,6 @@
             cursor: pointer;
             color: var(--muted-text);
         }
-        /* --- Collapsible Section --- */
         .collapsible-header {
             display: flex;
             justify-content: space-between;
@@ -542,10 +527,8 @@
             transition: max-height 0.4s ease-out;
         }
         .collapsible-content.open { max-height: 2000px; }
-        /* --- View Logic --- */
         .view { display: none; animation: fadeIn 0.5s; }
         .view.active { display: block; }
-        /* --- Toast --- */
         #toast {
             visibility: hidden;
             min-width: 250px;
@@ -565,7 +548,112 @@
             transition: all 0.3s;
         }
         #toast.show { visibility: visible; transform: translateY(0); opacity: 1; }
-        /* --- Responsive --- */
+        
+        /* Order Lookup Styles */
+        .order-lookup-container {
+            background: linear-gradient(135deg, #FFF9E6 0%, #FFF3CD 100%);
+            border: 2px solid #FFD700;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .order-input-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .order-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 16px 20px;
+            border: 2px solid #FFD700;
+            border-radius: 16px;
+            font-size: 24px;
+            font-weight: 800;
+            text-align: center;
+            letter-spacing: 4px;
+            background: white;
+            color: #1A1C1E;
+            text-transform: uppercase;
+        }
+        .order-input::placeholder {
+            color: #ccc;
+            font-size: 18px;
+            letter-spacing: 2px;
+        }
+        .order-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.3);
+        }
+        .order-details-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 20px;
+            border: 2px solid #E9ECEF;
+            animation: fadeIn 0.3s ease;
+        }
+        .order-details-card.found {
+            border-color: #00B894;
+            background: #F0FFF4;
+        }
+        .order-details-card.not-found {
+            border-color: #D63031;
+            background: #FFF5F5;
+        }
+        .verification-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .verification-btn {
+            padding: 20px;
+            border-radius: 16px;
+            border: 2px solid #E9ECEF;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .verification-btn:hover {
+            border-color: #FFD700;
+            transform: translateY(-2px);
+        }
+        .verification-btn.selected {
+            border-color: #00B894;
+            background: #E3FCEF;
+        }
+        .verification-btn .icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+        .verification-btn .label {
+            font-size: 14px;
+            font-weight: 700;
+        }
+        .numpad-order {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-width: 300px;
+            margin: 20px auto;
+        }
+        .numpad-order-btn {
+            aspect-ratio: 1;
+            border: none;
+            border-radius: 12px;
+            background: white;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .numpad-order-btn:active {
+            background: #FFD700;
+        }
+        
         @media (max-width: 1024px) {
             .sidebar { transform: translateX(-100%); box-shadow: 5px 0 20px rgba(0,0,0,0.1); }
             .sidebar.open { transform: translateX(0); }
@@ -580,6 +668,7 @@
             .pos-container { flex-direction: column; }
             .cart-panel { position: relative; top: 0; margin-top: 20px; }
             table { display: block; overflow-x: auto; white-space: nowrap; }
+            .order-input { font-size: 18px; }
         }
     </style>
 </head>
@@ -595,11 +684,12 @@
         <p style="font-size:12px;font-weight:700;color:#ADB5BD;text-transform:uppercase;letter-spacing:1px;margin-bottom:20px;">CASHIER MENU</p>
         <div style="flex-grow:1;">
             <div class="nav-item active" data-target="view-pos" onclick="navigate('view-pos')">POS Terminal</div>
-            <div class="nav-item" data-target="view-history" onclick="navigate('view-history')">Sales History</div>
             <div class="nav-item" data-target="view-kiosk" onclick="navigate('view-kiosk')">Kiosk Orders</div>
+            <div class="nav-item" data-target="view-history" onclick="navigate('view-history')">Sales History</div>
         </div>
         <div class="status-pill">Live • Johannesburg, ZA</div>
     </aside>
+    
     <!-- Right Slide Panel -->
     <div class="overlay" id="overlay" onclick="closeRightPanel()"></div>
     <div class="right-panel" id="rightPanel">
@@ -608,7 +698,6 @@
             <p>Enter amount received from customer</p>
         </div>
         <div class="right-panel-body">
-            <!-- Display Screen -->
             <div class="display-screen">
                 <div class="display-line">
                     <span>AMOUNT DUE</span>
@@ -627,7 +716,6 @@
                     <span id="displayChange">R 0.00</span>
                 </div>
             </div>
-            <!-- Payment Methods -->
             <div class="payment-methods">
                 <div class="method-btn active" onclick="selectMethod('cash', this)">
                     <div class="icon">💵</div>
@@ -642,14 +730,12 @@
                     <div class="label">Split</div>
                 </div>
             </div>
-            <!-- Quick Amounts -->
             <div class="quick-amounts">
                 <button class="quick-btn" onclick="setExactAmount()">Exact Amount</button>
                 <button class="quick-btn" onclick="addQuickAmount(10)">+ R10</button>
                 <button class="quick-btn" onclick="addQuickAmount(50)">+ R50</button>
                 <button class="quick-btn" onclick="addQuickAmount(100)">+ R100</button>
             </div>
-            <!-- Numpad -->
             <div class="numpad-grid">
                 <button class="numpad-btn" onclick="appendNumber('7')">7</button>
                 <button class="numpad-btn" onclick="appendNumber('8')">8</button>
@@ -671,6 +757,7 @@
             <button class="btn-pill" onclick="closeRightPanel()" style="background:#e9ecef;color:#333;box-shadow:none;">Cancel</button>
         </div>
     </div>
+
     <main id="mainContent">
         <div class="header-flex">
             <div class="greeting">
@@ -683,6 +770,7 @@
                 <p style="color:var(--muted-text);font-size:14px;" id="date-display"></p>
             </div>
         </div>
+
         <!-- POS TERMINAL -->
         <div id="view-pos" class="view active">
             <div class="pos-container" style="display:flex;gap:30px;flex-wrap:wrap;">
@@ -718,6 +806,73 @@
                 </div>
             </div>
         </div>
+
+        <!-- KIOSK ORDERS - ENHANCED WITH ORDER NUMBER LOOKUP -->
+        <div id="view-kiosk" class="view">
+            <!-- Order Lookup Section -->
+            <div class="order-lookup-container">
+                <h2 style="font-size: 24px; margin-bottom: 10px;">🔍 Verify Kiosk Order</h2>
+                <p style="color: var(--muted-text);">Enter the 4-digit order number from the customer's kiosk receipt</p>
+                
+                <div class="order-input-group">
+                    <input type="text" 
+                           id="orderNumberInput" 
+                           class="order-input" 
+                           placeholder="KSK-0000" 
+                           maxlength="8"
+                           oninput="formatOrderNumber(this)"
+                           onkeypress="handleOrderKeypress(event)">
+                    <button class="btn-pill" onclick="lookupOrder()" style="width: auto; padding: 16px 32px;">
+                        🔍 Verify
+                    </button>
+                </div>
+
+                <!-- On-screen Numpad for Order Entry -->
+                <div class="numpad-order">
+                    <button class="numpad-order-btn" onclick="appendToOrder('1')">1</button>
+                    <button class="numpad-order-btn" onclick="appendToOrder('2')">2</button>
+                    <button class="numpad-order-btn" onclick="appendToOrder('3')">3</button>
+                    <button class="numpad-order-btn" onclick="appendToOrder('4')">4</button>
+                    <button class="numpad-order-btn" onclick="appendToOrder('5')">5</button>
+                    <button class="numpad-order-btn" onclick="appendToOrder('6')">6</button>
+                    <button class="numpad-order-btn" onclick="appendToOrder('7')">7</button>
+                    <button class="numpad-order-btn" onclick="appendToOrder('8')">8</button>
+                    <button class="numpad-order-btn" onclick="appendToOrder('9')">9</button>
+                    <button class="numpad-order-btn" onclick="clearOrderInput()" style="background: #FFEBEE; color: #C62828;">C</button>
+                    <button class="numpad-order-btn" onclick="appendToOrder('0')">0</button>
+                    <button class="numpad-order-btn" onclick="backspaceOrder()" style="background: #F1F3F5;">⌫</button>
+                </div>
+
+                <!-- Order Details Display -->
+                <div id="orderDetails" style="display: none;"></div>
+            </div>
+
+            <!-- Pending Orders List -->
+            <div class="card">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+                    <h3>Pending Kiosk Orders</h3>
+                    <input type="text" id="kioskSearch" class="search-input" placeholder="Search Order # or Name">
+                </div>
+                <div style="overflow-x:auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order #</th>
+                                <th>Time</th>
+                                <th>Customer</th>
+                                <th>Cell</th>
+                                <th>Items</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="kioskBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
         <!-- SALES HISTORY -->
         <div id="view-history" class="view">
             <div class="card">
@@ -727,8 +882,6 @@
                         <button class="btn-pill" id="endOfDayBtn" style="width:auto;padding:10px 20px;font-size:13px;">📋 End of Day PDF</button>
                     </div>
                 </div>
-             
-                <!-- Collapsible Today Section -->
                 <div class="collapsible-section" style="margin-bottom: 30px;">
                     <div class="collapsible-header active" onclick="toggleCollapse(this)">
                         <h3>📅 Today's Sales</h3>
@@ -753,7 +906,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Collapsible All Time Section -->
                 <div class="collapsible-section">
                     <div class="collapsible-header" onclick="toggleCollapse(this)">
                         <h3>📚 All Time Sales</h3>
@@ -780,32 +932,8 @@
                 </div>
             </div>
         </div>
-        <!-- KIOSK ORDERS -->
-        <div id="view-kiosk" class="view">
-            <div class="card">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-                    <h3>Kiosk Orders • Awaiting Cash</h3>
-                    <input type="text" id="kioskSearch" class="search-input" placeholder="Search Order # or Name">
-                </div>
-                <div style="overflow-x:auto;">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Order #</th>
-                                <th>Time</th>
-                                <th>Customer</th>
-                                <th>Cell</th>
-                                <th>Items</th>
-                                <th>Total</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="kioskBody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
     </main>
+
     <!-- Login Modal -->
     <div id="loginModal" class="modal-overlay">
         <div class="modal-content">
@@ -820,39 +948,30 @@
             </div>
         </div>
     </div>
-    <!-- Checkout Modal -->
-    <div id="checkoutModal" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Complete Sale</h3>
-                <button class="close-btn" onclick="closeModal('checkoutModal')">&times;</button>
+
+    <!-- Kiosk Payment Verification Modal -->
+    <div id="kioskVerifyModal" class="modal-overlay">
+        <div class="modal-content" style="max-width: 480px;">
+            <div class="modal-header" style="background: var(--primary-grad);">
+                <h3>✅ Verify Cash Payment</h3>
+                <button class="close-btn" onclick="closeModal('kioskVerifyModal')">&times;</button>
             </div>
-            <div class="modal-body" id="checkoutModalBody">
-                <!-- Dynamic Content -->
+            <div class="modal-body" id="kioskVerifyBody">
+                <!-- Dynamic content -->
             </div>
             <div class="modal-footer">
-                <button class="btn-pill" onclick="closeModal('checkoutModal')" style="flex:1;background:#e9ecef;color:#333;box-shadow:none;">Cancel</button>
-                <button class="btn-pill" onclick="confirmSale()" style="flex:1;">✅ Confirm Sale</button>
+                <button class="btn-pill" onclick="closeModal('kioskVerifyModal')" style="flex:1;background:#e9ecef;color:#333;box-shadow:none;">Cancel</button>
+                <button class="btn-pill" onclick="confirmKioskCashPayment()" style="flex:1;">✅ Confirm Paid</button>
             </div>
         </div>
     </div>
-    <!-- Kiosk Payment Panel (Slide-in) -->
-    <div class="right-panel" id="kioskPaymentPanel">
-        <div class="right-panel-header">
-            <h2>💵 Collect Cash</h2>
-            <p>Kiosk Order Payment</p>
-        </div>
-        <div class="right-panel-body" id="kioskPaymentBody">
-            <!-- Dynamic Content -->
-        </div>
-        <div class="right-panel-footer" id="kioskPaymentFooter">
-            <!-- Dynamic Footer -->
-        </div>
-    </div>
+
     <div id="toast">Notification</div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, onValue, update, push, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, onValue, update, push, set, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        
         const firebaseConfig = {
             apiKey: "AIzaSyAxBT0oESoL62oz_x_Z8cMtdENWZPx4tMI",
             authDomain: "pinotp-d7ef5.firebaseapp.com",
@@ -862,24 +981,25 @@
             messagingSenderId: "708458917827",
             appId: "1:708458917827:web:375de278577df0adcf9776"
         };
-     
+
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         const inventoryRef = ref(db, 'inventory');
         const salesRef = ref(db, 'sales');
-        const kioskRef = ref(db, 'kioskOrders');
+        
         let inventoryData = {};
         let cart = [];
         let currentCashOrder = null;
-        let paidStr = '';
-        let currentDue = 0;
+        let verifiedOrder = null;
         let cashierName = '';
         let employeeId = '';
+        
         // Right Panel Variables
         let currentPaymentMethod = 'cash';
         let amountDue = 0;
         let amountPaid = 0;
         let inputBuffer = '';
+
         // --- Clock ---
         function updateTime() {
             const now = new Date();
@@ -888,6 +1008,7 @@
         }
         setInterval(updateTime, 1000);
         updateTime();
+
         // --- Navigation ---
         window.navigate = (targetId) => {
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -901,41 +1022,244 @@
         window.toggleMenu = () => {
             document.getElementById('sidebar').classList.toggle('open');
         };
+
+        // --- Order Number Functions ---
+        window.formatOrderNumber = (input) => {
+            let value = input.value.toUpperCase().replace(/[^0-9]/g, '');
+            if (value.length > 4) value = value.slice(0, 4);
+            if (value.length > 0) {
+                input.value = 'KSK-' + value;
+            } else {
+                input.value = '';
+            }
+        };
+
+        window.handleOrderKeypress = (e) => {
+            if (e.key === 'Enter') {
+                lookupOrder();
+            }
+        };
+
+        window.appendToOrder = (digit) => {
+            const input = document.getElementById('orderNumberInput');
+            let current = input.value.replace(/[^0-9]/g, '');
+            if (current.length < 4) {
+                current += digit;
+                input.value = current.length > 0 ? 'KSK-' + current : '';
+            }
+        };
+
+        window.clearOrderInput = () => {
+            document.getElementById('orderNumberInput').value = '';
+            document.getElementById('orderDetails').style.display = 'none';
+        };
+
+        window.backspaceOrder = () => {
+            const input = document.getElementById('orderNumberInput');
+            let current = input.value.replace(/[^0-9]/g, '');
+            current = current.slice(0, -1);
+            input.value = current.length > 0 ? 'KSK-' + current : '';
+        };
+
+        window.lookupOrder = () => {
+            const input = document.getElementById('orderNumberInput');
+            const orderNum = input.value.trim();
+            
+            if (!orderNum || orderNum.length < 8) {
+                showToast('Please enter a valid order number (e.g., KSK-1234)');
+                return;
+            }
+
+            onValue(salesRef, (snapshot) => {
+                const data = snapshot.val() || {};
+                const orders = Object.entries(data);
+                
+                // Find order by orderNumber
+                const found = orders.find(([key, order]) => order.orderNumber === orderNum);
+                
+                const detailsDiv = document.getElementById('orderDetails');
+                
+                if (found) {
+                    const [key, order] = found;
+                    verifiedOrder = { key, ...order };
+                    
+                    const isPaid = order.status === 'paid';
+                    const statusColor = isPaid ? '#00B894' : '#FFB800';
+                    const statusText = isPaid ? '✅ PAID' : '⏳ PENDING PAYMENT';
+                    
+                    detailsDiv.innerHTML = `
+                        <div class="order-details-card ${isPaid ? '' : 'found'}">
+                            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                                <h3 style="font-size: 20px;">Order ${order.orderNumber}</h3>
+                                <span style="background:${statusColor};color:white;padding:6px 16px;border-radius:50px;font-weight:700;font-size:12px;">${statusText}</span>
+                            </div>
+                            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin-bottom:20px;">
+                                <div>
+                                    <p style="color:#666;font-size:12px;margin-bottom:4px;">Customer</p>
+                                    <p style="font-weight:700;font-size:16px;">${order.customer}</p>
+                                </div>
+                                <div>
+                                    <p style="color:#666;font-size:12px;margin-bottom:4px;">Cell Number</p>
+                                    <p style="font-weight:700;font-size:16px;">${order.cell || 'N/A'}</p>
+                                </div>
+                                <div>
+                                    <p style="color:#666;font-size:12px;margin-bottom:4px;">Item</p>
+                                    <p style="font-weight:700;font-size:16px;">${order.name}</p>
+                                </div>
+                                <div>
+                                    <p style="color:#666;font-size:12px;margin-bottom:4px;">Quantity</p>
+                                    <p style="font-weight:700;font-size:16px;">×${order.qty}</p>
+                                </div>
+                            </div>
+                            <div style="background:#1A1C1E;color:#FFD700;padding:20px;border-radius:16px;text-align:center;">
+                                <p style="color:#888;font-size:14px;margin-bottom:5px;">TOTAL AMOUNT DUE</p>
+                                <p style="font-size:36px;font-weight:800;">R ${parseFloat(order.revenue).toFixed(2)}</p>
+                            </div>
+                            ${!isPaid ? `
+                                <div class="verification-section">
+                                    <div class="verification-btn selected" onclick="selectVerification(this, 'cash')">
+                                        <div class="icon">💵</div>
+                                        <div class="label">Cash Payment</div>
+                                    </div>
+                                    <div class="verification-btn" onclick="selectVerification(this, 'card')">
+                                        <div class="icon">💳</div>
+                                        <div class="label">Card Payment</div>
+                                    </div>
+                                </div>
+                                <button class="btn-pill" onclick="openKioskVerifyModal()" style="margin-top:20px;">✅ Verify & Mark as Paid</button>
+                            ` : `
+                                <div style="background:#E3FCEF;color:#00B894;padding:16px;border-radius:12px;text-align:center;margin-top:20px;font-weight:700;">
+                                    ✓ This order has already been paid
+                                </div>
+                                <button class="btn-pill" onclick="reprintKioskReceipt()" style="margin-top:15px;background:#1A1C1E;color:#FFD700;">🖨️ Reprint Receipt</button>
+                            `}
+                        </div>
+                    `;
+                } else {
+                    detailsDiv.innerHTML = `
+                        <div class="order-details-card not-found">
+                            <div style="text-align:center;padding:20px;">
+                                <div style="font-size:48px;margin-bottom:10px;">❌</div>
+                                <h3 style="color:#D63031;margin-bottom:10px;">Order Not Found</h3>
+                                <p style="color:#666;">No order found with number ${orderNum}</p>
+                                <p style="color:#999;font-size:14px;margin-top:10px;">Please check the order number and try again</p>
+                            </div>
+                        </div>
+                    `;
+                }
+                detailsDiv.style.display = 'block';
+            }, {onlyOnce:true});
+        };
+
+        window.selectVerification = (btn, method) => {
+            document.querySelectorAll('.verification-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            verifiedOrder.paymentMethod = method;
+        };
+
+        window.openKioskVerifyModal = () => {
+            if (!verifiedOrder) return;
+            
+            const body = document.getElementById('kioskVerifyBody');
+            body.innerHTML = `
+                <div style="text-align:center;margin-bottom:25px;">
+                    <div style="font-size:64px;margin-bottom:15px;">💵</div>
+                    <h2 style="margin-bottom:10px;">Confirm Cash Payment</h2>
+                    <p style="color:#666;">Verify that you have received cash from the customer</p>
+                </div>
+                <div style="background:#f8f9fa;padding:20px;border-radius:16px;margin-bottom:20px;">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:15px;padding-bottom:15px;border-bottom:1px solid #dee2e6;">
+                        <span style="color:#666;">Order Number</span>
+                        <span style="font-weight:800;">${verifiedOrder.orderNumber}</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;margin-bottom:15px;padding-bottom:15px;border-bottom:1px solid #dee2e6;">
+                        <span style="color:#666;">Customer</span>
+                        <span style="font-weight:800;">${verifiedOrder.customer}</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;margin-bottom:15px;padding-bottom:15px;border-bottom:1px solid #dee2e6;">
+                        <span style="color:#666;">Item</span>
+                        <span style="font-weight:800;">${verifiedOrder.name} ×${verifiedOrder.qty}</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;align-items:center;">
+                        <span style="color:#666;">Amount Received</span>
+                        <span style="font-size:28px;font-weight:800;color:#00B894;">R ${parseFloat(verifiedOrder.revenue).toFixed(2)}</span>
+                    </div>
+                </div>
+                <div style="background:#FFF3CD;border:2px solid #FFD700;border-radius:12px;padding:16px;text-align:center;">
+                    <p style="font-weight:700;color:#856404;margin-bottom:5px;">⚠️ Action Required</p>
+                    <p style="font-size:14px;color:#856404;">Click "Confirm Paid" to mark this order as completed and print receipt</p>
+                </div>
+            `;
+            
+            document.getElementById('kioskVerifyModal').style.display = 'flex';
+        };
+
+        window.confirmKioskCashPayment = async () => {
+            if (!verifiedOrder) return;
+            
+            try {
+                await update(ref(db, `sales/${verifiedOrder.key}`), {
+                    status: 'paid',
+                    paymentMethod: verifiedOrder.paymentMethod || 'cash',
+                    paidAt: Date.now(),
+                    paidBy: cashierName,
+                    cashierId: employeeId
+                });
+                
+                closeModal('kioskVerifyModal');
+                showToast(`✅ Order ${verifiedOrder.orderNumber} marked as paid!`);
+                
+                // Refresh the display
+                lookupOrder();
+                renderKioskOrders();
+                
+                // Auto-print receipt
+                setTimeout(() => printKioskReceipt(verifiedOrder), 500);
+                
+            } catch (e) {
+                console.error(e);
+                showToast('❌ Error updating order status');
+            }
+        };
+
+        window.reprintKioskReceipt = () => {
+            if (verifiedOrder) {
+                printKioskReceipt(verifiedOrder);
+            }
+        };
+
         // --- Right Panel Functions ---
         window.openCheckout = () => {
             if (!cart.length) return showToast('Cart is empty');
-          
-            // Calculate total
+            
             amountDue = cart.reduce((sum, item) => sum + (parseFloat(item.price) * item.qty), 0);
             amountPaid = 0;
             inputBuffer = '';
             currentPaymentMethod = 'cash';
-          
-            // Update display
+            
             updateDisplay();
-          
-            // Reset payment method buttons
+            
             document.querySelectorAll('.method-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.method-btn')[0].classList.add('active');
-          
-            // Open panel
+            
             document.getElementById('rightPanel').classList.add('open');
             document.getElementById('overlay').classList.add('active');
             document.getElementById('mainContent').classList.add('shifted');
         };
+
         window.closeRightPanel = () => {
             document.getElementById('rightPanel').classList.remove('open');
-            document.getElementById('kioskPaymentPanel').classList.remove('open');
             document.getElementById('overlay').classList.remove('active');
             document.getElementById('mainContent').classList.remove('shifted');
             inputBuffer = '';
             amountPaid = 0;
         };
+
         window.selectMethod = (method, btn) => {
             currentPaymentMethod = method;
             document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-          
+            
             if (method === 'card') {
                 amountPaid = amountDue;
                 inputBuffer = amountDue.toFixed(2);
@@ -943,6 +1267,7 @@
                 showToast('Card payment: Exact amount selected');
             }
         };
+
         window.appendNumber = (num) => {
             if (inputBuffer.length >= 9) return;
             if (num === '.' && inputBuffer.includes('.')) return;
@@ -951,35 +1276,40 @@
             amountPaid = parseFloat(inputBuffer) || 0;
             updateDisplay();
         };
+
         window.clearEntry = () => {
             inputBuffer = '';
             amountPaid = 0;
             updateDisplay();
         };
+
         window.backspace = () => {
             inputBuffer = inputBuffer.slice(0, -1);
             amountPaid = parseFloat(inputBuffer) || 0;
             updateDisplay();
         };
+
         window.setExactAmount = () => {
             inputBuffer = amountDue.toFixed(2);
             amountPaid = amountDue;
             updateDisplay();
         };
+
         window.addQuickAmount = (amount) => {
             amountPaid += amount;
             inputBuffer = amountPaid.toFixed(2);
             updateDisplay();
         };
+
         function updateDisplay() {
             document.getElementById('displayDue').innerText = 'R ' + amountDue.toFixed(2);
             document.getElementById('displayPaid').innerText = 'R ' + amountPaid.toFixed(2);
             document.getElementById('displayTotal').innerText = 'R ' + amountDue.toFixed(2);
-          
+            
             const change = amountPaid - amountDue;
             const changeLine = document.getElementById('changeLine');
             const changeDisplay = document.getElementById('displayChange');
-          
+            
             if (change >= 0 && amountPaid > 0) {
                 changeLine.style.display = 'flex';
                 changeDisplay.innerText = 'R ' + change.toFixed(2);
@@ -993,6 +1323,7 @@
                 }
             }
         }
+
         window.processPayment = async () => {
             if (amountPaid < amountDue) {
                 showToast('❌ Insufficient amount!');
@@ -1000,13 +1331,14 @@
             }
             const change = amountPaid - amountDue;
             const now = Date.now();
-            const orderId = "POS-" + String(now).slice(-6);
+            // Generate KSK format order number for POS sales too (for consistency)
+            const orderId = "KSK-" + String(Math.floor(1000 + Math.random() * 9000));
+            
             try {
-                // Process each cart item
                 for (const item of cart) {
                     const newQty = Math.max(0, inventoryData[item.key].qty - item.qty);
                     await update(ref(db, `inventory/${item.key}`), { qty: newQty });
-                  
+                    
                     await push(salesRef, {
                         name: item.name,
                         price: item.price,
@@ -1023,22 +1355,23 @@
                         employeeId: employeeId
                     });
                 }
-                // Show success in panel
+                
                 const successHtml = `
                     <div style="text-align:center;padding:40px 20px;">
                         <div style="font-size:60px;margin-bottom:20px;">✅</div>
                         <h2>Payment Complete!</h2>
                         <p style="margin:20px 0 10px;color:#666;">Change to give:</p>
                         <p style="font-size:32px;font-weight:800;color:#00B894;">R ${change.toFixed(2)}</p>
+                        <p style="margin-top:15px;color:#666;font-size:14px;">Order: ${orderId}</p>
                         <button onclick="printReceipt('${orderId}', ${amountPaid}, ${change}); closeRightPanel();" class="btn-pill" style="margin-top:30px;">🖨️ Print Receipt</button>
                     </div>
                 `;
-              
+                
                 document.querySelector('.right-panel-body').innerHTML = successHtml;
                 document.querySelector('.right-panel-footer').innerHTML = `
                     <button class="btn-pill" onclick="resetPanel(); closeRightPanel();" style="width:100%;">Done</button>
                 `;
-              
+                
                 showToast(`✅ Sale Complete: ${orderId}`);
                 cart = [];
                 renderCart();
@@ -1047,6 +1380,7 @@
                 showToast("❌ Error processing sale");
             }
         };
+
         window.resetPanel = () => {
             document.querySelector('.right-panel-body').innerHTML = `
                 <div class="display-screen">
@@ -1108,6 +1442,7 @@
                 <button class="btn-pill" onclick="closeRightPanel()" style="background:#e9ecef;color:#333;box-shadow:none;">Cancel</button>
             `;
         };
+
         // --- Login ---
         window.loginCashier = () => {
             const name = document.getElementById('cashierName').value.trim();
@@ -1122,11 +1457,13 @@
             document.getElementById('cashierDisplay').innerText = `👤 ${name} • ID: ${id}`;
             showToast(`Welcome, ${name}!`);
         };
+
         // --- Inventory & POS ---
         onValue(inventoryRef, (snapshot) => {
             inventoryData = snapshot.val() || {};
             renderProductGrid();
         });
+
         function renderProductGrid(filter = '') {
             const container = document.getElementById('productGrid');
             container.innerHTML = '';
@@ -1152,7 +1489,9 @@
                 delay += 50;
             });
         }
+
         document.getElementById('productSearch').addEventListener('input', (e) => renderProductGrid(e.target.value));
+
         window.addToCart = (key) => {
             const item = inventoryData[key];
             const existing = cart.find(i => i.key === key);
@@ -1164,15 +1503,17 @@
             renderCart();
             showToast(`Added ${item.name}`);
         };
+
         window.removeFromCart = (index) => {
             cart.splice(index, 1);
             renderCart();
         };
+
         function renderCart() {
             const container = document.getElementById('cartItems');
             const countBadge = document.getElementById('cartCount');
             const totalDisplay = document.getElementById('cartTotal');
-         
+            
             container.innerHTML = '';
             let total = 0;
             let itemCount = 0;
@@ -1205,35 +1546,37 @@
             countBadge.innerText = itemCount;
             totalDisplay.innerText = `R ${total.toFixed(2)}`;
         }
+
         // --- Sales History ---
         function renderSalesHistory() {
             onValue(salesRef, (snapshot) => {
                 const data = snapshot.val() || {};
                 const allSales = Object.values(data).sort((a,b) => b.timestamp - a.timestamp);
-             
+                
                 const today = new Date();
                 today.setHours(0,0,0,0);
-             
+                
                 const todaySales = allSales.filter(s => s.timestamp >= today.getTime());
-             
+                
                 renderTable(todaySales, 'todaySalesBody', true);
                 renderTable(allSales, 'allSalesBody', false);
             }, {onlyOnce:true});
         }
+
         function renderTable(sales, elementId, isToday) {
             const tbody = document.getElementById(elementId);
             tbody.innerHTML = '';
-         
+            
             if(sales.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:20px; color:#999;">No sales found</td></tr>`;
                 return;
             }
             sales.forEach(sale => {
-                const orderNum = sale.orderNumber || "ORD-" + String(sale.timestamp).slice(-6);
+                const orderNum = sale.orderNumber || "KSK-" + String(sale.timestamp).slice(-4);
                 const dateStr = isToday
                     ? new Date(sale.timestamp).toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'})
                     : new Date(sale.timestamp).toLocaleDateString('en-ZA');
-             
+                
                 const row = document.createElement('tr');
                 row.className = 'item-row';
                 row.innerHTML = `
@@ -1247,10 +1590,11 @@
                 tbody.appendChild(row);
             });
         }
-        // Filter Listeners
+
         document.getElementById('todaySearch').addEventListener('input', (e) => filterTable('todaySalesBody', e.target.value));
         document.getElementById('allTimeSearch').addEventListener('input', (e) => filterTable('allSalesBody', e.target.value));
         document.getElementById('kioskSearch').addEventListener('input', (e) => filterTable('kioskBody', e.target.value));
+
         function filterTable(tbodyId, query) {
             const rows = document.getElementById(tbodyId).getElementsByTagName('tr');
             for (let row of rows) {
@@ -1258,28 +1602,30 @@
                 row.style.display = text.includes(query.toLowerCase()) ? '' : 'none';
             }
         }
-        // Collapsible Logic
+
         window.toggleCollapse = (header) => {
             header.classList.toggle('active');
             const content = header.nextElementSibling;
             content.classList.toggle('open');
         };
+
         // --- Kiosk Orders ---
         function renderKioskOrders() {
             onValue(salesRef, (snapshot) => {
                 const data = snapshot.val() || {};
-                const orders = Object.values(data)
-                    .filter(s => s.customer !== "Walk-in" && s.status !== 'paid')
-                    .sort((a,b) => b.timestamp - a.timestamp);
-             
+                const orders = Object.entries(data)
+                    .filter(([key, s]) => s.customer !== "Walk-in")
+                    .sort((a,b) => b[1].timestamp - a[1].timestamp);
+                
                 const tbody = document.getElementById('kioskBody');
                 tbody.innerHTML = '';
                 if(orders.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:30px; color:#999;">No pending kiosk orders</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:30px; color:#999;">No kiosk orders found</td></tr>`;
                     return;
                 }
-                orders.forEach(order => {
-                    const orderNum = order.orderNumber ? `#${order.orderNumber}` : `#${String(order.timestamp).slice(-6)}`;
+                orders.forEach(([key, order]) => {
+                    const orderNum = order.orderNumber || "KSK-" + String(order.timestamp).slice(-4);
+                    const isPaid = order.status === 'paid';
                     const row = document.createElement('tr');
                     row.className = 'item-row';
                     row.innerHTML = `
@@ -1289,171 +1635,27 @@
                         <td>${order.cell || '-'}</td>
                         <td>${order.name} ×${order.qty}</td>
                         <td style="font-weight:800;color:#00B894;">R ${parseFloat(order.revenue).toFixed(2)}</td>
-                        <td><button class="btn-pill btn-secondary" style="width:auto;padding:8px 16px;font-size:12px;" onclick="openKioskPaymentPanel('${order.timestamp}')">Collect Cash</button></td>
+                        <td><span class="status-badge ${isPaid ? 'status-paid' : 'status-pending'}">${isPaid ? 'Paid' : 'Pending'}</span></td>
+                        <td>${!isPaid ? `<button class="btn-pill btn-secondary" style="width:auto;padding:8px 16px;font-size:12px;" onclick="quickVerify('${orderNum}')">Verify</button>` : '<span style="color:#00B894;font-size:12px;">✓ Complete</span>'}</td>
                     `;
                     tbody.appendChild(row);
                 });
             }, {onlyOnce:true});
         }
-        // --- Kiosk Payment Panel (Slide-in) ---
-        window.openKioskPaymentPanel = (timestamp) => {
-            onValue(salesRef, (snapshot) => {
-                const data = snapshot.val();
-                const order = Object.values(data).find(o => o.timestamp == timestamp);
-                if(order) {
-                    currentCashOrder = order;
-                    currentDue = parseFloat(order.revenue || 0);
-                    paidStr = '';
-                  
-                    const orderNum = order.orderNumber ? `#${order.orderNumber}` : `#${String(order.timestamp).slice(-6)}`;
-                  
-                    // Build the panel content
-                    const bodyHtml = `
-                        <div style="text-align:center; margin-bottom:25px;">
-                            <div style="font-size:48px;margin-bottom:10px;">👤</div>
-                            <h2 style="margin:0 0 5px;">${order.customer}</h2>
-                            <p style="color:#666;margin:0;">${order.cell || 'No cell provided'}</p>
-                            <span class="order-badge" style="margin-top:15px;">${orderNum}</span>
-                        </div>
-                        <div style="background:#f8f9fa; padding:20px; border-radius:16px; margin-bottom:25px;">
-                            <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:15px;border-bottom:1px solid #eee;">
-                                <span style="font-size:15px;color:#666;">Amount Due</span>
-                                <span style="font-size:26px;font-weight:800;color:#00B894;">R ${currentDue.toFixed(2)}</span>
-                            </div>
-                            <div style="margin:20px 0;display:flex;justify-content:space-between;align-items:center;">
-                                <span style="font-size:18px;">Amount Paid</span>
-                                <span id="kioskPaidDisplay" style="font-size:32px;font-weight:800;color:#1A1C1E;">R 0.00</span>
-                            </div>
-                            <div style="display:flex;justify-content:space-between;align-items:center;">
-                                <span style="font-size:18px;">Change to Give</span>
-                                <span id="kioskChangeDisplay" style="font-size:26px;font-weight:800;color:#00B894;">R 0.00</span>
-                            </div>
-                        </div>
-                        <p style="text-align:center;font-size:13px;color:#666;margin-bottom:15px;">Enter amount received from customer</p>
-                      
-                        <!-- Quick Amounts -->
-                        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));gap:10px;margin-bottom:25px;">
-                            <button onclick="setKioskQuickAmount(50)" class="btn-pill" style="background:#fff;color:#000;border:2px solid #eee;padding:12px 0;font-size:14px;">R 50</button>
-                            <button onclick="setKioskQuickAmount(100)" class="btn-pill" style="background:#fff;color:#000;border:2px solid #eee;padding:12px 0;font-size:14px;">R 100</button>
-                            <button onclick="setKioskQuickAmount(200)" class="btn-pill" style="background:#fff;color:#000;border:2px solid #eee;padding:12px 0;font-size:14px;">R 200</button>
-                            <button onclick="setKioskExact()" class="btn-pill" style="background:#fff;color:#000;border:2px solid #eee;padding:12px 0;font-size:14px;">Exact</button>
-                        </div>
-                      
-                        <!-- Dial Pad -->
-                        <div style="background:#fff;border-radius:20px;padding:20px;box-shadow:inset 0 2px 10px rgba(0,0,0,0.03);">
-                            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
-                                <button class="numpad-btn" onclick="appendToKioskPaid('7')">7</button>
-                                <button class="numpad-btn" onclick="appendToKioskPaid('8')">8</button>
-                                <button class="numpad-btn" onclick="appendToKioskPaid('9')">9</button>
-                                <button class="numpad-btn" onclick="appendToKioskPaid('4')">4</button>
-                                <button class="numpad-btn" onclick="appendToKioskPaid('5')">5</button>
-                                <button class="numpad-btn" onclick="appendToKioskPaid('6')">6</button>
-                                <button class="numpad-btn" onclick="appendToKioskPaid('1')">1</button>
-                                <button class="numpad-btn" onclick="appendToKioskPaid('2')">2</button>
-                                <button class="numpad-btn" onclick="appendToKioskPaid('3')">3</button>
-                                <button class="numpad-btn clear" onclick="clearKioskPaidInput()">C</button>
-                                <button class="numpad-btn" onclick="appendToKioskPaid('0')">0</button>
-                                <button class="numpad-btn" onclick="appendToKioskPaid('.')">.</button>
-                            </div>
-                            <button onclick="backspaceKioskPaidInput()" style="margin-top:12px;width:100%;padding:16px;background:#F1F3F5;border:none;border-radius:16px;font-size:18px;font-weight:600;">⌫ Backspace</button>
-                        </div>
-                    `;
-                  
-                    const footerHtml = `
-                        <button class="btn-pill" onclick="confirmKioskPayment()" id="confirmKioskBtn" style="margin-bottom:10px;">✅ Mark as Paid</button>
-                        <button class="btn-pill" onclick="closeRightPanel()" style="background:#e9ecef;color:#333;box-shadow:none;">Cancel</button>
-                    `;
-                  
-                    document.getElementById('kioskPaymentBody').innerHTML = bodyHtml;
-                    document.getElementById('kioskPaymentFooter').innerHTML = footerHtml;
-                    updateKioskPaidDisplay();
-                  
-                    // Open panel
-                    document.getElementById('kioskPaymentPanel').classList.add('open');
-                    document.getElementById('overlay').classList.add('active');
-                    document.getElementById('mainContent').classList.add('shifted');
-                }
-            }, {onlyOnce:true});
+
+        window.quickVerify = (orderNum) => {
+            document.getElementById('orderNumberInput').value = orderNum;
+            lookupOrder();
         };
-        // Kiosk Dial Pad Functions
-        window.appendToKioskPaid = function(digit) {
-            if (paidStr.length >= 9) return;
-            if (digit === '.' && paidStr.includes('.')) return;
-            paidStr += digit;
-            updateKioskPaidDisplay();
-        };
-        window.backspaceKioskPaidInput = function() {
-            paidStr = paidStr.slice(0, -1);
-            updateKioskPaidDisplay();
-        };
-        window.clearKioskPaidInput = function() {
-            paidStr = '';
-            updateKioskPaidDisplay();
-        };
-        window.setKioskQuickAmount = function(amount) {
-            paidStr = amount.toString();
-            updateKioskPaidDisplay();
-        };
-        window.setKioskExact = function() {
-            paidStr = currentDue.toFixed(2);
-            updateKioskPaidDisplay();
-        };
-        function updateKioskPaidDisplay() {
-            let paidVal = paidStr ? parseFloat(paidStr) : 0;
-            if (isNaN(paidVal)) paidVal = 0;
-            const paidDisplay = document.getElementById('kioskPaidDisplay');
-            const changeDisplay = document.getElementById('kioskChangeDisplay');
-            if (paidDisplay) paidDisplay.innerText = `R ${paidVal.toFixed(2)}`;
-            const changeVal = paidVal - currentDue;
-            if (changeDisplay) {
-                changeDisplay.innerText = changeVal >= 0 ? `R ${changeVal.toFixed(2)}` : `R 0.00`;
-                changeDisplay.style.color = changeVal >= 0 ? '#00B894' : '#999';
-            }
-        }
-        window.confirmKioskPayment = async () => {
-            if(!currentCashOrder) return;
-            let paidVal = paidStr ? parseFloat(paidStr) : 0;
-            if (paidVal < currentDue) {
-                showToast('❌ Insufficient amount paid!');
-                return;
-            }
-            const changeVal = paidVal - currentDue;
-            try {
-                onValue(salesRef, async (snapshot) => {
-                    const data = snapshot.val();
-                    const key = Object.keys(data).find(k => data[k].timestamp === currentCashOrder.timestamp);
-                 
-                    if(key) {
-                        await update(ref(db, `sales/${key}`), { status: 'paid' });
-                      
-                        // Show success screen with Print Receipt option
-                        const successHtml = `
-                            <div style="text-align:center;padding:40px 20px;">
-                                <div style="font-size:60px;margin-bottom:20px;">✅</div>
-                                <h2>Payment Complete!</h2>
-                                <p style="margin:20px 0 10px;color:#666;">Change to give customer:</p>
-                                <p style="font-size:28px;font-weight:800;color:#00B894;">R ${changeVal.toFixed(2)}</p>
-                                <button onclick="printKioskReceipt(); closeRightPanel();" class="btn-pill" style="margin-top:30px;width:100%;">🖨️ Print Customer Receipt</button>
-                            </div>
-                        `;
-                        document.getElementById('kioskPaymentBody').innerHTML = successHtml;
-                        document.getElementById('kioskPaymentFooter').innerHTML = `
-                            <button class="btn-pill" onclick="closeRightPanel()" style="width:100%;background:#e9ecef;color:#333;box-shadow:none;">Done</button>
-                        `;
-                      
-                        renderKioskOrders();
-                        renderSalesHistory();
-                    }
-                }, {onlyOnce:true});
-            } catch (e) {
-                console.error(e);
-                showToast("❌ Error updating order");
-            }
-        };
-        window.printKioskReceipt = () => {
+
+        // --- Receipt Printing ---
+        window.printKioskReceipt = (order = null) => {
+            const receiptOrder = order || verifiedOrder;
+            if (!receiptOrder) return;
+            
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-          
+            
             doc.setFillColor(255, 215, 0);
             doc.rect(0, 0, 210, 35, 'F');
             doc.setTextColor(0);
@@ -1461,16 +1663,17 @@
             doc.text("AURA POS", 105, 18, { align: "center" });
             doc.setFontSize(14);
             doc.text("KIOSK RECEIPT", 105, 28, { align: "center" });
-          
+            
             doc.setFontSize(11);
             doc.setTextColor(80);
-            const orderNum = currentCashOrder.orderNumber ? `#${currentCashOrder.orderNumber}` : `#${String(currentCashOrder.timestamp).slice(-6)}`;
+            const orderNum = receiptOrder.orderNumber || "KSK-" + String(receiptOrder.timestamp).slice(-4);
             doc.text(`Order # ${orderNum}`, 20, 50);
-            doc.text(new Date().toLocaleDateString('en-ZA') + " " + new Date().toLocaleTimeString('en-ZA', {hour:'2-digit', minute:'2-digit'}), 20, 58);
-            doc.text(`Customer: ${currentCashOrder.customer}`, 20, 66);
-            doc.text(`Cashier: ${cashierName} (${employeeId})`, 20, 74);
-          
-            let y = 90;
+            doc.text(new Date(receiptOrder.timestamp).toLocaleDateString('en-ZA') + " " + new Date(receiptOrder.timestamp).toLocaleTimeString('en-ZA', {hour:'2-digit', minute:'2-digit'}), 20, 58);
+            doc.text(`Customer: ${receiptOrder.customer}`, 20, 66);
+            doc.text(`Cell: ${receiptOrder.cell || 'N/A'}`, 20, 74);
+            doc.text(`Cashier: ${receiptOrder.paidBy || cashierName || 'Self-Service'}`, 20, 82);
+            
+            let y = 95;
             doc.setFontSize(10);
             doc.text("────────────────────────────────────", 20, y);
             y += 8;
@@ -1481,45 +1684,46 @@
             y += 6;
             doc.text("────────────────────────────────────", 20, y);
             y += 10;
-          
-            const unitPrice = parseFloat(currentCashOrder.price).toFixed(2);
-            const total = (parseFloat(currentCashOrder.price) * currentCashOrder.qty).toFixed(2);
-            doc.text(currentCashOrder.name.substring(0, 25), 20, y);
-            doc.text(currentCashOrder.qty.toString(), 95, y);
+            
+            const unitPrice = parseFloat(receiptOrder.price).toFixed(2);
+            const total = (parseFloat(receiptOrder.price) * receiptOrder.qty).toFixed(2);
+            doc.text(receiptOrder.name.substring(0, 25), 20, y);
+            doc.text(receiptOrder.qty.toString(), 95, y);
             doc.text("R " + unitPrice, 125, y);
             doc.text("R " + total, 170, y);
-          
+            
             y += 15;
-            const revenue = parseFloat(currentCashOrder.revenue).toFixed(2);
+            const revenue = parseFloat(receiptOrder.revenue).toFixed(2);
             doc.setFontSize(14);
             doc.setFont(undefined, 'bold');
             doc.text("TOTAL", 20, y);
             doc.text("R " + revenue, 170, y);
-          
+            
             y += 12;
             doc.setFontSize(11);
             doc.setFont(undefined, 'normal');
-            doc.text("AMOUNT PAID", 20, y);
-            doc.text("R " + paidStr, 170, y);
-          
-            y += 8;
-            const changeVal = parseFloat(paidStr) - parseFloat(revenue);
-            doc.text("CHANGE", 20, y);
-            doc.text("R " + changeVal.toFixed(2), 170, y);
-          
+            doc.text("STATUS", 20, y);
+            doc.text(receiptOrder.status === 'paid' ? "PAID ✓" : "PENDING", 170, y);
+            
+            if (receiptOrder.status === 'paid') {
+                y += 8;
+                doc.text("PAYMENT METHOD", 20, y);
+                doc.text((receiptOrder.paymentMethod || 'cash').toUpperCase(), 170, y);
+            }
+            
             y += 20;
             doc.setFontSize(10);
             doc.text("Thank you for shopping with AuraPOS!", 105, y, { align: "center" });
             doc.text("Johannesburg, ZA", 105, y + 8, { align: "center" });
-          
+            
             doc.save(`AuraPOS_Kiosk_Receipt_${orderNum}.pdf`);
             showToast('📄 Receipt downloaded');
         };
-        // --- Print Receipt ---
+
         window.printReceipt = (orderId, amountPaid = 0, change = 0) => {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
-          
+            
             doc.setFillColor(255, 215, 0);
             doc.rect(0, 0, 210, 35, 'F');
             doc.setTextColor(0);
@@ -1527,14 +1731,14 @@
             doc.text("AURA POS", 105, 18, { align: "center" });
             doc.setFontSize(14);
             doc.text("RECEIPT", 105, 28, { align: "center" });
-          
+            
             doc.setFontSize(11);
             doc.setTextColor(80);
-            doc.text(`Order # ${orderId || "POS-" + Date.now()}`, 20, 50);
+            doc.text(`Order # ${orderId}`, 20, 50);
             doc.text(new Date().toLocaleDateString('en-ZA') + " " + new Date().toLocaleTimeString('en-ZA', {hour:'2-digit', minute:'2-digit'}), 20, 58);
             doc.text(`Customer: Walk-in`, 20, 66);
             doc.text(`Cashier: ${cashierName} (${employeeId})`, 20, 74);
-          
+            
             let y = 90;
             doc.setFontSize(10);
             doc.text("────────────────────────────────────", 20, y);
@@ -1546,8 +1750,7 @@
             y += 6;
             doc.text("────────────────────────────────────", 20, y);
             y += 10;
-          
-            // Print cart items
+            
             cart.forEach(item => {
                 const unitPrice = parseFloat(item.price).toFixed(2);
                 const total = (parseFloat(item.price) * item.qty).toFixed(2);
@@ -1557,78 +1760,80 @@
                 doc.text("R " + total, 170, y);
                 y += 8;
             });
-          
+            
             y += 10;
             const total = cart.reduce((sum, item) => sum + (parseFloat(item.price) * item.qty), 0);
             doc.setFontSize(14);
             doc.setFont(undefined, 'bold');
             doc.text("TOTAL", 20, y);
             doc.text("R " + total.toFixed(2), 170, y);
-          
+            
             y += 12;
             doc.setFontSize(11);
             doc.setFont(undefined, 'normal');
             doc.text("AMOUNT PAID", 20, y);
             doc.text("R " + (amountPaid || total).toFixed(2), 170, y);
-          
+            
             y += 8;
             doc.text("CHANGE", 20, y);
             doc.text("R " + (change || 0).toFixed(2), 170, y);
-          
+            
             y += 20;
             doc.setFontSize(10);
             doc.text("Thank you for shopping with AuraPOS!", 105, y, { align: "center" });
             doc.text("Johannesburg, ZA", 105, y + 8, { align: "center" });
-          
-            doc.save(`AuraPOS_Receipt_${orderId || Date.now()}.pdf`);
+            
+            doc.save(`AuraPOS_Receipt_${orderId}.pdf`);
             showToast('📄 Receipt downloaded');
         };
+
         // --- End of Day PDF ---
         document.getElementById('endOfDayBtn').addEventListener('click', () => {
             onValue(salesRef, (snapshot) => {
                 const data = snapshot.val() || {};
                 const today = new Date();
                 today.setHours(0,0,0,0);
-             
+                
                 const todaySales = Object.values(data).filter(s => s.timestamp >= today.getTime());
                 const total = todaySales.reduce((sum, s) => sum + parseFloat(s.revenue || 0), 0);
-             
+                
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
-             
+                
                 doc.setFillColor(255, 215, 0);
                 doc.rect(0, 0, 210, 30, 'F');
                 doc.setTextColor(0,0,0);
                 doc.setFontSize(22);
                 doc.text("AURA POS - END OF DAY", 20, 20);
-             
+                
                 doc.setFontSize(12);
                 doc.setTextColor(100);
                 doc.text(`Date: ${new Date().toLocaleDateString('en-ZA')}`, 20, 40);
                 doc.text(`Cashier: ${cashierName || 'Terminal 1'}`, 20, 48);
-             
+                
                 doc.setFontSize(16);
                 doc.setTextColor(0);
                 doc.text(`Total Revenue: R ${total.toFixed(2)}`, 20, 65);
                 doc.setFontSize(12);
                 doc.text(`Transactions: ${todaySales.length}`, 20, 73);
-             
+                
                 let y = 90;
                 doc.setFontSize(10);
                 doc.setTextColor(100);
-             
+                
                 todaySales.forEach(s => {
-                    const ord = s.orderNumber || "ORD-" + String(s.timestamp).slice(-6);
+                    const ord = s.orderNumber || "KSK-" + String(s.timestamp).slice(-4);
                     const time = new Date(s.timestamp).toLocaleTimeString('en-ZA');
                     doc.text(`${ord} | ${time} | ${s.customer} | ${s.name} - R ${s.revenue}`, 20, y);
                     y += 8;
                     if (y > 280) { doc.addPage(); y = 20; }
                 });
-             
+                
                 doc.save(`AuraPOS_EOD_${new Date().toISOString().slice(0,10)}.pdf`);
                 showToast('📄 PDF Downloaded');
             }, {onlyOnce:true});
         });
+
         // --- Toast ---
         function showToast(msg) {
             const t = document.getElementById('toast');
@@ -1636,13 +1841,18 @@
             t.classList.add('show');
             setTimeout(() => t.classList.remove('show'), 3000);
         }
-        // Close modals on outside click
+
+        window.closeModal = (id) => {
+            document.getElementById(id).style.display = 'none';
+        };
+
         window.onclick = (event) => {
             if (event.target.classList.contains('modal-overlay')) {
                 if (event.target.id === 'loginModal') return;
                 event.target.style.display = 'none';
             }
-        }
+        };
+
         // Initial render + show login
         renderProductGrid();
         document.getElementById('loginModal').style.display = 'flex';
