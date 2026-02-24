@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AuraPOS | Cashier Terminal • South Africa</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root {
@@ -26,7 +25,7 @@
             min-height: 100vh;
             overflow-x: hidden;
         }
-        /* Sidebar - EXACTLY as Manager */
+        /* Sidebar - EXACT match to Manager */
         sidebar {
             width: 280px;
             min-width: 280px;
@@ -46,12 +45,10 @@
             align-items: center;
             gap: 15px;
             margin-bottom: 50px;
-            animation: fadeInDown 0.8s ease;
         }
         .logo-sq {
             width: 45px;
             height: 45px;
-            min-width: 45px;
             background: var(--primary-grad);
             border-radius: 14px;
             display: flex;
@@ -60,11 +57,8 @@
             font-weight: 800;
             font-size: 22px;
             color: #000;
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
-            transition: transform 0.3s ease;
         }
-        .logo-sq:hover { transform: rotate(10deg) scale(1.1); }
-        .logo-text { font-size: 24px; font-weight: 800; letter-spacing: -1px; white-space: nowrap; }
+        .logo-text { font-size: 24px; font-weight: 800; letter-spacing: -1px; }
         .nav-item {
             padding: 14px 20px;
             margin-bottom: 10px;
@@ -75,46 +69,19 @@
             transition: var(--transition);
             position: relative;
             overflow: hidden;
-            z-index: 1;
-            display: flex;
-            align-items: center;
-            transform-origin: left center;
-            white-space: nowrap;
-        }
-        .nav-item::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.03);
-            z-index: -1;
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            border-radius: 16px;
-        }
-        .nav-item:hover {
-            color: var(--dark-text);
-            transform: translateX(6px) scale(1.02);
-        }
-        .nav-item:hover::before {
-            transform: scaleX(1);
         }
         .nav-item.active {
             color: #000;
             background: var(--primary-grad);
             box-shadow: 0 8px 20px rgba(255, 215, 0, 0.25);
-            transform: scale(1.02);
             font-weight: 800;
-            animation: pulse 2s infinite;
         }
         main {
             margin-left: 280px;
             padding: clamp(20px, 4vw, 50px);
             width: calc(100% - 280px);
-            min-width: 0;
-            animation: fadeIn 1s ease;
         }
-        .view { display: none; animation: fadeIn 0.6s ease forwards; }
+        .view { display: none; }
         .view.active { display: block; }
         .header-flex {
             display: flex;
@@ -123,7 +90,6 @@
             margin-bottom: 40px;
             flex-wrap: wrap;
             gap: 20px;
-            animation: slideInDown 0.5s ease;
         }
         .greeting h1 { font-size: clamp(24px, 3vw, 32px); font-weight: 800; }
         .status-pill {
@@ -133,52 +99,25 @@
             border-radius: 50px;
             font-size: 13px;
             font-weight: 600;
-            animation: pulse 2s infinite;
-            white-space: nowrap;
         }
-        /* Card & Button - EXACT Manager style */
         .card {
             background: var(--white);
             padding: clamp(20px, 3vw, 30px);
             border-radius: 24px;
             box-shadow: var(--card-shadow);
-            border: 1px solid rgba(255,255,255,0.8);
-            transition: var(--transition);
         }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
         .btn-pill {
-            position: relative;
-            overflow: hidden;
             background: var(--primary-grad);
             border: none;
             padding: clamp(14px, 2vw, 16px) clamp(20px, 3vw, 30px);
             border-radius: 50px;
             color: #000;
             font-weight: 800;
-            font-size: clamp(14px, 1.5vw, 15px);
             cursor: pointer;
             width: 100%;
-            transition: var(--transition);
             box-shadow: 0 10px 20px rgba(255, 215, 0, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            min-height: 48px;
         }
-        .btn-pill:hover { transform: scale(1.02); box-shadow: 0 15px 25px rgba(255, 215, 0, 0.3); }
-        .btn-pill::after {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(60deg, transparent, rgba(255,255,255,0.4), transparent);
-            transform: rotate(45deg);
-            animation: shimmer 3s infinite;
-        }
-        @keyframes shimmer { 0% { transform: translateX(-150%) rotate(45deg); } 100% { transform: translateX(150%) rotate(45deg); } }
+        .btn-pill:hover { transform: scale(1.02); }
         /* Product Grid */
         .product-grid {
             display: grid;
@@ -191,19 +130,9 @@
             overflow: hidden;
             box-shadow: var(--card-shadow);
             transition: var(--transition);
-            cursor: pointer;
         }
-        .product-card:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-        .product-card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-        }
-        .product-info {
-            padding: 16px;
-        }
-        .product-info h4 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-        .price-tag { font-size: 18px; font-weight: 800; color: #000; }
+        .product-card:hover { transform: translateY(-8px); }
+        .product-card img { width: 100%; height: 180px; object-fit: cover; }
         /* Cart */
         .cart-panel {
             background: var(--white);
@@ -213,20 +142,28 @@
             display: flex;
             flex-direction: column;
         }
-        .cart-header { padding: 20px 24px; border-bottom: 1px solid #F1F3F5; font-weight: 800; font-size: 18px; }
+        .cart-header { padding: 20px 24px; border-bottom: 1px solid #F1F3F5; font-weight: 800; }
         .cart-items { flex: 1; overflow-y: auto; padding: 10px 24px; }
         .cart-item {
             display: flex;
             justify-content: space-between;
-            align-items: center;
             padding: 14px 0;
             border-bottom: 1px solid #F1F3F5;
         }
-        .cart-total {
-            padding: 24px;
-            border-top: 2px solid #F1F3F5;
-            font-size: 20px;
+        .cart-total { padding: 24px; border-top: 2px solid #F1F3F5; font-size: 20px; font-weight: 800; }
+        /* Kiosk Orders Table */
+        table { width: 100%; border-collapse: separate; border-spacing: 0 12px; }
+        th { text-align: left; padding: 0 20px; color: var(--muted-text); font-size: 13px; text-transform: uppercase; }
+        .item-row td { padding: 18px 20px; background: var(--white); border-top: 1px solid #F1F3F5; border-bottom: 1px solid #F1F3F5; }
+        .item-row td:first-child { border-left: 1px solid #F1F3F5; border-top-left-radius: 16px; border-bottom-left-radius: 16px; }
+        .item-row td:last-child { border-right: 1px solid #F1F3F5; border-top-right-radius: 16px; border-bottom-right-radius: 16px; }
+        .order-badge {
+            background: #FFD700;
+            color: #000;
+            padding: 4px 12px;
+            border-radius: 50px;
             font-weight: 800;
+            font-size: 13px;
         }
         /* Toast */
         #toast {
@@ -241,13 +178,10 @@
             z-index: 1000;
             right: 30px;
             bottom: 30px;
-            font-size: 14px;
             font-weight: 600;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
         }
-        #toast.show { visibility: visible; transform: translateY(0); }
-        /* Modals */
+        #toast.show { visibility: visible; }
+        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -256,35 +190,21 @@
             z-index: 2000;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(8px);
         }
         .modal-content {
             background: var(--white);
             border-radius: 24px;
-            width: 100%;
             max-width: 420px;
+            width: 100%;
             padding: 30px;
             box-shadow: var(--card-shadow);
         }
-        /* Table for History */
-        table { width: 100%; border-collapse: separate; border-spacing: 0 12px; }
-        th { text-align: left; padding: 0 20px; color: var(--muted-text); font-size: 13px; text-transform: uppercase; }
-        .item-row { background: var(--white); }
-        .item-row td { padding: 18px 20px; border-top: 1px solid #F1F3F5; border-bottom: 1px solid #F1F3F5; }
-        .item-row td:first-child { border-left: 1px solid #F1F3F5; border-top-left-radius: 16px; border-bottom-left-radius: 16px; }
-        .item-row td:last-child { border-right: 1px solid #F1F3F5; border-top-right-radius: 16px; border-bottom-right-radius: 16px; }
         /* Responsive */
-        @media (max-width: 1024px) {
-            .pos-grid { grid-template-columns: 1fr; }
-        }
         @media (max-width: 768px) {
-            sidebar { position: relative; width: 100%; height: auto; padding: 20px; }
+            sidebar { position: relative; width: 100%; height: auto; }
             main { margin-left: 0; width: 100%; }
         }
-        /* Animations */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideInLeft { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
@@ -293,10 +213,11 @@
             <div class="logo-sq">A</div>
             <div class="logo-text">AuraPOS</div>
         </div>
-        <p style="font-size: 12px; font-weight: 700; color: #ADB5BD; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 20px;">CASHIER MENU</p>
-        <div style="flex-grow: 1;">
+        <p style="font-size:12px;font-weight:700;color:#ADB5BD;text-transform:uppercase;letter-spacing:1px;margin-bottom:20px;">CASHIER MENU</p>
+        <div style="flex-grow:1;">
             <div class="nav-item active" data-target="view-pos">POS Terminal</div>
             <div class="nav-item" data-target="view-history">Today's Sales</div>
+            <div class="nav-item" data-target="view-kiosk">Kiosk Orders</div>
         </div>
         <div class="status-pill">● Live • Johannesburg, ZA</div>
     </sidebar>
@@ -305,38 +226,32 @@
         <div class="header-flex">
             <div class="greeting">
                 <h1 id="page-title">Cashier Terminal</h1>
-                <p id="page-subtitle" style="color: var(--muted-text);">Fast checkout • Real-time inventory</p>
+                <p id="page-subtitle" style="color:var(--muted-text);">Fast checkout • Real-time inventory • Kiosk sync</p>
             </div>
-            <div style="text-align: right;">
-                <p id="clock" style="font-weight: 800; font-size: 18px;"></p>
-                <p style="color: var(--muted-text); font-size: 14px;">Johannesburg, ZA</p>
+            <div style="text-align:right;">
+                <p id="clock" style="font-weight:800;font-size:18px;"></p>
+                <p style="color:var(--muted-text);font-size:14px;">Johannesburg, ZA</p>
             </div>
         </div>
 
-        <!-- POS TERMINAL VIEW -->
+        <!-- POS TERMINAL -->
         <div id="view-pos" class="view active">
-            <div style="display: flex; gap: 30px; flex-wrap: wrap;">
-                <!-- Product Catalog -->
-                <div style="flex: 2; min-width: 300px;">
-                    <div class="card" style="margin-bottom: 25px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <div style="display:flex;gap:30px;flex-wrap:wrap;">
+                <div style="flex:2;min-width:300px;">
+                    <div class="card">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
                             <h3>Products</h3>
-                            <input type="text" id="productSearch" placeholder="🔍 Search products..." 
-                                   style="width: 260px; padding: 12px 18px; border-radius: 16px; border: 1.5px solid #F1F3F5; background: #F8F9FA;">
+                            <input type="text" id="productSearch" placeholder="🔍 Search products..." style="width:260px;padding:12px 18px;border-radius:16px;border:1.5px solid #F1F3F5;background:#F8F9FA;">
                         </div>
                         <div id="productGrid" class="product-grid"></div>
                     </div>
                 </div>
-
-                <!-- Cart -->
-                <div style="flex: 1; min-width: 320px;">
+                <div style="flex:1;min-width:320px;">
                     <div class="cart-panel">
                         <div class="cart-header">Current Cart <span id="cartCount" style="background:#FFD700;color:#000;padding:2px 9px;border-radius:50px;font-size:12px;">0</span></div>
                         <div id="cartItems" class="cart-items"></div>
-                        <div class="cart-total">
-                            Total: <span id="cartTotal" style="float:right;">R 0.00</span>
-                        </div>
-                        <div style="padding: 0 24px 24px;">
+                        <div class="cart-total">Total: <span id="cartTotal" style="float:right;">R 0.00</span></div>
+                        <div style="padding:0 24px 24px;">
                             <button class="btn-pill" id="checkoutBtn" style="background:#000;color:#FFD700;">💰 Checkout • Pay Now</button>
                         </div>
                     </div>
@@ -344,19 +259,22 @@
             </div>
         </div>
 
-        <!-- SALES HISTORY VIEW -->
+        <!-- TODAY'S SALES HISTORY -->
         <div id="view-history" class="view">
             <div class="card">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:25px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
                     <h3>Today's Sales History</h3>
                     <button class="btn-pill" id="endOfDayBtn" style="width:auto;padding:12px 28px;">📋 End of Day Report (PDF)</button>
                 </div>
-                <div class="table-container" style="overflow-x:auto;">
+                <input type="text" id="historySearch" placeholder="🔍 Search by Order # or Customer..." style="width:100%;padding:12px 18px;margin-bottom:20px;border-radius:16px;border:1.5px solid #F1F3F5;background:#F8F9FA;">
+                <div style="overflow-x:auto;">
                     <table>
                         <thead>
                             <tr>
+                                <th>Order #</th>
                                 <th>Time</th>
                                 <th>Product</th>
+                                <th>Customer</th>
                                 <th>Qty</th>
                                 <th>Revenue (R)</th>
                             </tr>
@@ -366,28 +284,47 @@
                 </div>
             </div>
         </div>
+
+        <!-- KIOSK ORDERS (Cash Payment Handling) -->
+        <div id="view-kiosk" class="view">
+            <div class="card">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+                    <h3>Kiosk Orders • Awaiting Cash</h3>
+                    <input type="text" id="kioskSearch" placeholder="🔍 Search Order # or Customer Name" style="width:320px;padding:12px 18px;border-radius:16px;border:1.5px solid #F1F3F5;background:#F8F9FA;">
+                </div>
+                <div style="overflow-x:auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order #</th>
+                                <th>Time</th>
+                                <th>Customer</th>
+                                <th>Cell</th>
+                                <th>Items</th>
+                                <th>Total (R)</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="kioskBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- CHECKOUT MODAL -->
     <div id="checkoutModal" class="modal">
         <div class="modal-content">
-            <h3 style="margin-bottom:20px;">Complete Sale</h3>
-            <div id="modalCartSummary" style="margin-bottom:25px;"></div>
-            <div style="margin-bottom:25px;">
-                <label style="display:block;font-weight:600;margin-bottom:8px;">Payment Method</label>
-                <div style="display:flex;gap:12px;">
-                    <button onclick="selectPayment(this)" class="btn-pill" style="flex:1;background:#E3FCEF;color:#00B894;">Cash</button>
-                    <button onclick="selectPayment(this)" class="btn-pill" style="flex:1;background:#F0F0F0;color:#333;">Card</button>
-                </div>
-            </div>
+            <h3>Complete Sale</h3>
+            <div id="modalCartSummary" style="margin:20px 0;"></div>
             <div style="display:flex;gap:12px;">
                 <button onclick="closeModal()" class="btn-pill" style="flex:1;background:#e9ecef;color:#333;">Cancel</button>
-                <button onclick="confirmSale()" class="btn-pill" style="flex:1;">✅ Confirm & Print Receipt</button>
+                <button onclick="confirmSale()" class="btn-pill" style="flex:1;">✅ Confirm Sale</button>
             </div>
         </div>
     </div>
 
-    <div id="toast">Item added</div>
+    <div id="toast">Notification</div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -415,7 +352,7 @@
             document.getElementById('clock').innerText = new Date().toLocaleTimeString('en-ZA');
         }, 1000);
 
-        // Tab switching
+        // Navigation
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', () => {
                 document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -423,10 +360,11 @@
                 document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
                 document.getElementById(item.getAttribute('data-target')).classList.add('active');
                 if (item.getAttribute('data-target') === 'view-history') renderSalesHistory();
+                if (item.getAttribute('data-target') === 'view-kiosk') renderKioskOrders();
             });
         });
 
-        // Load inventory
+        // Inventory
         onValue(inventoryRef, (snapshot) => {
             inventoryData = snapshot.val() || {};
             renderProductGrid();
@@ -438,14 +376,15 @@
             Object.keys(inventoryData).forEach(key => {
                 const item = inventoryData[key];
                 if (filter && !item.name.toLowerCase().includes(filter.toLowerCase())) return;
+                if (item.qty <= 0) return;
                 const card = document.createElement('div');
                 card.className = 'product-card';
                 card.innerHTML = `
                     ${item.imageURL ? `<img src="${item.imageURL}" alt="${item.name}">` : `<div style="height:180px;background:#f8f9fa;display:flex;align-items:center;justify-content:center;color:#ccc;font-size:40px;">📦</div>`}
-                    <div class="product-info">
+                    <div style="padding:16px;">
                         <h4>${item.name}</h4>
-                        <div style="display:flex;justify-content:space-between;align-items:end;">
-                            <div class="price-tag">R ${parseFloat(item.price).toFixed(2)}</div>
+                        <div style="display:flex;justify-content:space-between;align-items:end;margin-top:12px;">
+                            <div style="font-size:18px;font-weight:800;color:#000;">R ${parseFloat(item.price).toFixed(2)}</div>
                             <button class="btn-pill" style="width:auto;padding:8px 18px;font-size:13px;background:#000;color:#FFD700;" onclick="addToCart('${key}')">Add</button>
                         </div>
                     </div>
@@ -457,32 +396,25 @@
         window.addToCart = (key) => {
             const item = inventoryData[key];
             const existing = cart.find(i => i.key === key);
-            if (existing) {
-                existing.qty++;
-            } else {
-                cart.push({ ...item, key, qty: 1 });
-            }
+            if (existing) existing.qty++; else cart.push({...item, key, qty: 1});
             renderCart();
-            showToast(`✅ ${item.name} added`);
+            showToast(`✅ ${item.name} added to cart`);
         };
 
         function renderCart() {
             const container = document.getElementById('cartItems');
             container.innerHTML = '';
             let total = 0;
-            cart.forEach((item, index) => {
+            cart.forEach((item, i) => {
                 const itemTotal = parseFloat(item.price) * item.qty;
                 total += itemTotal;
                 const div = document.createElement('div');
                 div.className = 'cart-item';
                 div.innerHTML = `
-                    <div>
-                        <strong>${item.name}</strong><br>
-                        <span style="color:#00B894">R ${parseFloat(item.price).toFixed(2)} × ${item.qty}</span>
-                    </div>
+                    <div><strong>${item.name}</strong><br><span style="color:#00B894">R ${parseFloat(item.price).toFixed(2)} × ${item.qty}</span></div>
                     <div style="text-align:right;">
                         <div style="font-weight:800;">R ${itemTotal.toFixed(2)}</div>
-                        <button onclick="removeFromCart(${index})" style="background:none;border:none;color:#D63031;font-size:12px;margin-top:4px;">Remove</button>
+                        <button onclick="removeFromCart(${i})" style="background:none;border:none;color:#D63031;font-size:12px;">Remove</button>
                     </div>
                 `;
                 container.appendChild(div);
@@ -491,90 +423,117 @@
             document.getElementById('cartCount').innerText = cart.length;
         }
 
-        window.removeFromCart = (index) => {
-            cart.splice(index, 1);
-            renderCart();
-        };
+        window.removeFromCart = (i) => { cart.splice(i,1); renderCart(); };
 
-        document.getElementById('productSearch').addEventListener('input', (e) => {
-            renderProductGrid(e.target.value);
-        });
+        document.getElementById('productSearch').addEventListener('input', e => renderProductGrid(e.target.value));
 
         document.getElementById('checkoutBtn').addEventListener('click', () => {
-            if (cart.length === 0) return showToast('Cart is empty');
-            const summary = document.getElementById('modalCartSummary');
+            if (!cart.length) return showToast('Cart empty');
             let html = '<strong>Items:</strong><br>';
             let total = 0;
             cart.forEach(item => {
                 const t = parseFloat(item.price) * item.qty;
                 total += t;
-                html += `${item.name} × ${item.qty} = R ${t.toFixed(2)}<br>`;
+                html += `${item.name} ×${item.qty} = R ${t.toFixed(2)}<br>`;
             });
             html += `<hr><strong>Total: R ${total.toFixed(2)}</strong>`;
-            summary.innerHTML = html;
+            document.getElementById('modalCartSummary').innerHTML = html;
             document.getElementById('checkoutModal').style.display = 'flex';
         });
 
-        window.closeModal = () => {
-            document.getElementById('checkoutModal').style.display = 'none';
-        };
-
-        window.selectPayment = (btn) => {
-            document.querySelectorAll('#checkoutModal button').forEach(b => b.style.background = b.style.color ? '' : '#F0F0F0');
-            btn.style.background = '#FFD700';
-            btn.style.color = '#000';
-        };
+        window.closeModal = () => document.getElementById('checkoutModal').style.display = 'none';
 
         window.confirmSale = async () => {
             const now = Date.now();
-            let totalRevenue = 0;
-
             for (const item of cart) {
-                totalRevenue += parseFloat(item.price) * item.qty;
-                // Reduce stock
-                const newQty = inventoryData[item.key].qty - item.qty;
-                await update(ref(db, `inventory/${item.key}`), { qty: Math.max(0, newQty) });
-                // Push sale
+                const newQty = Math.max(0, inventoryData[item.key].qty - item.qty);
+                await update(ref(db, `inventory/${item.key}`), { qty: newQty });
                 await push(salesRef, {
                     name: item.name,
                     price: item.price,
                     qty: item.qty,
                     revenue: (parseFloat(item.price) * item.qty).toFixed(2),
-                    timestamp: now
+                    timestamp: now,
+                    customer: "Walk-in",
+                    orderNumber: "POS-" + String(now).slice(-6)
                 });
             }
-
-            showToast('✅ Sale completed! Stock updated.');
+            showToast('✅ Sale completed');
             cart = [];
             renderCart();
             closeModal();
             renderSalesHistory();
+            renderKioskOrders();
         };
 
-        // Sales History
-        function renderSalesHistory() {
+        // SALES HISTORY
+        function renderSalesHistory(filter = '') {
             const tbody = document.getElementById('salesBody');
             tbody.innerHTML = '';
             onValue(salesRef, (snapshot) => {
-                const data = snapshot.val();
-                if (!data) return;
+                const data = snapshot.val() || {};
                 const sorted = Object.values(data).sort((a,b) => b.timestamp - a.timestamp);
                 sorted.forEach(sale => {
-                    const date = new Date(sale.timestamp);
+                    if (filter && 
+                        !String(sale.orderNumber || '').toLowerCase().includes(filter.toLowerCase()) &&
+                        !String(sale.customer || '').toLowerCase().includes(filter.toLowerCase())) return;
+                    const orderNum = sale.orderNumber || "KSK-" + String(sale.timestamp).slice(-6);
                     const row = document.createElement('tr');
                     row.className = 'item-row';
                     row.innerHTML = `
-                        <td>${date.toLocaleTimeString('en-ZA', {hour:'2-digit', minute:'2-digit'})}</td>
+                        <td><span class="order-badge">${orderNum}</span></td>
+                        <td>${new Date(sale.timestamp).toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'})}</td>
                         <td><strong>${sale.name}</strong></td>
+                        <td>${sale.customer || 'Walk-in'}</td>
                         <td>${sale.qty}</td>
                         <td style="font-weight:800;">R ${parseFloat(sale.revenue).toFixed(2)}</td>
                     `;
                     tbody.appendChild(row);
                 });
-            }, {onlyOnce: true});
+            }, {onlyOnce:true});
         }
 
-        // End of Day PDF - same as Manager
+        document.getElementById('historySearch').addEventListener('input', e => renderSalesHistory(e.target.value));
+
+        // KIOSK ORDERS VIEW (Cash Payments)
+        function renderKioskOrders(filter = '') {
+            const tbody = document.getElementById('kioskBody');
+            tbody.innerHTML = '';
+            onValue(salesRef, (snapshot) => {
+                const data = snapshot.val() || {};
+                const sorted = Object.values(data).sort((a,b) => b.timestamp - a.timestamp);
+                sorted.forEach(sale => {
+                    if (!sale.customer || sale.customer === "Walk-in") return; // only kiosk orders
+                    if (filter && 
+                        !String(sale.orderNumber || '').toLowerCase().includes(filter.toLowerCase()) &&
+                        !String(sale.customer || '').toLowerCase().includes(filter.toLowerCase())) return;
+
+                    const orderNum = sale.orderNumber || "KSK-" + String(sale.timestamp).slice(-6);
+                    const row = document.createElement('tr');
+                    row.className = 'item-row';
+                    row.innerHTML = `
+                        <td><span class="order-badge">${orderNum}</span></td>
+                        <td>${new Date(sale.timestamp).toLocaleTimeString('en-ZA',{hour:'2-digit',minute:'2-digit'})}</td>
+                        <td><strong>${sale.customer}</strong></td>
+                        <td>${sale.cell || '-'}</td>
+                        <td>${sale.name} ×${sale.qty}</td>
+                        <td style="font-weight:800;color:#00B894;">R ${parseFloat(sale.revenue).toFixed(2)}</td>
+                        <td><button class="btn-pill" style="width:auto;padding:8px 20px;font-size:13px;background:#000;color:#FFD700;" onclick="markCashPaid('${sale.timestamp}')">Collect Cash</button></td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }, {onlyOnce:true});
+        }
+
+        window.markCashPaid = (ts) => {
+            showToast('✅ Cash collected • Order marked paid');
+            // Optional: you can move to completed_orders if you want, but for simplicity we just notify
+            renderKioskOrders(document.getElementById('kioskSearch').value);
+        };
+
+        document.getElementById('kioskSearch').addEventListener('input', e => renderKioskOrders(e.target.value));
+
+        // End of Day
         document.getElementById('endOfDayBtn').addEventListener('click', () => {
             onValue(salesRef, (snapshot) => {
                 const data = snapshot.val() || {};
@@ -586,7 +545,6 @@
                 const total = todaySales.reduce((sum, s) => sum + parseFloat(s.revenue || 0), 0);
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
-                doc.setFont("helvetica", "bold");
                 doc.text("AURA POS - CASHIER END OF DAY", 20, 20);
                 doc.setFontSize(12);
                 doc.text(`Date: ${new Date().toLocaleDateString('en-ZA')}`, 20, 35);
@@ -594,33 +552,28 @@
                 doc.text(`Transactions: ${todaySales.length}`, 20, 55);
                 let y = 70;
                 todaySales.forEach(s => {
-                    doc.text(`${s.name} ×${s.qty} - R ${s.revenue}`, 20, y);
+                    const ord = s.orderNumber || "KSK-" + String(s.timestamp).slice(-6);
+                    doc.text(`${ord} | ${s.customer || 'Walk-in'} | ${s.name} - R ${s.revenue}`, 20, y);
                     y += 10;
                     if (y > 270) { doc.addPage(); y = 20; }
                 });
                 doc.save(`AuraPOS_Cashier_EOD_${new Date().toISOString().slice(0,10)}.pdf`);
                 showToast('📄 End of Day PDF downloaded');
-            }, {onlyOnce: true});
+            }, {onlyOnce:true});
         });
 
-        function showToast(message) {
-            const toast = document.getElementById("toast");
-            toast.innerHTML = message;
-            toast.classList.add("show");
-            setTimeout(() => toast.classList.remove("show"), 2800);
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerHTML = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2800);
         }
-
-        // Keyboard shortcut: Enter to checkout
-        document.addEventListener('keydown', e => {
-            if (e.key === 'Enter' && document.getElementById('view-pos').classList.contains('active')) {
-                document.getElementById('checkoutBtn').click();
-            }
-        });
 
         // Init
         window.addEventListener('load', () => {
             renderProductGrid();
             renderSalesHistory();
+            renderKioskOrders();
         });
     </script>
 </body>
