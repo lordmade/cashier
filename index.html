@@ -312,9 +312,9 @@
         .modal-content {
             background: var(--white);
             border-radius: 24px;
-            max-width: 480px;
-            width: 90%;
-            max-height: 90vh;
+            max-width: 520px;
+            width: 92%;
+            max-height: 92vh;
             overflow-y: auto;
             padding: 0;
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
@@ -344,6 +344,19 @@
             cursor: pointer;
             color: var(--muted-text);
         }
+        /* Dial Pad */
+        .key-btn {
+            padding: 22px 10px;
+            font-size: 26px;
+            font-weight: 700;
+            background: #FAFAFA;
+            border: 1.5px solid #E0E0E0;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .key-btn:hover { background: #F0F0F0; border-color: #FFD700; }
+        .key-btn:active { transform: scale(0.92); background: var(--primary-grad); color: #000; }
         /* --- Collapsible Section --- */
         .collapsible-header {
             display: flex;
@@ -424,6 +437,7 @@
             <div class="greeting">
                 <h1 id="page-title">Cashier Terminal</h1>
                 <p id="page-subtitle" style="color:var(--muted-text);">Fast checkout • Real-time inventory • Kiosk sync</p>
+                <p id="cashierDisplay" style="margin-top:8px;color:#00B894;font-weight:600;"></p>
             </div>
             <div style="text-align:right;">
                 <p id="clock" style="font-weight:800;font-size:18px;"></p>
@@ -553,6 +567,22 @@
             </div>
         </div>
     </main>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Welcome to AuraPOS</h3>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom:25px;color:#666;text-align:center;">Please enter your details to start your shift</p>
+                <input type="text" id="cashierName" class="search-input" style="width:100%;margin-bottom:15px;" placeholder="Full Name">
+                <input type="text" id="employeeId" class="search-input" style="width:100%;margin-bottom:25px;" placeholder="Employee ID">
+                <button class="btn-pill" onclick="loginCashier()" style="width:100%;">🚀 Start Shift</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Checkout Modal -->
     <div id="checkoutModal" class="modal-overlay">
         <div class="modal-content">
@@ -569,13 +599,14 @@
             </div>
         </div>
     </div>
+
     <!-- Cash Collection Modal -->
     <div id="cashModal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header" style="background: #FFF9E6; border-bottom: 1px solid #FFE082;">
                 <div>
                     <h3 style="margin:0;">💵 Collect Cash</h3>
-                    <p style="margin:5px 0 0; font-size:12px; color:#666;">Verify customer details before proceeding</p>
+                    <p style="margin:5px 0 0; font-size:12px; color:#666;">Enter amount paid by customer</p>
                 </div>
                 <button class="close-btn" onclick="closeModal('cashModal')">&times;</button>
             </div>
@@ -584,11 +615,13 @@
             </div>
             <div class="modal-footer">
                 <button class="btn-pill" onclick="closeModal('cashModal')" style="flex:1;background:#e9ecef;color:#333;box-shadow:none;">Cancel</button>
-                <button class="btn-pill" onclick="confirmCashCollection()" style="flex:1;">✅ Mark as Paid</button>
+                <button class="btn-pill" onclick="confirmCashCollection()" id="confirmCashBtn" style="flex:1;">✅ Mark as Paid</button>
             </div>
         </div>
     </div>
+
     <div id="toast">Notification</div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, onValue, update, push, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
@@ -606,10 +639,15 @@
         const db = getDatabase(app);
         const inventoryRef = ref(db, 'inventory');
         const salesRef = ref(db, 'sales');
-        const kioskRef = ref(db, 'kioskOrders'); // Separate node for kiosk to avoid mixing with POS
+        const kioskRef = ref(db, 'kioskOrders');
         let inventoryData = {};
         let cart = [];
-        let currentCashOrder = null; // Store temp order for cash modal
+        let currentCashOrder = null;
+        let paidStr = '';
+        let currentDue = 0;
+        let cashierName = '';
+        let employeeId = '';
+
         // --- Clock ---
         function updateTime() {
             const now = new Date();
@@ -618,24 +656,36 @@
         }
         setInterval(updateTime, 1000);
         updateTime();
+
         // --- Navigation ---
         window.navigate = (targetId) => {
-            // Update Nav UI
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.querySelector(`.nav-item[data-target="${targetId}"]`).classList.add('active');
-           
-            // Update View
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.getElementById(targetId).classList.add('active');
-            // Close mobile menu
             document.getElementById('sidebar').classList.remove('open');
-            // Refresh data
             if(targetId === 'view-history') renderSalesHistory();
             if(targetId === 'view-kiosk') renderKioskOrders();
         };
         window.toggleMenu = () => {
             document.getElementById('sidebar').classList.toggle('open');
         };
+
+        // --- Login ---
+        window.loginCashier = () => {
+            const name = document.getElementById('cashierName').value.trim();
+            const id = document.getElementById('employeeId').value.trim();
+            if (!name || !id) {
+                showToast('Name and Employee ID required');
+                return;
+            }
+            cashierName = name;
+            employeeId = id;
+            document.getElementById('loginModal').style.display = 'none';
+            document.getElementById('cashierDisplay').innerText = `👤 ${name} • ID: ${id}`;
+            showToast(`Welcome, ${name}!`);
+        };
+
         // --- Inventory & POS ---
         onValue(inventoryRef, (snapshot) => {
             inventoryData = snapshot.val() || {};
@@ -648,8 +698,7 @@
             Object.keys(inventoryData).forEach(key => {
                 const item = inventoryData[key];
                 if (filter && !item.name.toLowerCase().includes(filter.toLowerCase())) return;
-                if (item.qty <= 0) return; // Out of stock
-               
+                if (item.qty <= 0) return;
                 const card = document.createElement('div');
                 card.className = 'product-card';
                 card.style.animationDelay = `${delay}ms`;
@@ -720,6 +769,7 @@
             countBadge.innerText = itemCount;
             totalDisplay.innerText = `R ${total.toFixed(2)}`;
         }
+
         // --- Checkout Flow ---
         document.getElementById('checkoutBtn').addEventListener('click', () => {
             if (!cart.length) return showToast('Cart is empty');
@@ -756,12 +806,9 @@
             const orderId = "POS-" + String(now).slice(-6);
            
             try {
-                // Process each item in cart
                 for (const item of cart) {
-                    // 1. Update Inventory
                     const newQty = Math.max(0, inventoryData[item.key].qty - item.qty);
                     await update(ref(db, `inventory/${item.key}`), { qty: newQty });
-                    // 2. Record Sale
                     await push(salesRef, {
                         name: item.name,
                         price: item.price,
@@ -783,6 +830,7 @@
                 showToast("❌ Error processing sale");
             }
         };
+
         // --- Sales History ---
         function renderSalesHistory() {
             onValue(salesRef, (snapshot) => {
@@ -841,12 +889,9 @@
             const content = header.nextElementSibling;
             content.classList.toggle('open');
         };
-        // --- Kiosk Orders (Cash Handling) ---
-        // Note: In a real app, Kiosk orders would be written to a separate 'kioskOrders' node
-        // with status 'pending_cash'. Here we simulate reading from salesRef where customer != Walk-in and status != paid
-       
+
+        // --- Kiosk Orders ---
         function renderKioskOrders() {
-            // Ideally fetch from kioskRef, but simulating with salesRef for this demo structure
             onValue(salesRef, (snapshot) => {
                 const data = snapshot.val() || {};
                 const orders = Object.values(data)
@@ -860,7 +905,7 @@
                     return;
                 }
                 orders.forEach(order => {
-                    const orderNum = order.orderNumber || "KSK-" + String(order.timestamp).slice(-6);
+                    const orderNum = order.orderNumber ? `#${order.orderNumber}` : "KSK-" + String(order.timestamp).slice(-6);
                     const row = document.createElement('tr');
                     row.className = 'item-row';
                     row.innerHTML = `
@@ -876,70 +921,213 @@
                 });
             }, {onlyOnce:true});
         }
+
         window.openCashModal = (timestamp) => {
-            // Find order
             onValue(salesRef, (snapshot) => {
                 const data = snapshot.val();
                 const order = Object.values(data).find(o => o.timestamp == timestamp);
                 if(order) {
-                    currentCashOrder = order; // Store for confirmation
-                    const orderNum = order.orderNumber || "KSK-" + String(order.timestamp).slice(-6);
-                   
+                    currentCashOrder = order;
+                    currentDue = parseFloat(order.revenue || 0);
+                    paidStr = '';
+                    const orderNum = order.orderNumber ? `#${order.orderNumber}` : "KSK-" + String(order.timestamp).slice(-6);
+                    const dueFormatted = currentDue.toFixed(2);
+
                     const html = `
-                        <div style="text-align:center; margin-bottom:20px;">
-                            <div style="font-size:40px; margin-bottom:10px;">👤</div>
-                            <h2 style="margin:0;">${order.customer}</h2>
-                            <p style="color:#666; margin:5px 0;">${order.cell || 'No cell provided'}</p>
-                            <span class="order-badge" style="margin-top:10px;">${orderNum}</span>
+                        <div style="text-align:center; margin-bottom:25px;">
+                            <div style="font-size:48px;margin-bottom:10px;">👤</div>
+                            <h2 style="margin:0 0 5px;">${order.customer}</h2>
+                            <p style="color:#666;margin:0;">${order.cell || 'No cell provided'}</p>
+                            <span class="order-badge" style="margin-top:15px;">${orderNum}</span>
                         </div>
-                        <div style="background:#f8f9fa; padding:15px; border-radius:12px; margin-bottom:20px;">
-                            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-                                <span>Item:</span>
-                                <span style="font-weight:600">${order.name}</span>
+                        <div style="background:#f8f9fa; padding:20px; border-radius:16px; margin-bottom:25px;">
+                            <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:15px;border-bottom:1px solid #eee;">
+                                <span style="font-size:15px;color:#666;">Amount Due</span>
+                                <span style="font-size:26px;font-weight:800;color:#00B894;">R ${dueFormatted}</span>
                             </div>
-                            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-                                <span>Quantity:</span>
-                                <span style="font-weight:600">${order.qty}</span>
+                            <div style="margin:20px 0;display:flex;justify-content:space-between;align-items:center;">
+                                <span style="font-size:18px;">Amount Paid</span>
+                                <span id="paidDisplay" style="font-size:32px;font-weight:800;color:#1A1C1E;">R 0.00</span>
                             </div>
-                            <hr style="border:0; border-top:1px solid #ddd; margin:10px 0;">
-                            <div style="display:flex; justify-content:space-between; font-size:18px; font-weight:800;">
-                                <span>Amount Due:</span>
-                                <span style="color:#000;">R ${parseFloat(order.revenue).toFixed(2)}</span>
+                            <div style="display:flex;justify-content:space-between;align-items:center;">
+                                <span style="font-size:18px;">Change to Give</span>
+                                <span id="changeDisplay" style="font-size:26px;font-weight:800;color:#00B894;">R 0.00</span>
                             </div>
                         </div>
-                        <div style="background:#FFF9E6; border:1px solid #FFD700; padding:10px; border-radius:8px; font-size:12px; text-align:center;">
-                            ⚠️ Please collect cash from customer before confirming
+                        <p style="text-align:center;font-size:13px;color:#666;margin-bottom:15px;">Enter amount received from customer</p>
+                        
+                        <!-- Quick Amounts -->
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(80px,1fr));gap:10px;margin-bottom:25px;">
+                            <button onclick="setQuickAmount(50)" class="btn-pill" style="background:#fff;color:#000;border:2px solid #eee;padding:12px 0;font-size:14px;">R 50</button>
+                            <button onclick="setQuickAmount(100)" class="btn-pill" style="background:#fff;color:#000;border:2px solid #eee;padding:12px 0;font-size:14px;">R 100</button>
+                            <button onclick="setQuickAmount(200)" class="btn-pill" style="background:#fff;color:#000;border:2px solid #eee;padding:12px 0;font-size:14px;">R 200</button>
+                            <button onclick="setExact()" class="btn-pill" style="background:#fff;color:#000;border:2px solid #eee;padding:12px 0;font-size:14px;">Exact</button>
+                        </div>
+                        
+                        <!-- Dial Pad -->
+                        <div style="background:#fff;border-radius:20px;padding:20px;box-shadow:inset 0 2px 10px rgba(0,0,0,0.03);">
+                            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+                                <button class="key-btn" onclick="appendToPaid('7')">7</button>
+                                <button class="key-btn" onclick="appendToPaid('8')">8</button>
+                                <button class="key-btn" onclick="appendToPaid('9')">9</button>
+                                <button class="key-btn" onclick="appendToPaid('4')">4</button>
+                                <button class="key-btn" onclick="appendToPaid('5')">5</button>
+                                <button class="key-btn" onclick="appendToPaid('6')">6</button>
+                                <button class="key-btn" onclick="appendToPaid('1')">1</button>
+                                <button class="key-btn" onclick="appendToPaid('2')">2</button>
+                                <button class="key-btn" onclick="appendToPaid('3')">3</button>
+                                <button class="key-btn" onclick="appendToPaid('0')" style="grid-column:span 2;">0</button>
+                                <button class="key-btn" onclick="appendToPaid('.')">.</button>
+                                <button class="key-btn" onclick="clearPaidInput()" style="background:#FFEBEE;color:#C62828;">C</button>
+                            </div>
+                            <button onclick="backspacePaidInput()" style="margin-top:12px;width:100%;padding:16px;background:#F1F3F5;border:none;border-radius:16px;font-size:18px;font-weight:600;">⌫ Backspace</button>
                         </div>
                     `;
                     document.getElementById('cashModalBody').innerHTML = html;
+                    updatePaidDisplay();
                     document.getElementById('cashModal').style.display = 'flex';
                 }
             }, {onlyOnce:true});
         };
+
+        // Dial Pad Functions
+        window.appendToPaid = function(digit) {
+            if (paidStr.length >= 9) return;
+            if (digit === '.' && paidStr.includes('.')) return;
+            paidStr += digit;
+            updatePaidDisplay();
+        };
+        window.backspacePaidInput = function() {
+            paidStr = paidStr.slice(0, -1);
+            updatePaidDisplay();
+        };
+        window.clearPaidInput = function() {
+            paidStr = '';
+            updatePaidDisplay();
+        };
+        window.setQuickAmount = function(amount) {
+            paidStr = amount.toString();
+            updatePaidDisplay();
+        };
+        window.setExact = function() {
+            paidStr = currentDue.toFixed(2);
+            updatePaidDisplay();
+        };
+        function updatePaidDisplay() {
+            let paidVal = paidStr ? parseFloat(paidStr) : 0;
+            if (isNaN(paidVal)) paidVal = 0;
+            document.getElementById('paidDisplay').innerText = `R ${paidVal.toFixed(2)}`;
+            const changeVal = paidVal - currentDue;
+            const changeEl = document.getElementById('changeDisplay');
+            changeEl.innerText = changeVal >= 0 ? `R ${changeVal.toFixed(2)}` : `R 0.00`;
+            changeEl.style.color = changeVal >= 0 ? '#00B894' : '#999';
+        }
+
         window.confirmCashCollection = async () => {
             if(!currentCashOrder) return;
-           
+            let paidVal = paidStr ? parseFloat(paidStr) : 0;
+            if (paidVal < currentDue) {
+                showToast('❌ Insufficient amount paid!');
+                return;
+            }
+            const changeVal = paidVal - currentDue;
             try {
-                // Update the order status to paid
-                // In a real app, you'd use the specific key, here we search by timestamp for demo
                 onValue(salesRef, async (snapshot) => {
                     const data = snapshot.val();
                     const key = Object.keys(data).find(k => data[k].timestamp === currentCashOrder.timestamp);
                    
                     if(key) {
                         await update(ref(db, `sales/${key}`), { status: 'paid' });
-                        showToast('✅ Cash Collected & Order Updated');
-                        closeModal('cashModal');
+                        
+                        // Show success screen with Print Receipt option
+                        const successHtml = `
+                            <div style="text-align:center;padding:40px 20px;">
+                                <div style="font-size:60px;margin-bottom:20px;">✅</div>
+                                <h2>Payment Complete!</h2>
+                                <p style="margin:20px 0 10px;color:#666;">Change to give customer:</p>
+                                <p style="font-size:28px;font-weight:800;color:#00B894;">R ${changeVal.toFixed(2)}</p>
+                                <button onclick="printReceipt();closeModal('cashModal')" class="btn-pill" style="margin-top:30px;width:100%;">🖨️ Print Customer Receipt</button>
+                            </div>
+                        `;
+                        document.getElementById('cashModalBody').innerHTML = successHtml;
+                        document.querySelector('#cashModal .modal-header h3').innerText = '✅ Transaction Complete';
+                        const footer = document.querySelector('#cashModal .modal-footer');
+                        footer.innerHTML = `<button class="btn-pill" onclick="closeModal('cashModal')" style="flex:1;background:#e9ecef;color:#333;box-shadow:none;width:100%;">Done</button>`;
+                        
                         renderKioskOrders();
                         renderSalesHistory();
                     }
                 }, {onlyOnce:true});
-               
             } catch (e) {
                 console.error(e);
                 showToast("❌ Error updating order");
             }
         };
+
+        // --- Print Receipt ---
+        window.printReceipt = () => {
+            if (!currentCashOrder) return;
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.setFillColor(255, 215, 0);
+            doc.rect(0, 0, 210, 35, 'F');
+            doc.setTextColor(0);
+            doc.setFontSize(22);
+            doc.text("AURA POS", 105, 18, { align: "center" });
+            doc.setFontSize(14);
+            doc.text("RECEIPT", 105, 28, { align: "center" });
+            
+            doc.setFontSize(11);
+            doc.setTextColor(80);
+            doc.text(`Order # ${currentCashOrder.orderNumber || "KSK-" + String(currentCashOrder.timestamp).slice(-6)}`, 20, 50);
+            doc.text(new Date().toLocaleDateString('en-ZA') + "  " + new Date().toLocaleTimeString('en-ZA', {hour:'2-digit', minute:'2-digit'}), 20, 58);
+            doc.text(`Customer: ${currentCashOrder.customer}`, 20, 66);
+            doc.text(`Cashier: ${cashierName} (${employeeId})`, 20, 74);
+            
+            let y = 90;
+            doc.setFontSize(10);
+            doc.text("────────────────────────────────────", 20, y);
+            y += 8;
+            doc.text("ITEM", 20, y);
+            doc.text("QTY", 95, y);
+            doc.text("UNIT", 125, y);
+            doc.text("TOTAL", 170, y);
+            y += 6;
+            doc.text("────────────────────────────────────", 20, y);
+            y += 10;
+            
+            const unitPrice = (parseFloat(currentCashOrder.revenue) / currentCashOrder.qty).toFixed(2);
+            doc.text(currentCashOrder.name, 20, y);
+            doc.text(currentCashOrder.qty.toString(), 95, y);
+            doc.text("R " + unitPrice, 125, y);
+            doc.text("R " + parseFloat(currentCashOrder.revenue).toFixed(2), 170, y);
+            
+            y += 15;
+            doc.setFontSize(12);
+            doc.text("TOTAL", 20, y);
+            doc.text("R " + parseFloat(currentCashOrder.revenue).toFixed(2), 170, y);
+            
+            y += 12;
+            const paidVal = paidStr ? parseFloat(paidStr) : parseFloat(currentCashOrder.revenue);
+            doc.setFontSize(11);
+            doc.text("AMOUNT PAID", 20, y);
+            doc.text("R " + paidVal.toFixed(2), 170, y);
+            
+            y += 8;
+            const changeVal = paidVal - parseFloat(currentCashOrder.revenue);
+            doc.text("CHANGE", 20, y);
+            doc.text("R " + changeVal.toFixed(2), 170, y);
+            
+            y += 20;
+            doc.setFontSize(10);
+            doc.text("Thank you for shopping with AuraPOS!", 105, y, { align: "center" });
+            doc.text("Johannesburg, ZA", 105, y + 8, { align: "center" });
+            
+            doc.save(`AuraPOS_Receipt_${currentCashOrder.orderNumber || currentCashOrder.timestamp}.pdf`);
+            showToast('📄 Receipt downloaded');
+        };
+
         // --- End of Day PDF ---
         document.getElementById('endOfDayBtn').addEventListener('click', () => {
             onValue(salesRef, (snapshot) => {
@@ -962,7 +1150,7 @@
                 doc.setFontSize(12);
                 doc.setTextColor(100);
                 doc.text(`Date: ${new Date().toLocaleDateString('en-ZA')}`, 20, 40);
-                doc.text(`Cashier: Terminal 1`, 20, 48);
+                doc.text(`Cashier: ${cashierName || 'Terminal 1'}`, 20, 48);
                
                 doc.setFontSize(16);
                 doc.setTextColor(0);
@@ -986,6 +1174,7 @@
                 showToast('📄 PDF Downloaded');
             }, {onlyOnce:true});
         });
+
         // --- Toast ---
         function showToast(msg) {
             const t = document.getElementById('toast');
@@ -993,12 +1182,18 @@
             t.classList.add('show');
             setTimeout(() => t.classList.remove('show'), 3000);
         }
+
         // Close modals on outside click
         window.onclick = (event) => {
             if (event.target.classList.contains('modal-overlay')) {
+                if (event.target.id === 'loginModal') return; // prevent closing login without login
                 event.target.style.display = 'none';
             }
         }
+
+        // Initial render + show login
+        renderProductGrid();
+        document.getElementById('loginModal').style.display = 'flex';
     </script>
 </body>
-</html>t
+</html>
