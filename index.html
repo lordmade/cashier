@@ -28,10 +28,93 @@
             background: var(--primary); z-index: 5000; display: flex;
             justify-content: center; align-items: center; color: white;
         }
+        .login-container {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
         .login-card { background: var(--secondary); padding: 40px; border-radius: 20px; width: 350px; text-align: center; }
         .login-card input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; font-size: 16px; outline: none; }
+        .login-divider {
+            width: 1px;
+            height: 300px;
+            background: var(--text-muted);
+            opacity: 0.3;
+        }
+        .manager-register-card {
+            background: var(--secondary);
+            padding: 40px;
+            border-radius: 20px;
+            width: 350px;
+            text-align: center;
+            display: none;
+        }
+        .manager-register-card.active {
+            display: block;
+        }
+        .manager-register-card input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; font-size: 16px; outline: none; }
+        .register-section {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .register-section:last-of-type {
+            border-bottom: none;
+        }
+        .register-section label {
+            display: block;
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+        .employees-list {
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            padding: 12px;
+            max-height: 180px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+        .employee-item {
+            background: var(--primary);
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+        }
+        .employee-item-info {
+            text-align: left;
+        }
+        .employee-id {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .employee-name {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+        .btn-remove {
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .btn-remove:hover {
+            background: #e65b5a;
+        }
         /* Pill-shaped buttons */
         .btn-login,
+        .btn-register-employee,
+        .btn-switch-mode,
         .nav-btn,
         .cat-btn,
         .clear-btn,
@@ -59,6 +142,36 @@
             color: #000;
             font-weight: 800;
             margin-top: 10px;
+        }
+        .btn-login:hover {
+            background: #ffc107;
+            transform: scale(1.02);
+        }
+        .btn-register-employee {
+            width: 100%;
+            padding: 12px;
+            background: var(--success);
+            color: white;
+            font-weight: 700;
+            margin-top: 10px;
+        }
+        .btn-register-employee:hover {
+            background: #00a179;
+            transform: scale(1.02);
+        }
+        .btn-switch-mode {
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            font-weight: 600;
+            margin-top: 15px;
+            font-size: 12px;
+        }
+        .btn-switch-mode:hover {
+            background: var(--accent);
+            color: #000;
         }
         .sidebar-nav {
             width: 80px;
@@ -309,12 +422,43 @@
 </head>
 <body>
     <div id="loginOverlay">
-        <div class="login-card">
-            <h2 style="margin-bottom: 20px; color: var(--accent);">AuraPOS Login</h2>
-            <input type="text" id="cashierID" placeholder="Employee ID">
-            <button class="btn-login" onclick="handleLogin()">Enter System</button>
+        <div class="login-container">
+            <!-- Cashier Login -->
+            <div class="login-card" id="cashierLoginCard">
+                <h2 style="margin-bottom: 20px; color: var(--accent);">AuraPOS Login</h2>
+                <input type="text" id="cashierID" placeholder="Employee ID" onkeypress="if(event.key==='Enter') handleLogin()">
+                <button class="btn-login" onclick="handleLogin()">Enter System</button>
+                <button class="btn-switch-mode" onclick="switchLoginMode('manager')">Manager Setup</button>
+            </div>
+
+            <div class="login-divider"></div>
+
+            <!-- Manager Registration -->
+            <div class="manager-register-card" id="managerRegisterCard">
+                <h2 style="margin-bottom: 20px; color: var(--accent);">Manager Setup</h2>
+                
+                <div class="register-section">
+                    <label>New Employee ID</label>
+                    <input type="text" id="newEmployeeID" placeholder="e.g., EMP001" maxlength="20">
+                    
+                    <label style="margin-top: 12px;">Employee Name</label>
+                    <input type="text" id="newEmployeeName" placeholder="Full name">
+                    
+                    <button class="btn-register-employee" onclick="registerNewEmployee()">Register Employee</button>
+                </div>
+
+                <div class="register-section">
+                    <label>Registered Employees</label>
+                    <div class="employees-list" id="registeredEmployeesList">
+                        <p style="color: var(--text-muted); font-size: 12px;">No employees registered yet</p>
+                    </div>
+                </div>
+
+                <button class="btn-switch-mode" onclick="switchLoginMode('cashier')">Back to Login</button>
+            </div>
         </div>
     </div>
+
     <!-- Custom Message / Logout Confirmation Modal -->
     <div id="messageModal" class="modal">
         <div class="modal-content">
@@ -332,6 +476,7 @@
             </div>
         </div>
     </div>
+
     <nav class="sidebar-nav">
         <div class="logo-sq">A</div>
         <button class="nav-btn active" onclick="switchTab('pos')">
@@ -442,41 +587,122 @@
         const db = getDatabase(app);
         const inventoryRef = ref(db, 'inventory');
         const salesRef = ref(db, 'sales');
+        const employeesRef = ref(db, 'employees');
         let inventoryData = {};
+        let employeesData = {};
         let cart = {};
         let selectedCategory = '';
         let currentTotal = 0;
         let allSales = {};
         let currentCashier = { name: '', id: '' };
         let lastOrderDetails = null;
-        function showMessageModal(title, message, icon = 'info', color = '--success', showConfirm = false) {
-            document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalMessage').textContent = message;
-            const iconEl = document.getElementById('modalIcon');
-            iconEl.textContent = icon === 'success' ? '✔' : icon === 'error' ? '✖' : '!';
-            iconEl.style.color = `var(${color})`;
-            document.getElementById('confirmLogoutBtn').style.display = showConfirm ? 'block' : 'none';
-            document.getElementById('okOnlyBtn').style.display = showConfirm ? 'none' : 'block';
-            document.getElementById('messageModal').style.display = 'flex';
-        }
-        window.closeMessageModal = function() {
-            document.getElementById('messageModal').style.display = 'none';
-        };
-        window.addEventListener('load', () => {
-            const savedCashier = localStorage.getItem('aura_cashier');
-            if(savedCashier) {
-                currentCashier = JSON.parse(savedCashier);
-                document.getElementById('activeCashierName').innerText = currentCashier.name;
-                document.getElementById('loginOverlay').style.display = 'none';
-                showMessageModal("Welcome Back", `Logged in as ${currentCashier.name}`, 'success');
+
+        // ════════════════════════════════════════════════════════════════════════════════
+        // LOGIN & EMPLOYEE MANAGEMENT FUNCTIONS
+        // ════════════════════════════════════════════════════════════════════════════════
+
+        window.switchLoginMode = function(mode) {
+            const cashierCard = document.getElementById('cashierLoginCard');
+            const managerCard = document.getElementById('managerRegisterCard');
+            
+            if(mode === 'manager') {
+                cashierCard.style.display = 'none';
+                managerCard.classList.add('active');
+                loadEmployeesList();
+            } else {
+                cashierCard.style.display = 'block';
+                managerCard.classList.remove('active');
+                document.getElementById('cashierID').focus();
             }
-        });
-        window.handleLogin = async function() {
-            const id = document.getElementById('cashierID').value.trim();
-            if(!id) {
-                showMessageModal("Access Denied", "Please enter your employee ID.", 'error', '--danger');
+        };
+
+        window.registerNewEmployee = async function() {
+            const empID = document.getElementById('newEmployeeID').value.trim().toUpperCase();
+            const empName = document.getElementById('newEmployeeName').value.trim();
+
+            if(!empID || !empName) {
+                showMessageModal("Invalid Input", "Please enter both Employee ID and Name.", 'error', '--danger');
                 return;
             }
+
+            if(empID.length < 3) {
+                showMessageModal("Invalid ID", "Employee ID must be at least 3 characters.", 'error', '--danger');
+                return;
+            }
+
+            // Check if employee ID already exists
+            const employeeRef = ref(db, `employees/${empID}`);
+            get(employeeRef).then((snapshot) => {
+                if(snapshot.exists()) {
+                    showMessageModal("Duplicate ID", `Employee ID "${empID}" already exists.`, 'error', '--danger');
+                    return;
+                }
+
+                // Register the new employee
+                set(employeeRef, {
+                    id: empID,
+                    name: empName,
+                    registeredAt: new Date().toISOString(),
+                    status: 'active'
+                }).then(() => {
+                    showMessageModal("Success", `Employee "${empName}" (${empID}) registered successfully!`, 'success');
+                    document.getElementById('newEmployeeID').value = '';
+                    document.getElementById('newEmployeeName').value = '';
+                    loadEmployeesList();
+                }).catch(err => {
+                    showMessageModal("Error", "Failed to register employee: " + err.message, 'error', '--danger');
+                });
+            }).catch(err => {
+                showMessageModal("Error", "Database error: " + err.message, 'error', '--danger');
+            });
+        };
+
+        function loadEmployeesList() {
+            get(employeesRef).then((snapshot) => {
+                const listDiv = document.getElementById('registeredEmployeesList');
+                if(snapshot.exists()) {
+                    const employees = snapshot.val();
+                    listDiv.innerHTML = '';
+                    
+                    Object.entries(employees).forEach(([empID, empData]) => {
+                        const empItem = document.createElement('div');
+                        empItem.className = 'employee-item';
+                        empItem.innerHTML = `
+                            <div class="employee-item-info">
+                                <div class="employee-id">${empData.id}</div>
+                                <div class="employee-name">${empData.name}</div>
+                            </div>
+                            <button class="btn-remove" onclick="removeEmployee('${empID}')">Remove</button>
+                        `;
+                        listDiv.appendChild(empItem);
+                    });
+                } else {
+                    listDiv.innerHTML = '<p style="color: var(--text-muted); font-size: 12px;">No employees registered yet</p>';
+                }
+            }).catch(err => {
+                console.error("Error loading employees:", err);
+            });
+        }
+
+        window.removeEmployee = async function(empKey) {
+            if(!confirm('Are you sure you want to remove this employee?')) return;
+            
+            const empRef = ref(db, `employees/${empKey}`);
+            set(empRef, null).then(() => {
+                showMessageModal("Removed", "Employee has been removed.", 'success');
+                loadEmployeesList();
+            }).catch(err => {
+                showMessageModal("Error", "Failed to remove employee: " + err.message, 'error', '--danger');
+            });
+        };
+
+        window.handleLogin = async function() {
+            const id = document.getElementById('cashierID').value.trim().toUpperCase();
+            if(!id) {
+                showMessageModal("Required Field", "Please enter your employee ID.", 'error', '--danger');
+                return;
+            }
+
             const employeeRef = ref(db, `employees/${id}`);
             get(employeeRef).then((snapshot) => {
                 if(snapshot.exists()) {
@@ -492,12 +718,13 @@
                         showMessageModal("Access Denied", "No name associated with this ID.", 'error', '--danger');
                     }
                 } else {
-                    showMessageModal("Access Denied", "The entered Employee ID is invalid.", 'error', '--danger');
+                    showMessageModal("Access Denied", `Employee ID "${id}" is not registered. Contact your manager.`, 'error', '--danger');
                 }
             }).catch(err => {
-                showMessageModal("Error", "An error occurred during login.", 'error', '--danger');
+                showMessageModal("Error", "Login failed: " + err.message, 'error', '--danger');
             });
         };
+
         window.handleLogout = function() {
             showMessageModal(
                 "Confirm Exit",
@@ -512,17 +739,67 @@
                 location.reload();
             };
         };
+
+        function showMessageModal(title, message, icon = 'info', color = '--success', showConfirm = false) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').textContent = message;
+            const iconEl = document.getElementById('modalIcon');
+            iconEl.textContent = icon === 'success' ? '✔' : icon === 'error' ? '✖' : '!';
+            iconEl.style.color = `var(${color})`;
+            document.getElementById('confirmLogoutBtn').style.display = showConfirm ? 'block' : 'none';
+            document.getElementById('okOnlyBtn').style.display = showConfirm ? 'none' : 'block';
+            document.getElementById('messageModal').style.display = 'flex';
+        }
+
+        window.closeMessageModal = function() {
+            document.getElementById('messageModal').style.display = 'none';
+        };
+
+        // ════════════════════════════════════════════════════════════════════════════════
+        // AUTO-LOGIN & INITIALIZATION
+        // ════════════════════════════════════════════════════════════════════════════════
+
+        window.addEventListener('load', () => {
+            const savedCashier = localStorage.getItem('aura_cashier');
+            if(savedCashier) {
+                try {
+                    currentCashier = JSON.parse(savedCashier);
+                    // Verify employee still exists in database
+                    const empRef = ref(db, `employees/${currentCashier.id}`);
+                    get(empRef).then((snapshot) => {
+                        if(snapshot.exists()) {
+                            document.getElementById('activeCashierName').innerText = currentCashier.name;
+                            document.getElementById('loginOverlay').style.display = 'none';
+                            showMessageModal("Welcome Back", `Logged in as ${currentCashier.name}`, 'success');
+                        } else {
+                            // Employee no longer exists
+                            localStorage.removeItem('aura_cashier');
+                            showMessageModal("Access Denied", "Your account is no longer active. Please login again.", 'error', '--danger');
+                        }
+                    });
+                } catch(e) {
+                    localStorage.removeItem('aura_cashier');
+                }
+            }
+        });
+
+        // ════════════════════════════════════════════════════════════════════════════════
+        // POS SYSTEM FUNCTIONS
+        // ════════════════════════════════════════════════════════════════════════════════
+
         window.switchTab = function(tab) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
             document.getElementById(`view-${tab}`).classList.add('active');
             event.currentTarget.classList.add('active');
         };
+
         onValue(inventoryRef, (snapshot) => {
             inventoryData = snapshot.val() || {};
             renderCategories();
             renderMenu();
         });
+
         function renderCategories() {
             const container = document.getElementById('posCategories');
             if(!container) return;
@@ -543,6 +820,7 @@
                 container.appendChild(btn);
             });
         }
+
         function renderMenu() {
             const grid = document.getElementById('posMenuGrid');
             if(!grid) return;
@@ -567,12 +845,15 @@
                 grid.appendChild(card);
             });
         }
+
         function addToCart(key, name, price) {
             if (!cart[key]) cart[key] = {name, price: parseFloat(price), qty: 0};
             cart[key].qty += 1;
             updateCart();
         }
+
         window.clearCart = function() { cart = {}; updateCart(); }
+
         function updateCart() {
             const list = document.getElementById('posCartList');
             list.innerHTML = '';
@@ -611,6 +892,7 @@
             document.getElementById('btnChargeAmount').innerText = `R ${total.toFixed(2)}`;
             document.getElementById('btnOpenTender').disabled = total <= 0;
         }
+
         document.getElementById('btnOpenTender').onclick = () => {
             document.getElementById('tenderTotalDue').innerText = currentTotal.toFixed(2);
             document.getElementById('tenderInput').value = '';
@@ -619,20 +901,24 @@
             document.getElementById('tenderModal').style.display = 'flex';
             setTimeout(() => document.getElementById('tenderInput').focus(), 100);
         };
+
         window.closeTenderModal = function() {
             document.getElementById('tenderModal').style.display = 'none';
         };
+
         window.setTender = function(type) {
             const input = document.getElementById('tenderInput');
             if(type === 'exact') input.value = currentTotal.toFixed(2);
             calculateChange();
         };
+
         window.addTender = function(amount) {
             const input = document.getElementById('tenderInput');
             let current = parseFloat(input.value) || 0;
             input.value = (current + amount).toFixed(2);
             calculateChange();
         };
+
         window.calculateChange = function() {
             const tendered = parseFloat(document.getElementById('tenderInput').value) || 0;
             const change = tendered - currentTotal;
@@ -647,6 +933,7 @@
                 confirmBtn.disabled = true;
             }
         };
+
         function printReceipt(orderNum, items, total) {
             const receiptDiv = document.getElementById('receipt-print');
             const now = new Date();
@@ -679,6 +966,7 @@
             `;
             window.print();
         }
+
         window.triggerReceiptPrint = function() {
             if(lastOrderDetails) {
                 printReceipt(
@@ -688,10 +976,12 @@
                 );
             }
         };
+
         window.closeSuccessModal = function() {
             document.getElementById('successModal').style.display = 'none';
             lastOrderDetails = null;
         };
+
         window.processCashierOrder = function() {
             const timestamp = Date.now();
             const orderNumber = Math.floor(1000 + Math.random() * 9000);
@@ -726,13 +1016,16 @@
             closeTenderModal();
             clearCart();
         };
+
         onValue(salesRef, (snapshot) => {
             allSales = snapshot.val() || {};
             renderOrderQueue(allSales, document.getElementById('searchOrders')?.value || '');
         });
+
         window.filterOrders = function(value) {
             renderOrderQueue(allSales, value);
         };
+
         function renderOrderQueue(salesData, search = '') {
             const groupedOrders = {};
            
@@ -792,6 +1085,7 @@
                 grid.appendChild(card);
             });
         }
+
         window.markOrderCompleted = function(saleKeys) {
             saleKeys.forEach(key => {
                 update(ref(db, `sales/${key}`), { status: 'Completed' });
