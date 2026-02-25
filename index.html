@@ -28,93 +28,11 @@
             background: var(--primary); z-index: 5000; display: flex;
             justify-content: center; align-items: center; color: white;
         }
-        .login-container {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
         .login-card { background: var(--secondary); padding: 40px; border-radius: 20px; width: 350px; text-align: center; }
         .login-card input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; font-size: 16px; outline: none; }
-        .login-divider {
-            width: 1px;
-            height: 300px;
-            background: var(--text-muted);
-            opacity: 0.3;
-        }
-        .manager-register-card {
-            background: var(--secondary);
-            padding: 40px;
-            border-radius: 20px;
-            width: 350px;
-            text-align: center;
-            display: none;
-        }
-        .manager-register-card.active {
-            display: block;
-        }
-        .manager-register-card input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; font-size: 16px; outline: none; }
-        .register-section {
-            margin-bottom: 20px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .register-section:last-of-type {
-            border-bottom: none;
-        }
-        .register-section label {
-            display: block;
-            color: var(--accent);
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 8px;
-            text-align: left;
-        }
-        .employees-list {
-            background: rgba(0,0,0,0.2);
-            border-radius: 10px;
-            padding: 12px;
-            max-height: 180px;
-            overflow-y: auto;
-            margin-top: 10px;
-        }
-        .employee-item {
-            background: var(--primary);
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-        }
-        .employee-item-info {
-            text-align: left;
-        }
-        .employee-id {
-            color: var(--accent);
-            font-weight: 600;
-        }
-        .employee-name {
-            color: var(--text-muted);
-            font-size: 12px;
-        }
-        .btn-remove {
-            background: var(--danger);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 4px 8px;
-            cursor: pointer;
-            font-size: 11px;
-            font-weight: 600;
-        }
-        .btn-remove:hover {
-            background: #e65b5a;
-        }
+        
         /* Pill-shaped buttons */
         .btn-login,
-        .btn-register-employee,
-        .btn-switch-mode,
         .nav-btn,
         .cat-btn,
         .clear-btn,
@@ -146,32 +64,6 @@
         .btn-login:hover {
             background: #ffc107;
             transform: scale(1.02);
-        }
-        .btn-register-employee {
-            width: 100%;
-            padding: 12px;
-            background: var(--success);
-            color: white;
-            font-weight: 700;
-            margin-top: 10px;
-        }
-        .btn-register-employee:hover {
-            background: #00a179;
-            transform: scale(1.02);
-        }
-        .btn-switch-mode {
-            width: 100%;
-            padding: 10px;
-            background: transparent;
-            color: var(--accent);
-            border: 1px solid var(--accent);
-            font-weight: 600;
-            margin-top: 15px;
-            font-size: 12px;
-        }
-        .btn-switch-mode:hover {
-            background: var(--accent);
-            color: #000;
         }
         .sidebar-nav {
             width: 80px;
@@ -324,14 +216,14 @@
             font-weight: 600;
         }
         .btn-complete:hover { background: #000; }
-        /* ── Modals ── (now using theme colors consistently) */
+        /* ── Modals ── */
         .modal {
             display: none;
             position: fixed;
             z-index: 2000;
             left: 0; top: 0;
             width: 100%; height: 100%;
-            background-color: rgba(26, 28, 30, 0.75); /* --primary with opacity */
+            background-color: rgba(26, 28, 30, 0.75);
             justify-content: center;
             align-items: center;
             backdrop-filter: blur(6px);
@@ -422,39 +314,25 @@
 </head>
 <body>
     <div id="loginOverlay">
-        <div class="login-container">
-            <!-- Cashier Login -->
-            <div class="login-card" id="cashierLoginCard">
-                <h2 style="margin-bottom: 20px; color: var(--accent);">AuraPOS Login</h2>
-                <input type="text" id="cashierID" placeholder="Employee ID" onkeypress="if(event.key==='Enter') handleLogin()">
-                <button class="btn-login" onclick="handleLogin()">Enter System</button>
-                <button class="btn-switch-mode" onclick="switchLoginMode('manager')">Manager Setup</button>
+        <div class="login-card">
+            <h2 style="margin-bottom: 20px; color: var(--accent);">AuraPOS Login</h2>
+            <input type="text" id="cashierID" placeholder="Employee ID" onkeypress="if(event.key==='Enter') handleLogin()">
+            <button class="btn-login" onclick="handleLogin()">Enter System</button>
+        </div>
+    </div>
+
+    <!-- Access Denied Modal -->
+    <div id="accessDeniedModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header" style="background: var(--danger);">
+                <h2>🔒 Access Denied</h2>
             </div>
-
-            <div class="login-divider"></div>
-
-            <!-- Manager Registration -->
-            <div class="manager-register-card" id="managerRegisterCard">
-                <h2 style="margin-bottom: 20px; color: var(--accent);">Manager Setup</h2>
-                
-                <div class="register-section">
-                    <label>New Employee ID</label>
-                    <input type="text" id="newEmployeeID" placeholder="e.g., EMP001" maxlength="20">
-                    
-                    <label style="margin-top: 12px;">Employee Name</label>
-                    <input type="text" id="newEmployeeName" placeholder="Full name">
-                    
-                    <button class="btn-register-employee" onclick="registerNewEmployee()">Register Employee</button>
+            <div class="modal-body">
+                <div class="modal-icon">✖</div>
+                <p class="modal-message" id="accessDeniedMessage">The Employee ID you entered is not registered in the system. Please contact your manager.</p>
+                <div class="modal-actions">
+                    <button class="btn-modal btn-confirm" onclick="closeAccessDeniedModal()" style="width: 100%;">Try Again</button>
                 </div>
-
-                <div class="register-section">
-                    <label>Registered Employees</label>
-                    <div class="employees-list" id="registeredEmployeesList">
-                        <p style="color: var(--text-muted); font-size: 12px;">No employees registered yet</p>
-                    </div>
-                </div>
-
-                <button class="btn-switch-mode" onclick="switchLoginMode('cashier')">Back to Login</button>
             </div>
         </div>
     </div>
@@ -589,7 +467,6 @@
         const salesRef = ref(db, 'sales');
         const employeesRef = ref(db, 'employees');
         let inventoryData = {};
-        let employeesData = {};
         let cart = {};
         let selectedCategory = '';
         let currentTotal = 0;
@@ -598,102 +475,19 @@
         let lastOrderDetails = null;
 
         // ════════════════════════════════════════════════════════════════════════════════
-        // LOGIN & EMPLOYEE MANAGEMENT FUNCTIONS
+        // LOGIN VALIDATION FUNCTIONS
         // ════════════════════════════════════════════════════════════════════════════════
 
-        window.switchLoginMode = function(mode) {
-            const cashierCard = document.getElementById('cashierLoginCard');
-            const managerCard = document.getElementById('managerRegisterCard');
-            
-            if(mode === 'manager') {
-                cashierCard.style.display = 'none';
-                managerCard.classList.add('active');
-                loadEmployeesList();
-            } else {
-                cashierCard.style.display = 'block';
-                managerCard.classList.remove('active');
-                document.getElementById('cashierID').focus();
-            }
-        };
-
-        window.registerNewEmployee = async function() {
-            const empID = document.getElementById('newEmployeeID').value.trim().toUpperCase();
-            const empName = document.getElementById('newEmployeeName').value.trim();
-
-            if(!empID || !empName) {
-                showMessageModal("Invalid Input", "Please enter both Employee ID and Name.", 'error', '--danger');
-                return;
-            }
-
-            if(empID.length < 3) {
-                showMessageModal("Invalid ID", "Employee ID must be at least 3 characters.", 'error', '--danger');
-                return;
-            }
-
-            // Check if employee ID already exists
-            const employeeRef = ref(db, `employees/${empID}`);
-            get(employeeRef).then((snapshot) => {
-                if(snapshot.exists()) {
-                    showMessageModal("Duplicate ID", `Employee ID "${empID}" already exists.`, 'error', '--danger');
-                    return;
-                }
-
-                // Register the new employee
-                set(employeeRef, {
-                    id: empID,
-                    name: empName,
-                    registeredAt: new Date().toISOString(),
-                    status: 'active'
-                }).then(() => {
-                    showMessageModal("Success", `Employee "${empName}" (${empID}) registered successfully!`, 'success');
-                    document.getElementById('newEmployeeID').value = '';
-                    document.getElementById('newEmployeeName').value = '';
-                    loadEmployeesList();
-                }).catch(err => {
-                    showMessageModal("Error", "Failed to register employee: " + err.message, 'error', '--danger');
-                });
-            }).catch(err => {
-                showMessageModal("Error", "Database error: " + err.message, 'error', '--danger');
-            });
-        };
-
-        function loadEmployeesList() {
-            get(employeesRef).then((snapshot) => {
-                const listDiv = document.getElementById('registeredEmployeesList');
-                if(snapshot.exists()) {
-                    const employees = snapshot.val();
-                    listDiv.innerHTML = '';
-                    
-                    Object.entries(employees).forEach(([empID, empData]) => {
-                        const empItem = document.createElement('div');
-                        empItem.className = 'employee-item';
-                        empItem.innerHTML = `
-                            <div class="employee-item-info">
-                                <div class="employee-id">${empData.id}</div>
-                                <div class="employee-name">${empData.name}</div>
-                            </div>
-                            <button class="btn-remove" onclick="removeEmployee('${empID}')">Remove</button>
-                        `;
-                        listDiv.appendChild(empItem);
-                    });
-                } else {
-                    listDiv.innerHTML = '<p style="color: var(--text-muted); font-size: 12px;">No employees registered yet</p>';
-                }
-            }).catch(err => {
-                console.error("Error loading employees:", err);
-            });
+        function showAccessDeniedModal(empID) {
+            const message = `The Employee ID "${empID}" is not registered in the system. Please contact your manager to create this account.`;
+            document.getElementById('accessDeniedMessage').textContent = message;
+            document.getElementById('accessDeniedModal').style.display = 'flex';
         }
 
-        window.removeEmployee = async function(empKey) {
-            if(!confirm('Are you sure you want to remove this employee?')) return;
-            
-            const empRef = ref(db, `employees/${empKey}`);
-            set(empRef, null).then(() => {
-                showMessageModal("Removed", "Employee has been removed.", 'success');
-                loadEmployeesList();
-            }).catch(err => {
-                showMessageModal("Error", "Failed to remove employee: " + err.message, 'error', '--danger');
-            });
+        window.closeAccessDeniedModal = function() {
+            document.getElementById('accessDeniedModal').style.display = 'none';
+            document.getElementById('cashierID').value = '';
+            document.getElementById('cashierID').focus();
         };
 
         window.handleLogin = async function() {
@@ -715,10 +509,10 @@
                         document.getElementById('loginOverlay').style.display = 'none';
                         showMessageModal("Login Successful", `Welcome, ${name}!`, 'success');
                     } else {
-                        showMessageModal("Access Denied", "No name associated with this ID.", 'error', '--danger');
+                        showAccessDeniedModal(id);
                     }
                 } else {
-                    showMessageModal("Access Denied", `Employee ID "${id}" is not registered. Contact your manager.`, 'error', '--danger');
+                    showAccessDeniedModal(id);
                 }
             }).catch(err => {
                 showMessageModal("Error", "Login failed: " + err.message, 'error', '--danger');
@@ -774,7 +568,8 @@
                         } else {
                             // Employee no longer exists
                             localStorage.removeItem('aura_cashier');
-                            showMessageModal("Access Denied", "Your account is no longer active. Please login again.", 'error', '--danger');
+                            showAccessDeniedModal(currentCashier.id);
+                            document.getElementById('loginOverlay').style.display = 'flex';
                         }
                     });
                 } catch(e) {
