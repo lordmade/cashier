@@ -29,7 +29,7 @@
             justify-content: center; align-items: center; color: white;
         }
         .login-card { background: var(--secondary); padding: 40px; border-radius: 20px; width: 350px; text-align: center; }
-        .login-card input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; font-size: 16px; outline: none; color: #000; }
+        .login-card input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; font-size: 16px; outline: none; }
         .btn-login { width: 100%; padding: 12px; background: var(--accent); border: none; border-radius: 8px; font-weight: 800; cursor: pointer; margin-top: 10px; }
 
         /* Sidebar & Navigation */
@@ -48,14 +48,12 @@
         .category-scroll { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 10px; }
         .cat-btn { padding: 10px 20px; border-radius: 50px; border: 1px solid var(--border); background: var(--white); cursor: pointer; font-weight: 600; white-space: nowrap; transition: var(--transition); }
         .cat-btn.active { background: var(--primary); color: var(--white); border-color: var(--primary); }
-        
-        .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 15px; }
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
         .menu-item { background: var(--white); padding: 12px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); text-align: center; cursor: pointer; transition: var(--transition); border: 2px solid transparent; }
-        .menu-item:hover { transform: translateY(-3px); border-color: var(--accent); }
-        .menu-item img { width: 100%; height: 100px; object-fit: cover; border-radius: 10px; margin-bottom: 10px; background: #eee; }
+        .menu-item img { width: 100%; height: 100px; object-fit: cover; border-radius: 10px; margin-bottom: 10px; }
         .menu-item p { color: var(--success); font-weight: 800; }
 
-        .pos-cart-area { width: 380px; background: var(--white); border-left: 1px solid var(--border); display: flex; flex-direction: column; height: 100vh; }
+        .pos-cart-area { width: 350px; background: var(--white); border-left: 1px solid var(--border); display: flex; flex-direction: column; height: 100vh; }
         .cart-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .cart-items { flex: 1; overflow-y: auto; padding: 20px; list-style: none; }
         .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed var(--border); }
@@ -64,32 +62,28 @@
         
         .cart-totals { padding: 20px; background: var(--bg-light); }
         .total-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; }
-        .total-row.grand-total { font-size: 24px; font-weight: 800; border-top: 2px solid #ddd; padding-top: 10px; margin-top: 10px; }
+        .total-row.grand-total { font-size: 24px; font-weight: 800; border-top: 2px solid #ddd; padding-top: 10px; }
         
         .pay-btn { width: 100%; padding: 18px; border: none; border-radius: 12px; background: var(--success); color: white; font-size: 18px; font-weight: 800; cursor: pointer; margin-top: 15px; display: flex; justify-content: space-between; }
         .pay-btn:disabled { background: #ccc; cursor: not-allowed; }
 
         /* Modals */
-        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); justify-content: center; align-items: center; backdrop-filter: blur(4px); }
-        .modal-content { background: var(--white); width: 420px; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.3); position: relative; }
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center; backdrop-filter: blur(4px); }
+        .modal-content { background: var(--white); width: 400px; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
         .modal-header { background: var(--primary); color: var(--white); padding: 20px; text-align: center; }
-        .modal-body { padding: 25px; }
-        .tender-input { width: 100%; padding: 15px; font-size: 28px; font-weight: 800; border: 2px solid var(--border); border-radius: 10px; text-align: right; outline: none; margin-top: 5px; }
-        .change-display { background: #e8f5e9; padding: 15px; border-radius: 10px; text-align: center; margin: 20px 0; border: 1px solid var(--success); }
-        .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+        .modal-body { padding: 20px; }
+        .tender-input { width: 100%; padding: 15px; font-size: 24px; font-weight: 800; border: 2px solid var(--border); border-radius: 10px; text-align: right; outline: none; }
+        .change-display { background: #e8f5e9; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
+        .modal-actions { display: flex; gap: 10px; }
         
-        /* Success/Alert Styles */
-        .status-icon { font-size: 60px; margin-bottom: 15px; display: block; }
-        .btn-action { flex: 1; padding: 15px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; transition: var(--transition); }
-        .btn-print { background: var(--accent); color: var(--primary); }
-        .btn-close { background: var(--primary); color: white; }
+        .status-icon { font-size: 50px; margin-bottom: 15px; }
+        .btn-status { width: 100%; padding: 15px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; }
 
         /* Orders Grid */
         .orders-area { flex: 1; padding: 30px; overflow-y: auto; background: var(--bg-light); }
         .orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
-        .order-card { background: var(--white); border-radius: 16px; padding: 20px; border-top: 5px solid var(--accent); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .order-card { background: var(--white); border-radius: 16px; padding: 20px; border-top: 5px solid var(--accent); }
 
-        /* Print Settings */
         @media print {
             body * { visibility: hidden; }
             #receipt-content, #receipt-content * { visibility: visible; }
@@ -101,27 +95,19 @@
 
     <div id="loginOverlay">
         <div class="login-card">
-            <div class="logo-sq" style="margin: 0 auto 20px;">A</div>
-            <h2 style="margin-bottom: 10px; color: var(--accent);">Cashier Login</h2>
-            <p style="font-size: 13px; color: #bbb; margin-bottom: 20px;">Enter credentials to access terminal</p>
-            <input type="text" id="cashierName" placeholder="Cashier Name">
+            <h2 style="margin-bottom: 20px; color: var(--accent);">AuraPOS Login</h2>
+            <input type="text" id="cashierName" placeholder="Cashier Full Name">
             <input type="password" id="cashierID" placeholder="Access Code">
-            <button class="btn-login" onclick="handleLogin()">Unlock Terminal</button>
+            <button class="btn-login" onclick="handleLogin()">Enter System</button>
         </div>
     </div>
 
     <div id="statusModal" class="modal">
         <div class="modal-content" style="text-align: center; padding: 30px;">
-            <span id="statusIcon" class="status-icon">✅</span>
-            <h2 id="statusTitle">Order Successful</h2>
-            <div id="statusBody" style="margin: 15px 0; color: var(--text-muted);">
-                <p id="statusMsg"></p>
-                <h1 id="statusOrderNum" style="color: var(--primary); font-size: 40px; margin: 10px 0;">#0000</h1>
-            </div>
-            <div class="modal-actions">
-                <button class="btn-action btn-print" onclick="window.print()">Print Receipt</button>
-                <button class="btn-action btn-close" onclick="closeStatusModal()">New Order</button>
-            </div>
+            <div id="statusIcon" class="status-icon"></div>
+            <h2 id="statusTitle" style="margin-bottom: 10px;"></h2>
+            <p id="statusMsg" style="color: var(--text-muted); margin-bottom: 20px;"></p>
+            <div id="statusActions" class="modal-actions"></div>
         </div>
     </div>
 
@@ -139,52 +125,49 @@
 
     <main id="view-pos" class="view-section active">
         <div class="pos-menu-area">
-            <h1 class="header-title">Welcome, <span id="activeCashierDisp" style="color: var(--success);">...</span></h1>
+            <h1 class="header-title">Cashier: <span id="activeCashierDisp" style="color: var(--success);">...</span></h1>
             <div class="category-scroll" id="posCategories"></div>
             <div class="menu-grid" id="posMenuGrid"></div>
         </div>
         
         <aside class="pos-cart-area">
-            <div class="cart-header"><h2>New Order</h2><button onclick="clearCart()" style="color:var(--danger); border:none; background:none; cursor:pointer; font-weight:600;">Clear</button></div>
+            <div class="cart-header"><h2>Current Order</h2><button style="border:none; background:none; color:var(--danger); font-weight:600; cursor:pointer;" onclick="clearCart()">Clear</button></div>
             <ul class="cart-items" id="posCartList"></ul>
             <div class="cart-totals">
                 <div class="total-row"><span>Subtotal</span><span>R <span id="cartSubtotal">0.00</span></span></div>
-                <div class="total-row"><span>Tax (15%)</span><span>R <span id="cartVat">0.00</span></span></div>
+                <div class="total-row"><span>VAT (15% Incl)</span><span>R <span id="cartVat">0.00</span></span></div>
                 <div class="total-row grand-total"><span>Total</span><span>R <span id="cartGrandTotal">0.00</span></span></div>
-                <button class="pay-btn" id="btnOpenTender" disabled><span>Proceed to Pay</span><span id="btnChargeAmount">R 0.00</span></button>
+                <button class="pay-btn" id="btnOpenTender" disabled><span>Charge</span><span id="btnChargeAmount">R 0.00</span></button>
             </div>
         </aside>
     </main>
 
     <main id="view-orders" class="view-section">
         <div class="orders-area">
-            <h1 class="header-title">Order History</h1>
+            <h1 class="header-title">Live Order Queue</h1>
             <div class="orders-grid" id="ordersGrid"></div>
         </div>
     </main>
 
     <div id="tenderModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header"><h2>Payment: R <span id="tenderTotalDue">0.00</span></h2></div>
+            <div class="modal-header"><h2>Total: R <span id="tenderTotalDue">0.00</span></h2></div>
             <div class="modal-body">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:15px;">
-                    <button class="cat-btn" onclick="quickTender('exact')">Exact Cash</button>
-                    <button class="cat-btn" onclick="quickTender(100)">R 100</button>
-                    <button class="cat-btn" onclick="quickTender(200)">R 200</button>
-                    <button class="cat-btn" onclick="quickTender('card')">Card Payment</button>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:20px;">
+                    <button class="cat-btn" onclick="setTender('exact')">Exact Amount</button>
+                    <button class="cat-btn" onclick="addTender(100)">+ R 100</button>
                 </div>
-                <label style="font-size:12px; font-weight:800; color:var(--text-muted);">Amount Received</label>
                 <input type="number" id="tenderInput" class="tender-input" placeholder="0.00" oninput="calculateChange()">
-                <div class="change-display"><span>Change Due</span><h3 style="font-size:24px;">R <span id="changeDue">0.00</span></h3></div>
+                <div class="change-display"><span>Change Due</span><h3>R <span id="changeDue">0.00</span></h3></div>
                 <div class="modal-actions">
-                    <button class="btn-action btn-close" onclick="closeTenderModal()">Cancel</button>
-                    <button class="btn-action btn-print" id="btnConfirmPayment" disabled onclick="finalizeOrder()">Complete Sale</button>
+                    <button class="btn-login" style="background:#eee; color:#000;" onclick="closeTenderModal()">Cancel</button>
+                    <button class="btn-login" id="btnConfirmPayment" disabled onclick="processCashierOrder()">Complete Order</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="receipt-content" style="display:none; font-family: 'Courier New', monospace; width: 300px; padding: 20px; color: #000;"></div>
+    <div id="receipt-content" style="display:none; font-family: monospace; padding: 20px; text-align: center;"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -202,15 +185,15 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        let inventory = {}, cart = {}, currentTotal = 0;
-        let currentUser = JSON.parse(sessionStorage.getItem('pos_user')) || null;
+        let inventoryData = {}, cart = {}, currentTotal = 0;
+        let currentCashier = JSON.parse(sessionStorage.getItem('cashier')) || null;
 
         // --- Session Management ---
         window.addEventListener('load', () => {
-            if(!currentUser) {
+            if(!currentCashier) {
                 document.getElementById('loginOverlay').style.display = 'flex';
             } else {
-                document.getElementById('activeCashierDisp').innerText = currentUser.name;
+                document.getElementById('activeCashierDisp').innerText = currentCashier.name;
             }
         });
 
@@ -218,86 +201,83 @@
             const name = document.getElementById('cashierName').value;
             const id = document.getElementById('cashierID').value;
             if(name && id) {
-                currentUser = { name, id, loginTime: Date.now() };
-                sessionStorage.setItem('pos_user', JSON.stringify(currentUser));
+                currentCashier = { name, id };
+                sessionStorage.setItem('cashier', JSON.stringify(currentCashier));
                 document.getElementById('activeCashierDisp').innerText = name;
                 document.getElementById('loginOverlay').style.display = 'none';
+            } else {
+                showStatus('warning', 'Error', 'Please enter Name and Code');
             }
         };
 
-        // --- POS Logic ---
-        onValue(ref(db, 'inventory'), (snapshot) => {
-            inventory = snapshot.val() || {};
-            renderCategories();
-            renderMenu();
-        });
+        // --- Custom Popups ---
+        window.showStatus = (type, title, msg, orderNum = null) => {
+            const modal = document.getElementById('statusModal');
+            document.getElementById('statusIcon').innerText = type === 'success' ? '✅' : '⚠️';
+            document.getElementById('statusTitle').innerText = title;
+            document.getElementById('statusMsg').innerText = msg;
+            
+            const actions = document.getElementById('statusActions');
+            actions.innerHTML = '';
+            
+            if(orderNum) {
+                const prnt = document.createElement('button');
+                prnt.className = 'btn-status';
+                prnt.style.background = 'var(--accent)';
+                prnt.style.color = 'black';
+                prnt.innerText = 'Print Receipt';
+                prnt.onclick = () => window.print();
+                actions.appendChild(prnt);
+            }
 
-        function renderCategories() {
-            const container = document.getElementById('posCategories');
-            const cats = new Set(['All']);
-            Object.values(inventory).forEach(i => cats.add(i.category || 'General'));
-            container.innerHTML = Array.from(cats).map(c => 
-                `<button class="cat-btn ${c==='All'?'active':''}" onclick="filterMenu('${c}')">${c}</button>`
-            ).join('');
-        }
+            const ok = document.createElement('button');
+            ok.className = 'btn-status';
+            ok.style.background = 'var(--primary)';
+            ok.style.color = 'white';
+            ok.innerText = 'Dismiss';
+            ok.onclick = () => modal.style.display = 'none';
+            actions.appendChild(ok);
 
-        window.filterMenu = (cat) => {
-            document.querySelectorAll('.cat-btn').forEach(b => b.classList.toggle('active', b.innerText === cat));
-            renderMenu(cat === 'All' ? '' : cat);
+            modal.style.display = 'flex';
         };
+
+        // --- Core Logic ---
+        onValue(ref(db, 'inventory'), (s) => { inventoryData = s.val() || {}; renderMenu(); });
 
         function renderMenu(filter = '') {
             const grid = document.getElementById('posMenuGrid');
             grid.innerHTML = '';
-            Object.entries(inventory).forEach(([key, item]) => {
-                if(filter && item.category !== filter) return;
-                const price = item.price;
-                const div = document.createElement('div');
-                div.className = 'menu-item';
-                div.innerHTML = `<img src="${item.imageURL || ''}"><h4>${item.name}</h4><p>R ${price.toFixed(2)}</p>`;
-                div.onclick = () => {
-                    if(!cart[key]) cart[key] = { ...item, qty: 0 };
-                    cart[key].qty++;
-                    updateCart();
-                };
-                grid.appendChild(div);
+            Object.entries(inventoryData).forEach(([key, item]) => {
+                const card = document.createElement('div');
+                card.className = 'menu-item';
+                card.innerHTML = `<img src="${item.imageURL || ''}"><h4>${item.name}</h4><p>R ${parseFloat(item.price).toFixed(2)}</p>`;
+                card.onclick = () => addToCart(key, item);
+                grid.appendChild(card);
             });
+        }
+
+        function addToCart(key, item) {
+            if(!cart[key]) cart[key] = { ...item, qty: 0 };
+            cart[key].qty++;
+            updateCart();
         }
 
         function updateCart() {
             const list = document.getElementById('posCartList');
             list.innerHTML = '';
-            let sub = 0;
+            let total = 0;
             Object.entries(cart).forEach(([key, item]) => {
-                sub += item.price * item.qty;
-                list.innerHTML += `
-                    <li class="cart-item">
-                        <div><b>${item.name}</b><br><small>R${item.price.toFixed(2)}</small></div>
-                        <div class="cart-item-qty">
-                            <button onclick="adjustQty('${key}', -1)">-</button>
-                            <span>${item.qty}</span>
-                            <button onclick="adjustQty('${key}', 1)">+</button>
-                        </div>
-                    </li>`;
+                total += item.price * item.qty;
+                list.innerHTML += `<li class="cart-item"><div><b>${item.name}</b><br><small>R${item.price.toFixed(2)}</small></div><div class="cart-item-qty"><span>${item.qty}</span></div></li>`;
             });
-            currentTotal = sub;
-            const vat = sub * 0.15;
-            document.getElementById('cartSubtotal').innerText = (sub - vat).toFixed(2);
-            document.getElementById('cartVat').innerText = vat.toFixed(2);
-            document.getElementById('cartGrandTotal').innerText = sub.toFixed(2);
-            document.getElementById('btnChargeAmount').innerText = `R ${sub.toFixed(2)}`;
-            document.getElementById('btnOpenTender').disabled = sub <= 0;
+            currentTotal = total;
+            document.getElementById('cartGrandTotal').innerText = total.toFixed(2);
+            document.getElementById('btnChargeAmount').innerText = `R ${total.toFixed(2)}`;
+            document.getElementById('btnOpenTender').disabled = total <= 0;
         }
-
-        window.adjustQty = (key, amt) => {
-            cart[key].qty += amt;
-            if(cart[key].qty <= 0) delete cart[key];
-            updateCart();
-        };
 
         window.clearCart = () => { cart = {}; updateCart(); };
 
-        // --- Payment & Finalization ---
         document.getElementById('btnOpenTender').onclick = () => {
             document.getElementById('tenderTotalDue').innerText = currentTotal.toFixed(2);
             document.getElementById('tenderModal').style.display = 'flex';
@@ -305,102 +285,67 @@
 
         window.closeTenderModal = () => document.getElementById('tenderModal').style.display = 'none';
 
-        window.quickTender = (val) => {
-            const input = document.getElementById('tenderInput');
-            if(val === 'exact') input.value = currentTotal.toFixed(2);
-            else if(val === 'card') input.value = currentTotal.toFixed(2);
-            else input.value = val.toFixed(2);
-            calculateChange();
-        };
-
         window.calculateChange = () => {
-            const received = parseFloat(document.getElementById('tenderInput').value) || 0;
-            const change = received - currentTotal;
+            const val = parseFloat(document.getElementById('tenderInput').value) || 0;
+            const change = val - currentTotal;
             document.getElementById('changeDue').innerText = Math.max(0, change).toFixed(2);
-            document.getElementById('btnConfirmPayment').disabled = received < currentTotal;
+            document.getElementById('btnConfirmPayment').disabled = val < currentTotal;
         };
 
-        window.finalizeOrder = async () => {
+        window.processCashierOrder = async () => {
             const orderNum = Math.floor(1000 + Math.random() * 9000);
-            const ts = Date.now();
+            const ts = serverTimestamp();
             
-            // Save to Firebase
-            for(const [id, item] of Object.entries(cart)) {
+            // Build receipt and save
+            let itemsText = "";
+            for(const [key, item] of Object.entries(cart)) {
+                itemsText += `<tr><td>${item.name} x${item.qty}</td><td style="text-align:right">R${(item.price*item.qty).toFixed(2)}</td></tr>`;
                 await push(ref(db, 'sales'), {
                     orderNumber: orderNum,
                     name: item.name,
                     qty: item.qty,
-                    revenue: (item.price * item.qty),
-                    cashier: currentUser.name,
-                    timestamp: serverTimestamp(),
+                    revenue: item.price * item.qty,
+                    cashier: currentCashier.name,
+                    timestamp: ts,
                     status: 'Completed'
                 });
             }
 
-            // Prepare Receipt
-            prepareReceipt(orderNum);
-            
-            // Show Success Modal
+            // Prepare Receipt Content
+            document.getElementById('receipt-content').innerHTML = `
+                <h2>AURAPOS</h2>
+                <p>Order: #${orderNum}<br>${new Date().toLocaleString()}</p>
+                <hr><table style="width:100%">${itemsText}</table><hr>
+                <h3>TOTAL: R ${currentTotal.toFixed(2)}</h3>
+                <p>Cashier: ${currentCashier.name}</p>
+            `;
+
+            const change = document.getElementById('changeDue').innerText;
             closeTenderModal();
-            document.getElementById('statusOrderNum').innerText = `#${orderNum}`;
-            document.getElementById('statusMsg').innerText = `Total Sale: R${currentTotal.toFixed(2)}`;
-            document.getElementById('statusModal').style.display = 'flex';
-            
+            showStatus('success', 'Order Complete', `Order #${orderNum} created. Change: R${change}`, orderNum);
             clearCart();
         };
 
-        function prepareReceipt(num) {
-            const area = document.getElementById('receipt-content');
-            const date = new Date().toLocaleString();
-            let itemsHtml = Object.values(cart).map(i => 
-                `<tr><td>${i.name} x${i.qty}</td><td style="text-align:right">R${(i.price*i.qty).toFixed(2)}</td></tr>`
-            ).join('');
-
-            area.innerHTML = `
-                <div style="text-align:center">
-                    <h2>AURAPOS TERMINAL</h2>
-                    <p>Order ID: #${num}<br>${date}</p>
-                    <hr>
-                    <table style="width:100%">${itemsHtml}</table>
-                    <hr>
-                    <h3>TOTAL: R ${currentTotal.toFixed(2)}</h3>
-                    <p>Cashier: ${currentUser.name}</p>
-                    <p>*** THANK YOU ***</p>
-                </div>
-            `;
-        }
-
-        window.closeStatusModal = () => document.getElementById('statusModal').style.display = 'none';
-
         window.switchTab = (tab) => {
-            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
             document.getElementById(`view-${tab}`).classList.add('active');
             event.currentTarget.classList.add('active');
         };
 
-        // Order history listener
+        // Order Queue Listener
         onValue(ref(db, 'sales'), (snap) => {
             const data = snap.val() || {};
             const grid = document.getElementById('ordersGrid');
             grid.innerHTML = '';
-            
-            const orders = {};
+            const grouped = {};
             Object.values(data).forEach(s => {
-                if(!orders[s.orderNumber]) orders[s.orderNumber] = { total: 0, items: [] };
-                orders[s.orderNumber].total += s.revenue;
-                orders[s.orderNumber].items.push(`${s.qty}x ${s.name}`);
+                if(!grouped[s.orderNumber]) grouped[s.orderNumber] = { ...s, items: [], total: 0 };
+                grouped[s.orderNumber].items.push(`${s.qty}x ${s.name}`);
+                grouped[s.orderNumber].total += s.revenue;
             });
-
-            Object.entries(orders).reverse().forEach(([num, details]) => {
-                grid.innerHTML += `
-                    <div class="order-card">
-                        <div style="display:flex; justify-content:space-between;">
-                            <h3>#${num}</h3>
-                            <span style="color:var(--success); font-weight:800;">R ${details.total.toFixed(2)}</span>
-                        </div>
-                        <p style="font-size:12px; margin-top:10px; color:#666;">${details.items.join(', ')}</p>
-                    </div>`;
+            Object.values(grouped).reverse().forEach(o => {
+                grid.innerHTML += `<div class="order-card"><h3>#${o.orderNumber}</h3><p>${o.items.join(', ')}</p><hr><div style="display:flex; justify-content:space-between; margin-top:10px;"><b>R${o.total.toFixed(2)}</b><small>COMPLETED</small></div></div>`;
             });
         });
     </script>
