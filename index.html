@@ -797,13 +797,6 @@
                 update(ref(db, `sales/${key}`), { status: 'Completed' });
             });
         };
-
-        // Make the "Enter System" button work with keyboard too
-        document.getElementById('cashierID').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                handleLogin();
-            }
-        });
     </script>
 </body>
 </html>
