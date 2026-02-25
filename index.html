@@ -19,11 +19,8 @@
             --border: #E9ECEF;
             --transition: all 0.2s ease;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; user-select: none; }
-
         body { display: flex; height: 100vh; background-color: var(--bg-light); color: var(--text-dark); overflow: hidden; }
-
         /* --- SIDEBAR NAVIGATION --- */
         .sidebar-nav {
             width: 80px; background: var(--primary); display: flex; flex-direction: column; align-items: center; padding: 20px 0; z-index: 100;
@@ -34,34 +31,30 @@
         }
         .nav-btn svg { width: 24px; height: 24px; fill: currentColor; }
         .nav-btn.active { background: var(--secondary); color: var(--accent); }
-
         /* --- MAIN CONTENT AREAS --- */
         .view-section { display: none; flex: 1; height: 100vh; }
         .view-section.active { display: flex; }
-
         /* --- POS VIEW --- */
         .pos-menu-area { flex: 1; display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
         .header-title { font-size: 24px; font-weight: 800; margin-bottom: 20px; }
-        
+       
         .category-scroll { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 10px; }
         .category-scroll::-webkit-scrollbar { height: 4px; }
         .category-scroll::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
         .cat-btn { padding: 10px 20px; border-radius: 50px; border: 1px solid var(--border); background: var(--white); cursor: pointer; font-weight: 600; white-space: nowrap; transition: var(--transition); }
         .cat-btn.active { background: var(--primary); color: var(--white); border-color: var(--primary); }
-
         .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
         .menu-item { background: var(--white); padding: 12px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); text-align: center; cursor: pointer; transition: var(--transition); border: 2px solid transparent; }
         .menu-item:active { transform: scale(0.95); border-color: var(--accent); }
         .menu-item img { width: 100%; height: 100px; object-fit: cover; border-radius: 10px; margin-bottom: 10px; }
         .menu-item h4 { font-size: 14px; margin-bottom: 5px; }
         .menu-item p { color: var(--success); font-weight: 800; }
-
         /* --- POS CART AREA --- */
         .pos-cart-area { width: 350px; background: var(--white); border-left: 1px solid var(--border); display: flex; flex-direction: column; height: 100vh; box-shadow: -5px 0 20px rgba(0,0,0,0.03); }
         .cart-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .cart-header h2 { font-size: 18px; }
         .clear-btn { color: var(--danger); background: none; border: none; font-weight: 600; cursor: pointer; }
-        
+       
         .cart-items { flex: 1; overflow-y: auto; padding: 20px; list-style: none; }
         .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed var(--border); }
         .cart-item-details { flex: 1; }
@@ -69,15 +62,13 @@
         .cart-item-price { color: var(--text-muted); font-size: 12px; }
         .cart-item-qty { display: flex; align-items: center; gap: 10px; background: var(--bg-light); border-radius: 8px; padding: 5px; }
         .cart-item-qty button { width: 28px; height: 28px; border: none; border-radius: 6px; background: var(--white); cursor: pointer; font-weight: bold; }
-
         .cart-totals { padding: 20px; background: var(--bg-light); }
         .total-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: var(--text-muted); }
         .total-row.grand-total { font-size: 24px; font-weight: 800; color: var(--text-dark); margin-top: 10px; padding-top: 10px; border-top: 2px solid #ddd; }
-        
+       
         .pay-btn { width: 100%; padding: 18px; border: none; border-radius: 12px; background: var(--success); color: white; font-size: 18px; font-weight: 800; cursor: pointer; margin-top: 15px; transition: var(--transition); display: flex; justify-content: space-between; }
         .pay-btn:active { transform: scale(0.98); }
         .pay-btn:disabled { background: #ccc; cursor: not-allowed; }
-
         /* --- ORDERS QUEUE VIEW --- */
         .orders-area { flex: 1; padding: 30px; overflow-y: auto; background: var(--bg-light); }
         .orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 20px; }
@@ -91,36 +82,33 @@
         .order-items li { display: flex; justify-content: space-between; margin-bottom: 5px; }
         .order-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 15px; border-top: 1px solid var(--border); }
         .btn-complete { padding: 8px 15px; border: none; border-radius: 8px; background: var(--primary); color: white; font-weight: 600; cursor: pointer; }
-
         /* --- TENDER / CHECKOUT MODAL --- */
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center; backdrop-filter: blur(4px); }
         .modal-content { background: var(--white); width: 400px; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
         .modal-header { background: var(--primary); color: var(--white); padding: 20px; text-align: center; }
         .modal-header h2 { font-size: 24px; }
         .modal-body { padding: 20px; }
-        
+       
         .quick-cash { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
         .btn-cash { padding: 15px; border: 1px solid var(--border); background: var(--bg-light); border-radius: 10px; font-weight: 800; font-size: 16px; cursor: pointer; transition: var(--transition); }
         .btn-cash:active { background: var(--accent); border-color: var(--accent); }
-        
+       
         .input-group { margin-bottom: 20px; }
         .input-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 5px; }
         .tender-input { width: 100%; padding: 15px; font-size: 24px; font-weight: 800; border: 2px solid var(--border); border-radius: 10px; text-align: right; outline: none; }
         .tender-input:focus { border-color: var(--accent); }
-        
+       
         .change-display { background: #e8f5e9; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
         .change-display span { display: block; font-size: 14px; color: var(--success); font-weight: 600; }
         .change-display h3 { font-size: 32px; color: var(--success); font-weight: 800; }
-        
+       
         .modal-actions { display: flex; gap: 10px; }
         .btn-cancel { flex: 1; padding: 15px; border: none; border-radius: 10px; background: #eee; font-weight: 600; cursor: pointer; }
         .btn-confirm { flex: 2; padding: 15px; border: none; border-radius: 10px; background: var(--success); color: white; font-weight: 800; font-size: 16px; cursor: pointer; }
         .btn-confirm:disabled { background: #ccc; cursor: not-allowed; }
-
     </style>
 </head>
 <body>
-
     <nav class="sidebar-nav">
         <div class="logo-sq">A</div>
         <button class="nav-btn active" onclick="switchTab('pos')">
@@ -132,14 +120,13 @@
             Orders
         </button>
     </nav>
-
     <main id="view-pos" class="view-section active">
         <div class="pos-menu-area">
             <h1 class="header-title">Cashier Terminal</h1>
             <div class="category-scroll" id="posCategories"></div>
             <div class="menu-grid" id="posMenuGrid"></div>
         </div>
-        
+       
         <aside class="pos-cart-area">
             <div class="cart-header">
                 <h2>Current Order</h2>
@@ -158,16 +145,15 @@
             </div>
         </aside>
     </main>
-
     <main id="view-orders" class="view-section">
         <div class="orders-area">
             <h1 class="header-title">Live Order Queue</h1>
             <p style="color: var(--text-muted); margin-bottom: 20px;">Tracking orders from Customer Kiosk and Cashier Terminal.</p>
+            <input type="text" id="searchOrders" placeholder="Search by customer, cell, or order #" style="width:100%; padding:10px; border-radius:8px; border:1px solid var(--border); margin-bottom:20px;" oninput="filterOrders(this.value)">
             <div class="orders-grid" id="ordersGrid">
                 </div>
         </div>
     </main>
-
     <div id="tenderModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -195,11 +181,10 @@
             </div>
         </div>
     </div>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, onValue, push, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-        
+       
         const firebaseConfig = {
             apiKey: "AIzaSyAxBT0oESoL62oz_x_Z8cMtdENWZPx4tMI",
             authDomain: "pinotp-d7ef5.firebaseapp.com",
@@ -209,17 +194,16 @@
             messagingSenderId: "708458917827",
             appId: "1:708458917827:web:375de278577df0adcf9776"
         };
-
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
         const inventoryRef = ref(db, 'inventory');
         const salesRef = ref(db, 'sales');
-
         let inventoryData = {};
         let cart = {};
         let selectedCategory = '';
         let currentTotal = 0;
-        
+        let globalSalesData = {};
+       
         // --- NAVIGATION LOGIC ---
         window.switchTab = function(tab) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
@@ -227,26 +211,23 @@
             document.getElementById(`view-${tab}`).classList.add('active');
             event.currentTarget.classList.add('active');
         }
-
         // --- FETCH INVENTORY & POS LOGIC ---
         onValue(inventoryRef, (snapshot) => {
             inventoryData = snapshot.val() || {};
             renderCategories();
             renderMenu();
         });
-
         function renderCategories() {
             const container = document.getElementById('posCategories');
             container.innerHTML = '';
             const categories = new Set();
             Object.values(inventoryData).forEach(item => categories.add(item.category || 'General'));
-            
+           
             const allBtn = document.createElement('button');
             allBtn.className = `cat-btn ${!selectedCategory ? 'active' : ''}`;
             allBtn.innerText = "All";
             allBtn.onclick = () => { selectedCategory = ''; renderCategories(); renderMenu(); };
             container.appendChild(allBtn);
-
             categories.forEach(cat => {
                 const btn = document.createElement('button');
                 btn.className = `cat-btn ${selectedCategory === cat ? 'active' : ''}`;
@@ -255,14 +236,13 @@
                 container.appendChild(btn);
             });
         }
-
         function renderMenu() {
             const grid = document.getElementById('posMenuGrid');
             grid.innerHTML = '';
             Object.entries(inventoryData).forEach(([key, item]) => {
                 const cat = item.category || 'General';
                 if (selectedCategory && cat !== selectedCategory) return;
-                
+               
                 // Show items even if qty is low for cashier, but visual cue
                 const finalPrice = item.discount > 0 ? (item.price - (item.price * item.discount / 100)) : item.price;
                 const card = document.createElement('div');
@@ -280,20 +260,17 @@
                 grid.appendChild(card);
             });
         }
-
         function addToCart(key, name, price) {
             if (!cart[key]) cart[key] = {name, price: parseFloat(price), qty: 0};
             cart[key].qty += 1;
             updateCart();
         }
-
         window.clearCart = function() { cart = {}; updateCart(); }
-
         function updateCart() {
             const list = document.getElementById('posCartList');
             list.innerHTML = '';
             let total = 0;
-            
+           
             Object.entries(cart).forEach(([key, item]) => {
                 const sub = item.price * item.qty;
                 total += sub;
@@ -311,26 +288,23 @@
                     </div>
                 `;
                 li.querySelector('.plus').onclick = () => { item.qty += 1; updateCart(); };
-                li.querySelector('.minus').onclick = () => { 
-                    item.qty -= 1; 
-                    if (item.qty <= 0) delete cart[key]; 
-                    updateCart(); 
+                li.querySelector('.minus').onclick = () => {
+                    item.qty -= 1;
+                    if (item.qty <= 0) delete cart[key];
+                    updateCart();
                 };
                 list.appendChild(li);
             });
-
             currentTotal = total;
             const vat = total * 15 / 115; // Inclusive VAT calculation for SA (15%)
             const subtotal = total - vat;
-
             document.getElementById('cartSubtotal').innerText = subtotal.toFixed(2);
             document.getElementById('cartVat').innerText = vat.toFixed(2);
             document.getElementById('cartGrandTotal').innerText = total.toFixed(2);
             document.getElementById('btnChargeAmount').innerText = `R ${total.toFixed(2)}`;
-            
+           
             document.getElementById('btnOpenTender').disabled = total <= 0;
         }
-
         // --- TENDER & CHECKOUT MODAL LOGIC ---
         document.getElementById('btnOpenTender').onclick = () => {
             document.getElementById('tenderTotalDue').innerText = currentTotal.toFixed(2);
@@ -340,30 +314,26 @@
             document.getElementById('tenderModal').style.display = 'flex';
             setTimeout(() => document.getElementById('tenderInput').focus(), 100);
         };
-
         window.closeTenderModal = function() {
             document.getElementById('tenderModal').style.display = 'none';
         };
-
         window.setTender = function(type) {
             const input = document.getElementById('tenderInput');
             if(type === 'exact') input.value = currentTotal.toFixed(2);
             window.calculateChange();
         };
-
         window.addTender = function(amount) {
             const input = document.getElementById('tenderInput');
             let current = parseFloat(input.value) || 0;
             input.value = (current + amount).toFixed(2);
             window.calculateChange();
         };
-
         window.calculateChange = function() {
             const tendered = parseFloat(document.getElementById('tenderInput').value) || 0;
             const change = tendered - currentTotal;
             const changeDisplay = document.getElementById('changeDue');
             const confirmBtn = document.getElementById('btnConfirmPayment');
-            
+           
             if (change >= 0) {
                 changeDisplay.innerText = change.toFixed(2);
                 confirmBtn.disabled = false;
@@ -372,14 +342,14 @@
                 confirmBtn.disabled = true;
             }
         };
-
         window.processCashierOrder = function() {
             const timestamp = Date.now(); // Acts as grouping ID
+            let orderNumber = Math.floor((timestamp % 1000000) / 100);
             Object.entries(cart).forEach(([key, item]) => {
                 // Update Inventory
                 const currentQty = inventoryData[key]?.qty || 0;
                 update(ref(db, `inventory/${key}`), {qty: currentQty - item.qty});
-                
+               
                 // Push to Sales with specific tags so it renders nicely in "Orders"
                 push(salesRef, {
                     name: item.name,
@@ -389,33 +359,33 @@
                     customer: "In-Store Customer",
                     cell: "Walk-in",
                     source: "Cashier",
-                    status: "Completed" // Cashier orders auto-complete, kiosk is "Pending"
+                    status: "Completed", // Cashier orders auto-complete, kiosk is "Pending"
+                    orderNumber: orderNumber
                 });
             });
-
             alert(`Payment Successful! Change due: R ${document.getElementById('changeDue').innerText}`);
             closeTenderModal();
             clearCart();
         };
-
-
         // --- LIVE ORDER QUEUE TRACKING ---
         onValue(salesRef, (snapshot) => {
-            const data = snapshot.val() || {};
-            renderOrderQueue(data);
+            globalSalesData = snapshot.val() || {};
+            renderOrderQueue(globalSalesData, document.getElementById('searchOrders')?.value || '');
         });
-
-        function renderOrderQueue(salesData) {
+        window.filterOrders = function(value) {
+            renderOrderQueue(globalSalesData, value);
+        }
+        function renderOrderQueue(salesData, search = '') {
             // Because previous Kiosk pushed individual line items, we must group them by timestamp/customer
             const groupedOrders = {};
-            
+           
             Object.entries(salesData).forEach(([saleKey, sale]) => {
                 // Grouping by timestamp (rounded to roughly same second) + customer name
-                const orderId = `${sale.customer}_${Math.floor(sale.timestamp / 1000)}`;
-                
+                const orderId = sale.orderNumber ? `order_${sale.orderNumber}` : `${sale.customer}_${Math.floor(sale.timestamp / 1000)}`;
+               
                 if (!groupedOrders[orderId]) {
                     groupedOrders[orderId] = {
-                        displayId: Math.floor((sale.timestamp % 1000000) / 100), // Random looking 4 digit ID
+                        displayId: sale.orderNumber || Math.floor((sale.timestamp % 1000000) / 100), // Random looking 4 digit ID
                         customer: sale.customer,
                         cell: sale.cell,
                         time: new Date(sale.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
@@ -426,23 +396,26 @@
                         saleKeys: [] // Keep track of DB keys to update status later
                     };
                 }
-                
+               
                 groupedOrders[orderId].items.push(`${sale.qty}x ${sale.name}`);
                 groupedOrders[orderId].total += parseFloat(sale.revenue);
                 groupedOrders[orderId].saleKeys.push(saleKey);
             });
-
             // Convert to array and sort by newest first
             const sortedOrders = Object.values(groupedOrders).sort((a, b) => b.rawTimestamp - a.rawTimestamp);
-
+            const filteredOrders = sortedOrders.filter(order => {
+                const searchLower = search.toLowerCase();
+                return order.customer.toLowerCase().includes(searchLower) ||
+                       (order.cell || '').toLowerCase().includes(searchLower) ||
+                       order.displayId.toString().includes(searchLower);
+            });
             const grid = document.getElementById('ordersGrid');
             grid.innerHTML = '';
-
-            sortedOrders.forEach(order => {
+            filteredOrders.forEach(order => {
                 // Only show today's orders practically, or limit to last 20
                 const card = document.createElement('div');
                 card.className = `order-card ${order.status === 'Completed' ? 'completed' : ''}`;
-                
+               
                 let actionButton = '';
                 if(order.status !== 'Completed') {
                     // Stringify the array of keys to pass to the inline onclick function safely
@@ -451,7 +424,6 @@
                 } else {
                     actionButton = `<span style="color:var(--success); font-weight:bold; font-size:12px;">✓ Done</span>`;
                 }
-
                 card.innerHTML = `
                     <div class="order-header">
                         <span class="order-id">#${order.displayId}</span>
@@ -469,13 +441,11 @@
                 grid.appendChild(card);
             });
         }
-
         window.markOrderCompleted = function(saleKeys) {
             saleKeys.forEach(key => {
                 update(ref(db, `sales/${key}`), { status: 'Completed' });
             });
         }
-
     </script>
 </body>
 </html>
