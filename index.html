@@ -29,7 +29,7 @@
             justify-content: center; align-items: center; color: white;
         }
         .login-card { background: var(--secondary); padding: 40px; border-radius: 20px; width: 350px; text-align: center; }
-        .login-card input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; font-size: 16px; }
+        .login-card input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; font-size: 16px; outline: none; }
         .btn-login { width: 100%; padding: 12px; background: var(--accent); border: none; border-radius: 8px; font-weight: 800; cursor: pointer; margin-top: 10px; }
 
         .sidebar-nav {
@@ -153,6 +153,10 @@
         .btn-confirm { flex: 2; padding: 15px; border: none; border-radius: 10px; background: var(--success); color: white; font-weight: 800; font-size: 16px; cursor: pointer; }
         .btn-confirm:disabled { background: #ccc; cursor: not-allowed; }
 
+        /* Success Modal Specifics */
+        .success-icon { font-size: 50px; color: var(--success); margin-bottom: 10px; }
+        .order-number-display { font-size: 40px; font-weight: 800; color: var(--primary); margin: 15px 0; letter-spacing: 2px; }
+
         /* Print Receipt Style */
         @media print {
             body * { visibility: hidden; }
@@ -250,6 +254,21 @@
         </div>
     </div>
 
+    <div id="successModal" class="modal">
+        <div class="modal-content" style="text-align: center;">
+            <div class="modal-body" style="padding: 40px 20px;">
+                <div class="success-icon">✔</div>
+                <h2 style="font-weight: 800;">Order Successful!</h2>
+                <p style="color: var(--text-muted); margin-top: 10px;">Order Number</p>
+                <div class="order-number-display" id="successOrderNumber">0000</div>
+                <div class="modal-actions" style="margin-top: 30px; flex-direction: column;">
+                    <button class="btn-confirm" onclick="triggerReceiptPrint()" style="width: 100%; background: var(--primary);">Print Receipt</button>
+                    <button class="btn-cancel" onclick="closeSuccessModal()" style="width: 100%;">Done & New Sale</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="receipt-print" style="display:none; font-family: monospace; font-size: 12px; text-align: center;"></div>
 
     <script type="module">
@@ -277,6 +296,7 @@
         let currentTotal = 0;
         let allSales = {};
         let currentCashier = { name: '', id: '' };
+        let lastOrderDetails = null;
 
         // --- Auth Logic ---
         window.handleLogin = function() {
@@ -441,28 +461,51 @@
         function printReceipt(orderNum, items, total) {
             const receiptDiv = document.getElementById('receipt-print');
             const now = new Date();
-            let itemsHtml = items.map(i => `<div>${i.name} x${i.qty} - R${(i.price * i.qty).toFixed(2)}</div>`).join('');
+            let itemsHtml = items.map(i => `
+                <div style="display:flex; justify-content:space-between; margin-bottom:2px;">
+                    <span>${i.name} x${i.qty}</span>
+                    <span>R${(i.price * i.qty).toFixed(2)}</span>
+                </div>`).join('');
             
             receiptDiv.innerHTML = `
                 <div style="font-weight:bold; font-size:16px;">AURAPOS RECEIPT</div>
-                <hr>
-                <div>Order #: <strong>${orderNum}</strong></div>
-                <div>Cashier: ${currentCashier.name}</div>
-                <div>Date: ${now.toLocaleDateString()}</div>
-                <div>Time: ${now.toLocaleTimeString()}</div>
-                <hr>
-                ${itemsHtml}
-                <hr>
-                <div style="font-weight:bold; font-size:14px;">Total: R ${total.toFixed(2)}</div>
+                <div style="margin-bottom:10px;">Modern Retail Experience</div>
+                <hr style="border-top: 1px dashed #000; margin: 10px 0;">
+                <div style="text-align: left;">
+                    <div>Order #: <strong>${orderNum}</strong></div>
+                    <div>Cashier: ${currentCashier.name} (ID: ${currentCashier.id})</div>
+                    <div>Date: ${now.toLocaleDateString()}</div>
+                    <div>Time: ${now.toLocaleTimeString()}</div>
+                </div>
+                <hr style="border-top: 1px dashed #000; margin: 10px 0;">
+                <div style="text-align: left;">
+                    ${itemsHtml}
+                </div>
+                <hr style="border-top: 1px dashed #000; margin: 10px 0;">
+                <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:14px;">
+                    <span>TOTAL:</span>
+                    <span>R ${total.toFixed(2)}</span>
+                </div>
                 <br>
                 <div>Thank you for your business!</div>
+                <div style="font-size: 10px; margin-top:10px;">Powered by AuraPOS</div>
             `;
             window.print();
         }
 
+        window.triggerReceiptPrint = function() {
+            if(lastOrderDetails) {
+                printReceipt(lastOrderDetails.num, lastOrderDetails.items, lastOrderDetails.total);
+            }
+        }
+
+        window.closeSuccessModal = function() {
+            document.getElementById('successModal').style.display = 'none';
+            lastOrderDetails = null;
+        }
+
         window.processCashierOrder = function() {
             const timestamp = Date.now();
-            // Generate sequence based order number
             const orderNumber = Math.floor(1000 + Math.random() * 9000); 
 
             let itemsList = [];
@@ -487,9 +530,16 @@
                 });
             });
 
-            if(confirm("Transaction Successful! Print Receipt?")) {
-                printReceipt(orderNumber, itemsList, currentTotal);
-            }
+            // Store for printing
+            lastOrderDetails = {
+                num: orderNumber,
+                items: itemsList,
+                total: currentTotal
+            };
+
+            // Show Success Modal
+            document.getElementById('successOrderNumber').innerText = orderNumber;
+            document.getElementById('successModal').style.display = 'flex';
             
             closeTenderModal();
             clearCart();
