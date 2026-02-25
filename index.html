@@ -474,7 +474,7 @@
         window.handleLogin = async function() {
             const id = document.getElementById('cashierID').value.trim();
             if(!id) {
-                showMessageModal("Login Failed", "Please enter your employee ID.", 'error', '--danger');
+                showMessageModal("Access Denied", "Please enter your employee ID.", 'error', '--danger');
                 return;
             }
             const employeeRef = ref(db, `employees/${id}`);
@@ -489,10 +489,10 @@
                         document.getElementById('loginOverlay').style.display = 'none';
                         showMessageModal("Login Successful", `Welcome, ${name}!`, 'success');
                     } else {
-                        showMessageModal("Login Failed", "No name associated with this ID.", 'error', '--danger');
+                        showMessageModal("Access Denied", "No name associated with this ID.", 'error', '--danger');
                     }
                 } else {
-                    showMessageModal("Login Failed", "Invalid Employee ID.", 'error', '--danger');
+                    showMessageModal("Access Denied", "The entered Employee ID is invalid.", 'error', '--danger');
                 }
             }).catch(err => {
                 showMessageModal("Error", "An error occurred during login.", 'error', '--danger');
