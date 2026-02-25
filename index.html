@@ -22,7 +22,17 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; user-select: none; }
         body { display: flex; height: 100vh; background-color: var(--bg-light); color: var(--text-dark); overflow: hidden; }
         
-        /* ── Pill-shaped buttons ─────────────────────────────────────── */
+        /* Login Overlay */
+        #loginOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--primary); z-index: 5000; display: flex;
+            justify-content: center; align-items: center; color: white;
+        }
+        .login-card { background: var(--secondary); padding: 40px; border-radius: 20px; width: 350px; text-align: center; }
+
+        .login-card input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; font-size: 16px; outline: none; }
+
+        /* Pill-shaped buttons */
         .btn-login,
         .nav-btn,
         .cat-btn,
@@ -64,27 +74,45 @@
             height: 100vh;
         }
         .logo-sq {
-            width: 54px; height: 54px;
+            width: 54px;
+            height: 54px;
             background: var(--accent);
             border-radius: 14px;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 800; font-size: 26px; color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 26px;
+            color: #000;
             margin-bottom: 40px;
         }
 
         .nav-btn {
-            width: 68px; height: 68px;
+            width: 68px;
+            height: 68px;
             border-radius: 9999px;
             background: transparent;
             color: var(--text-muted);
             margin-bottom: 12px;
-            flex-direction: column; gap: 6px;
-            font-size: 10px; font-weight: 600;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 10px;
+            font-weight: 600;
             padding: 8px 4px;
         }
-        .nav-btn svg { width: 28px; height: 28px; fill: currentColor; }
-        .nav-btn.active { background: var(--secondary); color: var(--accent); }
-        .nav-btn.logout { margin-top: auto; color: var(--danger); }
+        .nav-btn svg {
+            width: 28px;
+            height: 28px;
+            fill: currentColor;
+        }
+        .nav-btn.active {
+            background: var(--secondary);
+            color: var(--accent);
+        }
+        .nav-btn.logout {
+            margin-top: auto;
+            color: var(--danger);
+        }
 
         .view-section { display: none; flex: 1; height: 100vh; }
         .view-section.active { display: flex; }
@@ -96,8 +124,17 @@
         .category-scroll::-webkit-scrollbar { height: 4px; }
         .category-scroll::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
 
-        .cat-btn { padding: 10px 24px; border: 1px solid var(--border); background: var(--white); font-weight: 600; }
-        .cat-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .cat-btn {
+            padding: 10px 24px;
+            border: 1px solid var(--border);
+            background: var(--white);
+            font-weight: 600;
+        }
+        .cat-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
 
         .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
         .menu-item { background: var(--white); padding: 12px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); text-align: center; cursor: pointer; transition: var(--transition); border: 2px solid transparent; }
@@ -110,7 +147,12 @@
         .cart-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .cart-header h2 { font-size: 18px; }
 
-        .clear-btn { color: var(--danger); background: none; font-weight: 600; padding: 8px 16px; }
+        .clear-btn {
+            color: var(--danger);
+            background: none;
+            font-weight: 600;
+            padding: 8px 16px;
+        }
        
         .cart-items { flex: 1; overflow-y: auto; padding: 20px; list-style: none; }
         .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed var(--border); }
@@ -124,21 +166,50 @@
         .total-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: var(--text-muted); }
         .total-row.grand-total { font-size: 24px; font-weight: 800; color: var(--text-dark); margin-top: 10px; padding-top: 10px; border-top: 2px solid #ddd; }
        
-        .pay-btn { width: 100%; padding: 18px; background: var(--success); color: white; font-size: 18px; font-weight: 800; display: flex; justify-content: space-between; }
+        .pay-btn {
+            width: 100%;
+            padding: 18px;
+            background: var(--success);
+            color: white;
+            font-size: 18px;
+            font-weight: 800;
+            display: flex;
+            justify-content: space-between;
+        }
         .pay-btn:active { transform: scale(0.98); }
         .pay-btn:disabled { background: #ccc; cursor: not-allowed; }
 
         .orders-area { flex: 1; padding: 30px; overflow-y: auto; background: var(--bg-light); }
         .search-container { margin-bottom: 20px; }
-        #searchOrders { width: 100%; padding: 12px 16px; font-size: 16px; border: 1px solid var(--border); border-radius: 12px; background: var(--white); }
+        #searchOrders {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 16px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--white);
+        }
         .orders-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
-        .order-card { background: var(--white); border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-top: 5px solid var(--accent); display: flex; flex-direction: column; }
+        .order-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border-top: 5px solid var(--accent);
+            display: flex;
+            flex-direction: column;
+        }
         .order-card.pending { border-top-color: var(--accent); }
         .order-card.completed { border-top-color: var(--success); opacity: 0.92; }
 
         .order-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .order-id { font-weight: 800; font-size: 20px; }
-        .order-status-badge { padding: 4px 12px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+        .order-status-badge {
+            padding: 4px 12px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 600;
+        }
         .order-status-pending { background: #fff3cd; color: #856404; }
         .order-status-completed { background: #d4edda; color: #155724; }
         .order-time { font-size: 13px; color: var(--text-muted); }
@@ -148,99 +219,105 @@
         .order-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid var(--border); }
         .order-total { font-size: 18px; font-weight: 800; }
 
-        .btn-complete { padding: 10px 20px; background: var(--primary); color: white; font-weight: 600; }
+        .btn-complete {
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
         .btn-complete:hover { background: #000; }
 
-        /* ── Modals ──────────────────────────────────────────────── */
+        /* ── Modals ── (now using theme colors consistently) */
         .modal {
             display: none;
-            position: fixed; z-index: 2000; left: 0; top: 0;
+            position: fixed;
+            z-index: 2000;
+            left: 0; top: 0;
             width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.65);
-            justify-content: center; align-items: center;
+            background-color: rgba(26, 28, 30, 0.75); /* --primary with opacity */
+            justify-content: center;
+            align-items: center;
             backdrop-filter: blur(6px);
         }
         .modal-content {
-            background: #000;
-            color: #fff;
+            background: var(--white);
             width: 420px;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            border: 1px solid #FFD700;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+            border: 1px solid var(--border);
         }
-
-        /* Default modal header (used by most modals) */
         .modal-header {
-            background: #000;
-            color: #FFD700;
+            background: var(--primary);
+            color: var(--white);
             padding: 20px;
             text-align: center;
         }
-
-        /* ── Special styling for login success / logout confirm / tender modals ── */
-        #messageModal .modal-content,
-        #tenderModal .modal-content {
-            background: #000;
-            border: 2px solid #FFD700;
+        .modal-header h2 {
+            font-size: 24px;
+            margin: 0;
+        }
+        .modal-body {
+            padding: 32px 28px;
+            text-align: center;
+            background: var(--white);
+        }
+        .modal-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+        .modal-message {
+            font-size: 18px;
+            margin: 16px 0 28px;
+            color: var(--text-dark);
+            line-height: 1.4;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 12px;
         }
 
-        #messageModal .modal-header,
-        #tenderModal .modal-header {
-            background: #FFD700;
-            color: #000;
+        .btn-modal {
+            flex: 1;
+            padding: 14px 24px;
+            font-weight: 700;
         }
-
-        #messageModal .modal-body,
-        #tenderModal .modal-body {
-            background: #000;
-            color: #fff;
-        }
-
-        /* Buttons inside yellow-black-white modals */
-        #messageModal .btn-modal,
-        #tenderModal .btn-modal {
-            border-radius: 9999px;
-        }
-
-        #messageModal .btn-confirm,
-        #tenderModal .btn-confirm {
-            background: #FFD700;
-            color: #000;
-            font-weight: 800;
-        }
-
-        #messageModal .btn-cancel,
-        #tenderModal .btn-cancel {
-            background: #333;
-            color: #fff;
-        }
-
-        /* Success modal remains green as before */
-        #successModal .modal-header {
-            background: var(--success);
+        .btn-confirm {
+            background: var(--danger);
             color: white;
         }
-
-        .modal-icon { font-size: 60px; margin-bottom: 20px; }
-        .modal-message { font-size: 18px; margin: 16px 0 28px; line-height: 1.4; }
-        .modal-actions { display: flex; gap: 12px; }
+        .btn-confirm:hover {
+            background: #e65b5a;
+        }
+        .btn-cancel {
+            background: var(--bg-light);
+            color: var(--text-dark);
+        }
+        .btn-cancel:hover {
+            background: #e0e4e8;
+        }
 
         .quick-cash { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-        .btn-cash { padding: 15px 20px; border: 1px solid #FFD700; background: #111; color: #fff; font-weight: 800; font-size: 16px; }
-        .btn-cash:active { background: #FFD700; color: #000; }
-
+        .btn-cash { 
+            padding: 15px 20px;
+            border: 1px solid var(--border);
+            background: var(--bg-light);
+            font-weight: 800;
+            font-size: 16px;
+        }
+        .btn-cash:active { background: var(--accent); border-color: var(--accent); }
+       
         .input-group { margin-bottom: 20px; }
-        .input-group label { display: block; font-size: 12px; font-weight: 600; color: #aaa; margin-bottom: 5px; }
-        .tender-input { width: 100%; padding: 15px; font-size: 24px; font-weight: 800; border: 2px solid #FFD700; border-radius: 10px; text-align: right; outline: none; background: #111; color: white; }
-        .tender-input:focus { border-color: #fff; }
-
-        .change-display { background: #1a1a1a; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; border: 1px solid #FFD700; }
-        .change-display span { display: block; font-size: 14px; color: #FFD700; font-weight: 600; }
-        .change-display h3 { font-size: 32px; color: #fff; font-weight: 800; }
-
+        .input-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 5px; }
+        .tender-input { width: 100%; padding: 15px; font-size: 24px; font-weight: 800; border: 2px solid var(--border); border-radius: 10px; text-align: right; outline: none; }
+        .tender-input:focus { border-color: var(--accent); }
+       
+        .change-display { background: #e8f5e9; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
+        .change-display span { display: block; font-size: 14px; color: var(--success); font-weight: 600; }
+        .change-display h3 { font-size: 32px; color: var(--success); font-weight: 800; }
+       
         .success-icon { font-size: 50px; color: var(--success); margin-bottom: 10px; }
-        .order-number-display { font-size: 40px; font-weight: 800; color: #FFD700; margin: 15px 0; letter-spacing: 2px; }
+        .order-number-display { font-size: 40px; font-weight: 800; color: var(--primary); margin: 15px 0; letter-spacing: 2px; }
 
         @media print {
             body * { visibility: hidden; }
@@ -260,7 +337,7 @@
         </div>
     </div>
 
-    <!-- Message / Logout Confirmation Modal -->
+    <!-- Custom Message / Logout Confirmation Modal -->
     <div id="messageModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -272,7 +349,7 @@
                 <div class="modal-actions">
                     <button class="btn-modal btn-cancel" onclick="closeMessageModal()">Cancel</button>
                     <button class="btn-modal btn-confirm" id="confirmLogoutBtn" style="display:none;">Exit</button>
-                    <button class="btn-modal btn-confirm" onclick="closeMessageModal()" id="okOnlyBtn">OK</button>
+                    <button class="btn-modal btn-confirm" onclick="closeMessageModal()" id="okOnlyBtn" style="background: var(--success);">OK</button>
                 </div>
             </div>
         </div>
@@ -646,7 +723,11 @@
 
         window.triggerReceiptPrint = function() {
             if(lastOrderDetails) {
-                printReceipt(lastOrderDetails.num, lastOrderDetails.items, lastOrderDetails.total);
+                printReceipt(
+                    lastOrderDetails.num,
+                    lastOrderDetails.items,
+                    lastOrderDetails.total
+                );
             }
         };
 
