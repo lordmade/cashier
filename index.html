@@ -21,14 +21,15 @@
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; user-select: none; }
         body { display: flex; height: 100vh; background-color: var(--bg-light); color: var(--text-dark); overflow: hidden; }
-
+        
         /* Login Overlay */
         #loginOverlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: var(--primary); z-index: 5000; display: flex; 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--primary); z-index: 5000; display: flex;
             justify-content: center; align-items: center; color: white;
         }
         .login-card { background: var(--secondary); padding: 40px; border-radius: 20px; width: 350px; text-align: center; }
+
         .login-card input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; font-size: 16px; outline: none; }
         .btn-login { width: 100%; padding: 12px; background: var(--accent); border: none; border-radius: 8px; font-weight: 800; cursor: pointer; margin-top: 10px; }
 
@@ -48,12 +49,13 @@
 
         .pos-menu-area { flex: 1; display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
         .header-title { font-size: 24px; font-weight: 800; margin-bottom: 20px; }
-        
+       
         .category-scroll { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 10px; }
         .category-scroll::-webkit-scrollbar { height: 4px; }
         .category-scroll::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
         .cat-btn { padding: 10px 20px; border-radius: 50px; border: 1px solid var(--border); background: var(--white); cursor: pointer; font-weight: 600; white-space: nowrap; transition: var(--transition); }
         .cat-btn.active { background: var(--primary); color: var(--white); border-color: var(--primary); }
+
         .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
         .menu-item { background: var(--white); padding: 12px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.02); text-align: center; cursor: pointer; transition: var(--transition); border: 2px solid transparent; }
         .menu-item:active { transform: scale(0.95); border-color: var(--accent); }
@@ -65,7 +67,7 @@
         .cart-header { padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
         .cart-header h2 { font-size: 18px; }
         .clear-btn { color: var(--danger); background: none; border: none; font-weight: 600; cursor: pointer; }
-        
+       
         .cart-items { flex: 1; overflow-y: auto; padding: 20px; list-style: none; }
         .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed var(--border); }
         .cart-item-details { flex: 1; }
@@ -73,10 +75,11 @@
         .cart-item-price { color: var(--text-muted); font-size: 12px; }
         .cart-item-qty { display: flex; align-items: center; gap: 10px; background: var(--bg-light); border-radius: 8px; padding: 5px; }
         .cart-item-qty button { width: 28px; height: 28px; border: none; border-radius: 6px; background: var(--white); cursor: pointer; font-weight: bold; }
+
         .cart-totals { padding: 20px; background: var(--bg-light); }
         .total-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: var(--text-muted); }
         .total-row.grand-total { font-size: 24px; font-weight: 800; color: var(--text-dark); margin-top: 10px; padding-top: 10px; border-top: 2px solid #ddd; }
-        
+       
         .pay-btn { width: 100%; padding: 18px; border: none; border-radius: 12px; background: var(--success); color: white; font-size: 18px; font-weight: 800; cursor: pointer; margin-top: 15px; transition: var(--transition); display: flex; justify-content: space-between; }
         .pay-btn:active { transform: scale(0.98); }
         .pay-btn:disabled { background: #ccc; cursor: not-allowed; }
@@ -103,6 +106,7 @@
         }
         .order-card.pending { border-top-color: var(--accent); }
         .order-card.completed { border-top-color: var(--success); opacity: 0.92; }
+
         .order-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .order-id { font-weight: 800; font-size: 20px; }
         .order-status-badge {
@@ -130,30 +134,34 @@
         }
         .btn-complete:hover { background: #000; }
 
+        /* ── Modals ── */
         .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); justify-content: center; align-items: center; backdrop-filter: blur(4px); }
         .modal-content { background: var(--white); width: 400px; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.2); }
         .modal-header { background: var(--primary); color: var(--white); padding: 20px; text-align: center; }
         .modal-header h2 { font-size: 24px; }
-        .modal-body { padding: 20px; }
-        
+        .modal-body { padding: 30px; text-align: center; }
+        .modal-icon { font-size: 60px; margin-bottom: 20px; }
+        .modal-success { color: var(--success); }
+        .modal-error { color: var(--danger); }
+        .modal-message { font-size: 18px; margin: 15px 0 25px; color: var(--text-dark); }
+        .modal-actions { display: flex; gap: 12px; }
+        .btn-modal { flex: 1; padding: 14px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 16px; }
+        .btn-confirm { background: var(--success); color: white; }
+        .btn-cancel { background: #e9ecef; color: var(--text-dark); }
+
         .quick-cash { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
         .btn-cash { padding: 15px; border: 1px solid var(--border); background: var(--bg-light); border-radius: 10px; font-weight: 800; font-size: 16px; cursor: pointer; transition: var(--transition); }
         .btn-cash:active { background: var(--accent); border-color: var(--accent); }
-        
+       
         .input-group { margin-bottom: 20px; }
         .input-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 5px; }
         .tender-input { width: 100%; padding: 15px; font-size: 24px; font-weight: 800; border: 2px solid var(--border); border-radius: 10px; text-align: right; outline: none; }
         .tender-input:focus { border-color: var(--accent); }
-        
+       
         .change-display { background: #e8f5e9; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
         .change-display span { display: block; font-size: 14px; color: var(--success); font-weight: 600; }
         .change-display h3 { font-size: 32px; color: var(--success); font-weight: 800; }
-        
-        .modal-actions { display: flex; gap: 10px; }
-        .btn-cancel { flex: 1; padding: 15px; border: none; border-radius: 10px; background: #eee; font-weight: 600; cursor: pointer; }
-        .btn-confirm { flex: 2; padding: 15px; border: none; border-radius: 10px; background: var(--success); color: white; font-weight: 800; font-size: 16px; cursor: pointer; }
-        .btn-confirm:disabled { background: #ccc; cursor: not-allowed; }
-
+       
         .success-icon { font-size: 50px; color: var(--success); margin-bottom: 10px; }
         .order-number-display { font-size: 40px; font-weight: 800; color: var(--primary); margin: 15px 0; letter-spacing: 2px; }
 
@@ -172,6 +180,20 @@
             <input type="text" id="cashierName" placeholder="Cashier Full Name">
             <input type="text" id="cashierID" placeholder="Employee ID">
             <button class="btn-login" onclick="handleLogin()">Enter System</button>
+        </div>
+    </div>
+
+    <!-- ── Custom Message Modal ── -->
+    <div id="messageModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="modalIcon" class="modal-icon"></div>
+                <h2 id="modalTitle"></h2>
+                <p class="modal-message" id="modalMessage"></p>
+                <div class="modal-actions">
+                    <button class="btn-modal btn-confirm" onclick="closeMessageModal()">OK</button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -197,7 +219,7 @@
             <div class="category-scroll" id="posCategories"></div>
             <div class="menu-grid" id="posMenuGrid"></div>
         </div>
-        
+       
         <aside class="pos-cart-area">
             <div class="cart-header">
                 <h2>Current Order</h2>
@@ -269,12 +291,13 @@
         </div>
     </div>
 
+    <!-- Receipt hidden container -->
     <div id="receipt-print" style="display:none; font-family: monospace; font-size: 12px; text-align: center;"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, onValue, push, update, set } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-        
+       
         const firebaseConfig = {
             apiKey: "AIzaSyAxBT0oESoL62oz_x_Z8cMtdENWZPx4tMI",
             authDomain: "pinotp-d7ef5.firebaseapp.com",
@@ -286,7 +309,6 @@
         };
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
-
         const inventoryRef = ref(db, 'inventory');
         const salesRef = ref(db, 'sales');
 
@@ -298,33 +320,55 @@
         let currentCashier = { name: '', id: '' };
         let lastOrderDetails = null;
 
-        // --- Session Management ---
+        // ── Modal Helpers ───────────────────────────────────────
+        function showMessageModal(title, message, icon = 'info', color = '--success') {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').textContent = message;
+            const iconEl = document.getElementById('modalIcon');
+            iconEl.textContent = icon === 'success' ? '✔' : icon === 'error' ? '✖' : '!';
+            iconEl.style.color = `var(${color})`;
+            document.getElementById('messageModal').style.display = 'flex';
+        }
+
+        window.closeMessageModal = function() {
+            document.getElementById('messageModal').style.display = 'none';
+        };
+
+        // ── Session & Login ─────────────────────────────────────
         window.addEventListener('load', () => {
             const savedCashier = localStorage.getItem('aura_cashier');
             if(savedCashier) {
                 currentCashier = JSON.parse(savedCashier);
                 document.getElementById('activeCashierName').innerText = currentCashier.name;
                 document.getElementById('loginOverlay').style.display = 'none';
+                showMessageModal("Welcome Back", `Logged in as ${currentCashier.name}`, 'success');
             }
         });
 
         window.handleLogin = function() {
-            const name = document.getElementById('cashierName').value;
-            const id = document.getElementById('cashierID').value;
-            if(!name || !id) return alert("Please enter name and employee ID");
-            
+            const name = document.getElementById('cashierName').value.trim();
+            const id = document.getElementById('cashierID').value.trim();
+            if(!name || !id) {
+                showMessageModal("Login Failed", "Please enter both your full name and employee ID.", 'error', '--danger');
+                return;
+            }
+           
             currentCashier = { name, id };
             localStorage.setItem('aura_cashier', JSON.stringify(currentCashier));
             document.getElementById('activeCashierName').innerText = name;
             document.getElementById('loginOverlay').style.display = 'none';
-        }
+           
+            showMessageModal("Login Successful", `Welcome, ${name}!`, 'success');
+        };
 
         window.handleLogout = function() {
-            if(confirm("Are you sure you want to sign out? This will end your session.")) {
+            showMessageModal("Confirm Logout", "Are you sure you want to sign out?", 'info', '--danger');
+            document.querySelector('#messageModal .btn-confirm').onclick = function() {
+                closeMessageModal();
                 localStorage.removeItem('aura_cashier');
                 location.reload();
-            }
-        }
+            };
+        };
 
         window.switchTab = function(tab) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
@@ -345,7 +389,7 @@
             container.innerHTML = '';
             const categories = new Set();
             Object.values(inventoryData).forEach(item => categories.add(item.category || 'General'));
-            
+           
             const allBtn = document.createElement('button');
             allBtn.className = `cat-btn ${!selectedCategory ? 'active' : ''}`;
             allBtn.innerText = "All";
@@ -368,7 +412,7 @@
             Object.entries(inventoryData).forEach(([key, item]) => {
                 const cat = item.category || 'General';
                 if (selectedCategory && cat !== selectedCategory) return;
-                
+               
                 const finalPrice = item.discount > 0 ? (item.price - (item.price * item.discount / 100)) : item.price;
                 const card = document.createElement('div');
                 card.className = 'menu-item';
@@ -380,7 +424,7 @@
                 `;
                 card.onclick = () => {
                     if(item.qty > 0) addToCart(key, item.name, finalPrice);
-                    else alert('Item is out of stock in inventory.');
+                    else showMessageModal("Out of Stock", `${item.name} is currently out of stock.`, 'error', '--danger');
                 };
                 grid.appendChild(card);
             });
@@ -398,7 +442,7 @@
             const list = document.getElementById('posCartList');
             list.innerHTML = '';
             let total = 0;
-            
+           
             Object.entries(cart).forEach(([key, item]) => {
                 const sub = item.price * item.qty;
                 total += sub;
@@ -423,6 +467,7 @@
                 };
                 list.appendChild(li);
             });
+
             currentTotal = total;
             const vat = total * 15 / 115;
             const subtotal = total - vat;
@@ -464,7 +509,7 @@
             const change = tendered - currentTotal;
             const changeDisplay = document.getElementById('changeDue');
             const confirmBtn = document.getElementById('btnConfirmPayment');
-            
+           
             if (change >= 0) {
                 changeDisplay.innerText = change.toFixed(2);
                 confirmBtn.disabled = false;
@@ -478,55 +523,59 @@
             const receiptDiv = document.getElementById('receipt-print');
             const now = new Date();
             let itemsHtml = items.map(i => `
-                <div style="display:flex; justify-content:space-between; margin-bottom:2px;">
-                    <span>${i.name} x${i.qty}</span>
+                <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:13px;">
+                    <span>${i.qty} × ${i.name}</span>
                     <span>R${(i.price * i.qty).toFixed(2)}</span>
                 </div>`).join('');
-            
+           
             receiptDiv.innerHTML = `
                 <div style="font-weight:bold; font-size:16px;">AURAPOS RECEIPT</div>
-                <hr style="border-top: 1px dashed #000; margin: 10px 0;">
-                <div style="text-align: left;">
-                    <div>Order #: <strong>${orderNum}</strong></div>
-                    <div>Cashier: ${currentCashier.name} (ID: ${currentCashier.id})</div>
-                    <div>Date: ${now.toLocaleDateString()}</div>
-                    <div>Time: ${now.toLocaleTimeString()}</div>
+                <div style="margin:6px 0; font-size:13px;">Order #${orderNum}</div>
+                <hr style="border-top:1px dashed #000; margin:8px 0;">
+                <div style="text-align:left; font-size:13px; line-height:1.4;">
+                    <div><strong>Cashier:</strong> ${currentCashier.name} (ID: ${currentCashier.id})</div>
+                    <div><strong>Date:</strong> ${now.toLocaleDateString('en-ZA')}</div>
+                    <div><strong>Time:</strong> ${now.toLocaleTimeString('en-ZA', {hour12:false})}</div>
                 </div>
-                <hr style="border-top: 1px dashed #000; margin: 10px 0;">
-                <div style="text-align: left;">
+                <hr style="border-top:1px dashed #000; margin:10px 0;">
+                <div style="text-align:left;">
                     ${itemsHtml}
                 </div>
-                <hr style="border-top: 1px dashed #000; margin: 10px 0;">
+                <hr style="border-top:1px dashed #000; margin:10px 0;">
                 <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:14px;">
-                    <span>TOTAL:</span>
+                    <span>TOTAL</span>
                     <span>R ${total.toFixed(2)}</span>
                 </div>
                 <br>
-                <div>Thank you for your business!</div>
+                <div style="font-size:12px;">Thank you for shopping with us!</div>
             `;
             window.print();
         }
 
         window.triggerReceiptPrint = function() {
             if(lastOrderDetails) {
-                printReceipt(lastOrderDetails.num, lastOrderDetails.items, lastOrderDetails.total);
+                printReceipt(
+                    lastOrderDetails.num,
+                    lastOrderDetails.items,
+                    lastOrderDetails.total
+                );
             }
-        }
+        };
 
         window.closeSuccessModal = function() {
             document.getElementById('successModal').style.display = 'none';
             lastOrderDetails = null;
-        }
+        };
 
         window.processCashierOrder = function() {
             const timestamp = Date.now();
-            const orderNumber = Math.floor(1000 + Math.random() * 9000); 
-
+            const orderNumber = Math.floor(1000 + Math.random() * 9000);
             let itemsList = [];
+
             Object.entries(cart).forEach(([key, item]) => {
                 const currentQty = inventoryData[key]?.qty || 0;
                 update(ref(db, `inventory/${key}`), {qty: currentQty - item.qty});
-                
+               
                 itemsList.push({name: item.name, qty: item.qty, price: item.price});
 
                 push(salesRef, {
@@ -552,7 +601,7 @@
 
             document.getElementById('successOrderNumber').innerText = orderNumber;
             document.getElementById('successModal').style.display = 'flex';
-            
+           
             closeTenderModal();
             clearCart();
         };
@@ -568,12 +617,12 @@
 
         function renderOrderQueue(salesData, search = '') {
             const groupedOrders = {};
-            
+           
             Object.entries(salesData).forEach(([saleKey, sale]) => {
-                const orderId = sale.orderNumber 
+                const orderId = sale.orderNumber
                     ? `order_${sale.orderNumber}`
                     : `${sale.customer || 'guest'}_${Math.floor(sale.timestamp / 1000)}`;
-                
+               
                 if (!groupedOrders[orderId]) {
                     groupedOrders[orderId] = {
                         displayId: sale.orderNumber || Math.floor((sale.timestamp % 1000000) / 100),
@@ -587,12 +636,12 @@
                         saleKeys: []
                     };
                 }
-                
+               
                 groupedOrders[orderId].items.push(`${sale.qty}x ${sale.name}`);
                 groupedOrders[orderId].total += parseFloat(sale.revenue || 0);
                 groupedOrders[orderId].saleKeys.push(saleKey);
             });
-            
+           
             const sortedOrders = Object.values(groupedOrders).sort((a, b) => b.rawTimestamp - a.rawTimestamp);
             const grid = document.getElementById('ordersGrid');
             if(!grid) return;
@@ -605,11 +654,11 @@
                 const isPending = order.status !== 'Completed';
                 const card = document.createElement('div');
                 card.className = `order-card ${isPending ? 'pending' : 'completed'}`;
-                
+               
                 let actionButton = isPending
                     ? `<button class="btn-complete" onclick="markOrderCompleted(${JSON.stringify(order.saleKeys).replace(/"/g,'&quot;')})">Mark Complete</button>`
                     : `✓ Done`;
-                
+               
                 card.innerHTML = `
                     <div class="order-header">
                         <span class="order-id">#${order.displayId}</span>
@@ -631,7 +680,7 @@
             saleKeys.forEach(key => {
                 update(ref(db, `sales/${key}`), { status: 'Completed' });
             });
-        }
+        };
     </script>
 </body>
 </html>
