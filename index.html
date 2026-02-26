@@ -498,7 +498,7 @@
             const id = document.getElementById('cashierID').value.trim().toUpperCase();
             
             if(!id) {
-                showMessageModal("Required Field", "Please enter your employee ID.", 'error', '--danger');
+                showAccessDeniedModal("");
                 return;
             }
 
@@ -540,7 +540,7 @@
                     loginBtn.innerText = 'Enter System';
                 }
             } catch(err) {
-                showMessageModal("Error", "Login failed: " + err.message, 'error', '--danger');
+                showAccessDeniedModal(id);
                 loginBtn.disabled = false;
                 loginBtn.innerText = 'Enter System';
             }
