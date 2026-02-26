@@ -65,6 +65,9 @@
             background: #ffc107;
             transform: scale(1.02);
         }
+        .btn-login:active {
+            transform: scale(0.98);
+        }
         .sidebar-nav {
             width: 80px;
             background: var(--primary);
@@ -317,7 +320,7 @@
         <div class="login-card">
             <h2 style="margin-bottom: 20px; color: var(--accent);">AuraPOS Login</h2>
             <input type="text" id="cashierID" placeholder="Employee ID" onkeypress="if(event.key==='Enter') handleLogin()">
-            <button class="btn-login" onclick="handleLogin()">Enter System</button>
+            <button class="btn-login" id="loginBtn" onclick="handleLogin()">Enter System</button>
         </div>
     </div>
 
@@ -491,14 +494,22 @@
         };
 
         window.handleLogin = async function() {
+            const loginBtn = document.getElementById('loginBtn');
             const id = document.getElementById('cashierID').value.trim().toUpperCase();
+            
             if(!id) {
                 showMessageModal("Required Field", "Please enter your employee ID.", 'error', '--danger');
                 return;
             }
 
-            const employeeRef = ref(db, `employee/${id}`);
-            get(employeeRef).then((snapshot) => {
+            // Disable button during login
+            loginBtn.disabled = true;
+            loginBtn.innerText = 'Logging in...';
+
+            try {
+                const employeeRef = ref(db, `employee/${id}`);
+                const snapshot = await get(employeeRef);
+                
                 if(snapshot.exists()) {
                     const data = snapshot.val();
                     const name = data.name;
@@ -510,13 +521,19 @@
                         showMessageModal("Login Successful", `Welcome, ${name}!`, 'success');
                     } else {
                         showAccessDeniedModal(id);
+                        loginBtn.disabled = false;
+                        loginBtn.innerText = 'Enter System';
                     }
                 } else {
                     showAccessDeniedModal(id);
+                    loginBtn.disabled = false;
+                    loginBtn.innerText = 'Enter System';
                 }
-            }).catch(err => {
+            } catch(err) {
                 showMessageModal("Error", "Login failed: " + err.message, 'error', '--danger');
-            });
+                loginBtn.disabled = false;
+                loginBtn.innerText = 'Enter System';
+            }
         };
 
         window.handleLogout = function() {
