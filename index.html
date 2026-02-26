@@ -507,12 +507,22 @@
             loginBtn.innerText = 'Logging in...';
 
             try {
-                const employeeRef = ref(db, `employee/${id}`);
-                const snapshot = await get(employeeRef);
+                // Check if employee exists in the employee database
+                const employeeSnapshot = await get(employeesRef);
+                let employeeFound = null;
                 
-                if(snapshot.exists()) {
-                    const data = snapshot.val();
-                    const name = data.name;
+                if (employeeSnapshot.exists()) {
+                    const employees = employeeSnapshot.val();
+                    // Search through all employees to find matching ID
+                    Object.values(employees).forEach(emp => {
+                        if (emp.id === id) {
+                            employeeFound = emp;
+                        }
+                    });
+                }
+                
+                if(employeeFound) {
+                    const name = employeeFound.name;
                     if(name) {
                         currentCashier = { name, id };
                         localStorage.setItem('aura_cashier', JSON.stringify(currentCashier));
@@ -576,9 +586,18 @@
                 try {
                     currentCashier = JSON.parse(savedCashier);
                     // Verify employee still exists in database
-                    const empRef = ref(db, `employee/${currentCashier.id}`);
+                    const empRef = ref(db, 'employee');
                     get(empRef).then((snapshot) => {
-                        if(snapshot.exists()) {
+                        let employeeFound = null;
+                        if (snapshot.exists()) {
+                            const employees = snapshot.val();
+                            Object.values(employees).forEach(emp => {
+                                if (emp.id === currentCashier.id) {
+                                    employeeFound = emp;
+                                }
+                            });
+                        }
+                        if(employeeFound) {
                             document.getElementById('activeCashierName').innerText = currentCashier.name;
                             document.getElementById('loginOverlay').style.display = 'none';
                             showMessageModal("Welcome Back", `Logged in as ${currentCashier.name}`, 'success');
