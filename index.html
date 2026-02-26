@@ -21,7 +21,7 @@
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; user-select: none; }
         body { display: flex; height: 100vh; background-color: var(--bg-light); color: var(--text-dark); overflow: hidden; }
-       
+      
         /* Login Overlay */
         #loginOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -30,7 +30,7 @@
         }
         .login-card { background: var(--secondary); padding: 40px; border-radius: 20px; width: 350px; text-align: center; }
         .login-card input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; font-size: 16px; outline: none; }
-        
+       
         /* Pill-shaped buttons */
         .btn-login,
         .nav-btn,
@@ -120,7 +120,7 @@
         .view-section.active { display: flex; }
         .pos-menu-area { flex: 1; display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
         .header-title { font-size: 24px; font-weight: 800; margin-bottom: 20px; }
-       
+      
         .category-scroll { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 10px; }
         .category-scroll::-webkit-scrollbar { height: 4px; }
         .category-scroll::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
@@ -150,7 +150,7 @@
             font-weight: 600;
             padding: 8px 16px;
         }
-       
+      
         .cart-items { flex: 1; overflow-y: auto; padding: 20px; list-style: none; }
         .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed var(--border); }
         .cart-item-details { flex: 1; }
@@ -161,7 +161,7 @@
         .cart-totals { padding: 20px; background: var(--bg-light); }
         .total-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: var(--text-muted); }
         .total-row.grand-total { font-size: 24px; font-weight: 800; color: var(--text-dark); margin-top: 10px; padding-top: 10px; border-top: 2px solid #ddd; }
-       
+      
         .pay-btn {
             width: 100%;
             padding: 18px;
@@ -296,16 +296,16 @@
             font-size: 16px;
         }
         .btn-cash:active { background: var(--accent); border-color: var(--accent); }
-       
+      
         .input-group { margin-bottom: 20px; }
         .input-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 5px; }
         .tender-input { width: 100%; padding: 15px; font-size: 24px; font-weight: 800; border: 2px solid var(--border); border-radius: 10px; text-align: right; outline: none; }
         .tender-input:focus { border-color: var(--accent); }
-       
+      
         .change-display { background: #e8f5e9; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
         .change-display span { display: block; font-size: 14px; color: var(--success); font-weight: 600; }
         .change-display h3 { font-size: 32px; color: var(--success); font-weight: 800; }
-       
+      
         .success-icon { font-size: 50px; color: var(--success); margin-bottom: 10px; }
         .order-number-display { font-size: 40px; font-weight: 800; color: var(--primary); margin: 15px 0; letter-spacing: 2px; }
         @media print {
@@ -323,7 +323,6 @@
             <button class="btn-login" id="loginBtn" onclick="handleLogin()">Enter System</button>
         </div>
     </div>
-
     <!-- Access Denied Modal -->
     <div id="accessDeniedModal" class="modal">
         <div class="modal-content">
@@ -339,7 +338,6 @@
             </div>
         </div>
     </div>
-
     <!-- Custom Message / Logout Confirmation Modal -->
     <div id="messageModal" class="modal">
         <div class="modal-content">
@@ -357,7 +355,6 @@
             </div>
         </div>
     </div>
-
     <nav class="sidebar-nav">
         <div class="logo-sq">A</div>
         <button class="nav-btn active" onclick="switchTab('pos')">
@@ -379,7 +376,7 @@
             <div class="category-scroll" id="posCategories"></div>
             <div class="menu-grid" id="posMenuGrid"></div>
         </div>
-       
+      
         <aside class="pos-cart-area">
             <div class="cart-header">
                 <h2>Current Order</h2>
@@ -454,7 +451,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, onValue, push, update, set, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-       
+      
         const firebaseConfig = {
             apiKey: "AIzaSyAxBT0oESoL62oz_x_Z8cMtdENWZPx4tMI",
             authDomain: "pinotp-d7ef5.firebaseapp.com",
@@ -476,41 +473,35 @@
         let allSales = {};
         let currentCashier = { name: '', id: '' };
         let lastOrderDetails = null;
-
         // ════════════════════════════════════════════════════════════════════════════════
         // LOGIN VALIDATION FUNCTIONS
         // ════════════════════════════════════════════════════════════════════════════════
-
         function showAccessDeniedModal(empID) {
             const message = `Incorrect Employee ID entered. The ID "${empID}" is not registered in the system. Please contact your manager to create this account.`;
             document.getElementById('accessDeniedMessage').textContent = message;
             document.getElementById('accessDeniedModal').style.display = 'flex';
         }
-
         window.closeAccessDeniedModal = function() {
             document.getElementById('accessDeniedModal').style.display = 'none';
             document.getElementById('cashierID').value = '';
             document.getElementById('cashierID').focus();
         };
-
         window.handleLogin = async function() {
             const loginBtn = document.getElementById('loginBtn');
             const id = document.getElementById('cashierID').value.trim().toUpperCase();
-            
+           
             if(!id) {
                 showAccessDeniedModal("");
                 return;
             }
-
             // Disable button during login
             loginBtn.disabled = true;
             loginBtn.innerText = 'Logging in...';
-
             try {
                 // Check if employee exists in the employee database
                 const employeeSnapshot = await get(employeesRef);
                 let employeeFound = null;
-                
+               
                 if (employeeSnapshot.exists()) {
                     const employees = employeeSnapshot.val();
                     // Search through all employees to find matching ID
@@ -520,7 +511,7 @@
                         }
                     });
                 }
-                
+               
                 if(employeeFound) {
                     const name = employeeFound.name;
                     if(name) {
@@ -545,7 +536,6 @@
                 loginBtn.innerText = 'Enter System';
             }
         };
-
         window.handleLogout = function() {
             showMessageModal(
                 "Confirm Exit",
@@ -560,7 +550,6 @@
                 location.reload();
             };
         };
-
         function showMessageModal(title, message, icon = 'info', color = '--success', showConfirm = false) {
             document.getElementById('modalTitle').textContent = title;
             document.getElementById('modalMessage').textContent = message;
@@ -571,15 +560,12 @@
             document.getElementById('okOnlyBtn').style.display = showConfirm ? 'none' : 'block';
             document.getElementById('messageModal').style.display = 'flex';
         }
-
         window.closeMessageModal = function() {
             document.getElementById('messageModal').style.display = 'none';
         };
-
         // ════════════════════════════════════════════════════════════════════════════════
         // AUTO-LOGIN & INITIALIZATION
         // ════════════════════════════════════════════════════════════════════════════════
-
         window.addEventListener('load', () => {
             const savedCashier = localStorage.getItem('aura_cashier');
             if(savedCashier) {
@@ -604,7 +590,6 @@
                         } else {
                             // Employee no longer exists
                             localStorage.removeItem('aura_cashier');
-                            showAccessDeniedModal(currentCashier.id);
                             document.getElementById('loginOverlay').style.display = 'flex';
                         }
                     });
@@ -613,31 +598,27 @@
                 }
             }
         });
-
         // ════════════════════════════════════════════════════════════════════════════════
         // POS SYSTEM FUNCTIONS
         // ════════════════════════════════════════════════════════════════════════════════
-
         window.switchTab = function(tab) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
             document.getElementById(`view-${tab}`).classList.add('active');
             event.currentTarget.classList.add('active');
         };
-
         onValue(inventoryRef, (snapshot) => {
             inventoryData = snapshot.val() || {};
             renderCategories();
             renderMenu();
         });
-
         function renderCategories() {
             const container = document.getElementById('posCategories');
             if(!container) return;
             container.innerHTML = '';
             const categories = new Set();
             Object.values(inventoryData).forEach(item => categories.add(item.category || 'General'));
-           
+          
             const allBtn = document.createElement('button');
             allBtn.className = `cat-btn ${!selectedCategory ? 'active' : ''}`;
             allBtn.innerText = "All";
@@ -651,7 +632,6 @@
                 container.appendChild(btn);
             });
         }
-
         function renderMenu() {
             const grid = document.getElementById('posMenuGrid');
             if(!grid) return;
@@ -659,7 +639,7 @@
             Object.entries(inventoryData).forEach(([key, item]) => {
                 const cat = item.category || 'General';
                 if (selectedCategory && cat !== selectedCategory) return;
-               
+              
                 const finalPrice = item.discount > 0 ? (item.price - (item.price * item.discount / 100)) : item.price;
                 const card = document.createElement('div');
                 card.className = 'menu-item';
@@ -676,20 +656,17 @@
                 grid.appendChild(card);
             });
         }
-
         function addToCart(key, name, price) {
             if (!cart[key]) cart[key] = {name, price: parseFloat(price), qty: 0};
             cart[key].qty += 1;
             updateCart();
         }
-
         window.clearCart = function() { cart = {}; updateCart(); }
-
         function updateCart() {
             const list = document.getElementById('posCartList');
             list.innerHTML = '';
             let total = 0;
-           
+          
             Object.entries(cart).forEach(([key, item]) => {
                 const sub = item.price * item.qty;
                 total += sub;
@@ -723,7 +700,6 @@
             document.getElementById('btnChargeAmount').innerText = `R ${total.toFixed(2)}`;
             document.getElementById('btnOpenTender').disabled = total <= 0;
         }
-
         document.getElementById('btnOpenTender').onclick = () => {
             document.getElementById('tenderTotalDue').innerText = currentTotal.toFixed(2);
             document.getElementById('tenderInput').value = '';
@@ -732,30 +708,26 @@
             document.getElementById('tenderModal').style.display = 'flex';
             setTimeout(() => document.getElementById('tenderInput').focus(), 100);
         };
-
         window.closeTenderModal = function() {
             document.getElementById('tenderModal').style.display = 'none';
         };
-
         window.setTender = function(type) {
             const input = document.getElementById('tenderInput');
             if(type === 'exact') input.value = currentTotal.toFixed(2);
             calculateChange();
         };
-
         window.addTender = function(amount) {
             const input = document.getElementById('tenderInput');
             let current = parseFloat(input.value) || 0;
             input.value = (current + amount).toFixed(2);
             calculateChange();
         };
-
         window.calculateChange = function() {
             const tendered = parseFloat(document.getElementById('tenderInput').value) || 0;
             const change = tendered - currentTotal;
             const changeDisplay = document.getElementById('changeDue');
             const confirmBtn = document.getElementById('btnConfirmPayment');
-           
+          
             if (change >= 0) {
                 changeDisplay.innerText = change.toFixed(2);
                 confirmBtn.disabled = false;
@@ -764,7 +736,6 @@
                 confirmBtn.disabled = true;
             }
         };
-
         function printReceipt(orderNum, items, total) {
             const receiptDiv = document.getElementById('receipt-print');
             const now = new Date();
@@ -773,7 +744,7 @@
                     <span>${i.qty} × ${i.name}</span>
                     <span>R${(i.price * i.qty).toFixed(2)}</span>
                 </div>`).join('');
-           
+          
             receiptDiv.innerHTML = `
                 <div style="font-weight:bold; font-size:16px;">AURAPOS RECEIPT</div>
                 <div style="margin:6px 0; font-size:13px;">Order #${orderNum}</div>
@@ -797,7 +768,6 @@
             `;
             window.print();
         }
-
         window.triggerReceiptPrint = function() {
             if(lastOrderDetails) {
                 printReceipt(
@@ -807,12 +777,10 @@
                 );
             }
         };
-
         window.closeSuccessModal = function() {
             document.getElementById('successModal').style.display = 'none';
             lastOrderDetails = null;
         };
-
         window.processCashierOrder = function() {
             const timestamp = Date.now();
             const orderNumber = Math.floor(1000 + Math.random() * 9000);
@@ -820,7 +788,7 @@
             Object.entries(cart).forEach(([key, item]) => {
                 const currentQty = inventoryData[key]?.qty || 0;
                 update(ref(db, `inventory/${key}`), {qty: currentQty - item.qty});
-               
+              
                 itemsList.push({name: item.name, qty: item.qty, price: item.price});
                 push(salesRef, {
                     name: item.name,
@@ -843,28 +811,25 @@
             };
             document.getElementById('successOrderNumber').innerText = orderNumber;
             document.getElementById('successModal').style.display = 'flex';
-           
+          
             closeTenderModal();
             clearCart();
         };
-
         onValue(salesRef, (snapshot) => {
             allSales = snapshot.val() || {};
             renderOrderQueue(allSales, document.getElementById('searchOrders')?.value || '');
         });
-
         window.filterOrders = function(value) {
             renderOrderQueue(allSales, value);
         };
-
         function renderOrderQueue(salesData, search = '') {
             const groupedOrders = {};
-           
+          
             Object.entries(salesData).forEach(([saleKey, sale]) => {
                 const orderId = sale.orderNumber
                     ? `order_${sale.orderNumber}`
                     : `${sale.customer || 'guest'}_${Math.floor(sale.timestamp / 1000)}`;
-               
+              
                 if (!groupedOrders[orderId]) {
                     groupedOrders[orderId] = {
                         displayId: sale.orderNumber || Math.floor((sale.timestamp % 1000000) / 100),
@@ -878,12 +843,12 @@
                         saleKeys: []
                     };
                 }
-               
+              
                 groupedOrders[orderId].items.push(`${sale.qty}x ${sale.name}`);
                 groupedOrders[orderId].total += parseFloat(sale.revenue || 0);
                 groupedOrders[orderId].saleKeys.push(saleKey);
             });
-           
+          
             const sortedOrders = Object.values(groupedOrders).sort((a, b) => b.rawTimestamp - a.rawTimestamp);
             const grid = document.getElementById('ordersGrid');
             if(!grid) return;
@@ -895,11 +860,11 @@
                 const isPending = order.status !== 'Completed';
                 const card = document.createElement('div');
                 card.className = `order-card ${isPending ? 'pending' : 'completed'}`;
-               
+              
                 let actionButton = isPending
                     ? `<button class="btn-complete" onclick="markOrderCompleted(${JSON.stringify(order.saleKeys).replace(/"/g,'&quot;')})">Mark Complete</button>`
                     : `✓ Done`;
-               
+              
                 card.innerHTML = `
                     <div class="order-header">
                         <span class="order-id">#${order.displayId}</span>
@@ -916,7 +881,6 @@
                 grid.appendChild(card);
             });
         }
-
         window.markOrderCompleted = function(saleKeys) {
             saleKeys.forEach(key => {
                 update(ref(db, `sales/${key}`), { status: 'Completed' });
