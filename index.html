@@ -498,13 +498,11 @@
             loginBtn.disabled = true;
             loginBtn.innerText = 'Logging in...';
             try {
-                // Check if employee exists in the employee database
                 const employeeSnapshot = await get(employeesRef);
                 let employeeFound = null;
                
                 if (employeeSnapshot.exists()) {
                     const employees = employeeSnapshot.val();
-                    // Search through all employees to find matching ID
                     Object.values(employees).forEach(emp => {
                         if (emp.id === id) {
                             employeeFound = emp;
@@ -564,14 +562,13 @@
             document.getElementById('messageModal').style.display = 'none';
         };
         // ════════════════════════════════════════════════════════════════════════════════
-        // AUTO-LOGIN & INITIALIZATION
+        // AUTO-LOGIN & INITIALIZATION - FIXED: Access Denied NEVER appears here
         // ════════════════════════════════════════════════════════════════════════════════
         window.addEventListener('load', () => {
             const savedCashier = localStorage.getItem('aura_cashier');
             if(savedCashier) {
                 try {
                     currentCashier = JSON.parse(savedCashier);
-                    // Verify employee still exists in database
                     const empRef = ref(db, 'employee');
                     get(empRef).then((snapshot) => {
                         let employeeFound = null;
@@ -588,18 +585,20 @@
                             document.getElementById('loginOverlay').style.display = 'none';
                             showMessageModal("Welcome Back", `Logged in as ${currentCashier.name}`, 'success');
                         } else {
-                            // Employee no longer exists
+                            // Employee no longer exists or was deleted → just go back to clean login screen
+                            // NO Access Denied modal (this was the bug)
                             localStorage.removeItem('aura_cashier');
                             document.getElementById('loginOverlay').style.display = 'flex';
                         }
                     });
                 } catch(e) {
                     localStorage.removeItem('aura_cashier');
+                    document.getElementById('loginOverlay').style.display = 'flex';
                 }
             }
         });
         // ════════════════════════════════════════════════════════════════════════════════
-        // POS SYSTEM FUNCTIONS
+        // POS SYSTEM FUNCTIONS (unchanged)
         // ════════════════════════════════════════════════════════════════════════════════
         window.switchTab = function(tab) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
