@@ -465,7 +465,7 @@
         const db = getDatabase(app);
         const inventoryRef = ref(db, 'inventory');
         const salesRef = ref(db, 'sales');
-        const employeesRef = ref(db, 'employees');
+        const employeesRef = ref(db, 'employee');
         let inventoryData = {};
         let cart = {};
         let selectedCategory = '';
@@ -479,7 +479,7 @@
         // ════════════════════════════════════════════════════════════════════════════════
 
         function showAccessDeniedModal(empID) {
-            const message = `The Employee ID "${empID}" is not registered in the system. Please contact your manager to create this account.`;
+            const message = `Incorrect Employee ID entered. The ID "${empID}" is not registered in the system. Please contact your manager to create this account.`;
             document.getElementById('accessDeniedMessage').textContent = message;
             document.getElementById('accessDeniedModal').style.display = 'flex';
         }
@@ -497,7 +497,7 @@
                 return;
             }
 
-            const employeeRef = ref(db, `employees/${id}`);
+            const employeeRef = ref(db, `employee/${id}`);
             get(employeeRef).then((snapshot) => {
                 if(snapshot.exists()) {
                     const data = snapshot.val();
@@ -559,7 +559,7 @@
                 try {
                     currentCashier = JSON.parse(savedCashier);
                     // Verify employee still exists in database
-                    const empRef = ref(db, `employees/${currentCashier.id}`);
+                    const empRef = ref(db, `employee/${currentCashier.id}`);
                     get(empRef).then((snapshot) => {
                         if(snapshot.exists()) {
                             document.getElementById('activeCashierName').innerText = currentCashier.name;
