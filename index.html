@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AuraPOS | Cashier Terminal</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root {
             --primary: #1A1C1E;
@@ -486,6 +488,25 @@
         }
         .btn-receipt-print:hover { background: #000; transform: scale(1.02); }
         .btn-receipt-print:active { transform: scale(0.98); }
+        .btn-receipt-download {
+            flex: 2;
+            padding: 14px;
+            background: var(--success);
+            color: var(--white);
+            border: none;
+            border-radius: 9999px;
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-receipt-download:hover { background: #00a381; transform: scale(1.02); }
+        .btn-receipt-download:active { transform: scale(0.98); }
+        .btn-receipt-download:disabled { background: #aaa; cursor: not-allowed; transform: none; }
 
         @media print {
             body * { visibility: hidden; }
@@ -641,6 +662,9 @@
             </div>
             <div class="receipt-preview-actions">
                 <button class="btn-receipt-close" onclick="closeReceiptPreview()">Close</button>
+                <button class="btn-receipt-download" id="btnDownloadReceipt" onclick="downloadReceiptPDF()">
+                    ⬇️ Download PDF
+                </button>
                 <button class="btn-receipt-print" onclick="confirmPrintReceipt()">
                     🖨️ Print Receipt
                 </button>
@@ -1029,6 +1053,47 @@
 
         window.closeReceiptPreview = function() {
             document.getElementById('receiptPreviewModal').style.display = 'none';
+        };
+
+        window.downloadReceiptPDF = async function() {
+            const btn = document.getElementById('btnDownloadReceipt');
+            const card = document.getElementById('receiptPreviewCard');
+            if (!card || !lastOrderDetails) return;
+
+            btn.disabled = true;
+            btn.textContent = '⏳ Generating...';
+
+            try {
+                // Render the receipt card exactly as it looks on screen
+                const canvas = await html2canvas(card, {
+                    scale: 3,
+                    useCORS: true,
+                    backgroundColor: '#FAFAFA',
+                    logging: false
+                });
+
+                const imgData = canvas.toDataURL('image/png');
+                const { jsPDF } = window.jspdf;
+
+                // Receipt width ~80mm, height scales proportionally
+                const pdfWidthMM = 88;
+                const pxPerMM = canvas.width / pdfWidthMM;
+                const pdfHeightMM = canvas.height / pxPerMM;
+
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: [pdfWidthMM, pdfHeightMM]
+                });
+
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidthMM, pdfHeightMM);
+                pdf.save(`AuraPOS_Receipt_${lastOrderDetails.num}.pdf`);
+            } catch (err) {
+                console.error('PDF generation failed:', err);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '⬇️ Download PDF';
+            }
         };
 
         window.confirmPrintReceipt = function() {
