@@ -308,6 +308,185 @@
     
         .success-icon { font-size: 50px; color: var(--success); margin-bottom: 10px; }
         .order-number-display { font-size: 40px; font-weight: 800; color: var(--primary); margin: 15px 0; letter-spacing: 2px; }
+
+        /* ── Receipt Preview Modal ── */
+        #receiptPreviewModal {
+            display: none;
+            position: fixed;
+            z-index: 4000;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(26, 28, 30, 0.85);
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(8px);
+        }
+        .receipt-preview-wrapper {
+            background: var(--white);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+            width: 420px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .receipt-preview-header {
+            background: var(--primary);
+            color: var(--white);
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .receipt-preview-header h2 {
+            font-size: 20px;
+            font-weight: 800;
+            margin: 0;
+        }
+        .receipt-preview-header span {
+            font-size: 13px;
+            color: rgba(255,255,255,0.6);
+            font-weight: 600;
+        }
+        .receipt-preview-body {
+            overflow-y: auto;
+            padding: 28px;
+            flex: 1;
+        }
+        .receipt-preview-body::-webkit-scrollbar { width: 4px; }
+        .receipt-preview-body::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
+        .receipt-card {
+            background: #FAFAFA;
+            border: 1px dashed #C8C8C8;
+            border-radius: 16px;
+            padding: 24px 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            color: #111;
+        }
+        .receipt-brand {
+            text-align: center;
+            margin-bottom: 18px;
+            padding-bottom: 14px;
+            border-bottom: 2px dashed #aaa;
+        }
+        .receipt-brand .brand-name {
+            font-size: 26px;
+            font-weight: 900;
+            letter-spacing: 6px;
+            color: #1A1C1E;
+        }
+        .receipt-brand .brand-sub {
+            font-size: 12px;
+            color: #555;
+            margin-top: 2px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .receipt-meta {
+            margin-bottom: 14px;
+            padding-bottom: 14px;
+            border-bottom: 2px dashed #aaa;
+            line-height: 1.9;
+        }
+        .receipt-meta-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12.5px;
+        }
+        .receipt-meta-row .label { color: #666; }
+        .receipt-meta-row .value { font-weight: 700; color: #111; }
+        .receipt-items {
+            margin-bottom: 14px;
+            padding-bottom: 14px;
+            border-bottom: 2px dashed #aaa;
+        }
+        .receipt-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 6px 0;
+            font-size: 13px;
+            border-bottom: 1px dotted #e0e0e0;
+        }
+        .receipt-item-row:last-child { border-bottom: none; }
+        .receipt-item-name { flex: 1; font-weight: 600; }
+        .receipt-item-qty { color: #888; font-size: 12px; margin-right: 10px; white-space: nowrap; }
+        .receipt-item-price { font-weight: 700; white-space: nowrap; }
+        .receipt-totals { margin-bottom: 8px; }
+        .receipt-total-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            padding: 4px 0;
+            color: #555;
+        }
+        .receipt-total-row.grand {
+            font-size: 17px;
+            font-weight: 900;
+            color: #000;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 2px solid #111;
+        }
+        .receipt-footer {
+            text-align: center;
+            margin-top: 18px;
+            padding-top: 14px;
+            border-top: 2px dashed #aaa;
+            font-size: 12px;
+            color: #555;
+            line-height: 1.8;
+        }
+        .receipt-footer .thank-you {
+            font-size: 14px;
+            font-weight: 800;
+            color: #111;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        .receipt-preview-actions {
+            padding: 20px 24px;
+            background: var(--bg-light);
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+        .btn-receipt-close {
+            flex: 1;
+            padding: 14px;
+            background: var(--bg-light);
+            border: 2px solid var(--border);
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            color: var(--text-dark);
+            transition: var(--transition);
+        }
+        .btn-receipt-close:hover { background: #e0e4e8; }
+        .btn-receipt-print {
+            flex: 2;
+            padding: 14px;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 9999px;
+            font-weight: 800;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-receipt-print:hover { background: #000; transform: scale(1.02); }
+        .btn-receipt-print:active { transform: scale(0.98); }
+
         @media print {
             body * { visibility: hidden; }
             #receipt-print, #receipt-print * { visibility: visible; }
@@ -447,6 +626,28 @@
             </div>
         </div>
     </div>
+
+    <!-- ── Receipt Preview Modal ── -->
+    <div id="receiptPreviewModal">
+        <div class="receipt-preview-wrapper">
+            <div class="receipt-preview-header">
+                <h2>🧾 Receipt Preview</h2>
+                <span>Review before printing</span>
+            </div>
+            <div class="receipt-preview-body">
+                <div class="receipt-card" id="receiptPreviewCard">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+            <div class="receipt-preview-actions">
+                <button class="btn-receipt-close" onclick="closeReceiptPreview()">Close</button>
+                <button class="btn-receipt-print" onclick="confirmPrintReceipt()">
+                    🖨️ Print Receipt
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div id="receipt-print" style="display:none; font-family: monospace; font-size: 12px; text-align: center;"></div>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -733,10 +934,115 @@
                 confirmBtn.disabled = true;
             }
         };
-        function printReceipt(orderNum, items, total) {
+
+        // ════════════════════════════════════════════════════════════════════════════════
+        // RECEIPT PREVIEW — shows a styled preview modal before printing
+        // ════════════════════════════════════════════════════════════════════════════════
+        function buildReceiptHTML(orderNum, items, total) {
+            const now = new Date();
+            const vatAmount = (total * 15) / 115;
+            const subtotal = total - vatAmount;
+            const tendered = parseFloat(document.getElementById('tenderInput').value) || total;
+            const change = Math.max(0, tendered - total);
+
+            const itemsHTML = items.map(i => `
+                <div class="receipt-item-row">
+                    <span class="receipt-item-name">${i.name}</span>
+                    <span class="receipt-item-qty">× ${i.qty}</span>
+                    <span class="receipt-item-price">R ${(i.price * i.qty).toFixed(2)}</span>
+                </div>
+            `).join('');
+
+            return `
+                <div class="receipt-brand">
+                    <div class="brand-name">AURA</div>
+                    <div class="brand-sub">Point of Sale Receipt</div>
+                </div>
+
+                <div class="receipt-meta">
+                    <div class="receipt-meta-row">
+                        <span class="label">Order #</span>
+                        <span class="value">${orderNum}</span>
+                    </div>
+                    <div class="receipt-meta-row">
+                        <span class="label">Cashier</span>
+                        <span class="value">${currentCashier.name}</span>
+                    </div>
+                    <div class="receipt-meta-row">
+                        <span class="label">Customer</span>
+                        <span class="value">In-Store Customer</span>
+                    </div>
+                    <div class="receipt-meta-row">
+                        <span class="label">Date</span>
+                        <span class="value">${now.toLocaleDateString('en-ZA')}</span>
+                    </div>
+                    <div class="receipt-meta-row">
+                        <span class="label">Time</span>
+                        <span class="value">${now.toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}</span>
+                    </div>
+                    <div class="receipt-meta-row">
+                        <span class="label">Payment</span>
+                        <span class="value">Cash</span>
+                    </div>
+                </div>
+
+                <div class="receipt-items">
+                    ${itemsHTML}
+                </div>
+
+                <div class="receipt-totals">
+                    <div class="receipt-total-row">
+                        <span>Subtotal (excl. VAT)</span>
+                        <span>R ${subtotal.toFixed(2)}</span>
+                    </div>
+                    <div class="receipt-total-row">
+                        <span>VAT (15% incl.)</span>
+                        <span>R ${vatAmount.toFixed(2)}</span>
+                    </div>
+                    <div class="receipt-total-row">
+                        <span>Tendered</span>
+                        <span>R ${tendered.toFixed(2)}</span>
+                    </div>
+                    <div class="receipt-total-row">
+                        <span>Change</span>
+                        <span>R ${change.toFixed(2)}</span>
+                    </div>
+                    <div class="receipt-total-row grand">
+                        <span>TOTAL</span>
+                        <span>R ${total.toFixed(2)}</span>
+                    </div>
+                </div>
+
+                <div class="receipt-footer">
+                    <div class="thank-you">THANK YOU!</div>
+                    Please come again<br>
+                    AuraPOS · Pretoria, ZA<br>
+                    VAT Reg: 1234567890123
+                </div>
+            `;
+        }
+
+        function showReceiptPreview(orderNum, items, total) {
+            document.getElementById('receiptPreviewCard').innerHTML = buildReceiptHTML(orderNum, items, total);
+            document.getElementById('receiptPreviewModal').style.display = 'flex';
+        }
+
+        window.closeReceiptPreview = function() {
+            document.getElementById('receiptPreviewModal').style.display = 'none';
+        };
+
+        window.confirmPrintReceipt = function() {
+            if (!lastOrderDetails) return;
+            const { num, items, total } = lastOrderDetails;
+
+            // Build the hidden print div
             const receiptDiv = document.getElementById('receipt-print');
             const now = new Date();
-            
+            const vatAmount = (total * 15) / 115;
+            const subtotal = total - vatAmount;
+            const tendered = parseFloat(document.getElementById('tenderInput').value) || total;
+            const change = Math.max(0, tendered - total);
+
             let itemsHtml = items.map(i => `
                 <div style="display:flex; justify-content:space-between; margin:4px 0; font-size:13px;">
                     <span>${i.qty} × ${i.name}</span>
@@ -744,60 +1050,60 @@
                 </div>
             `).join('');
 
-            const vatAmount = (total * 15) / 115;
-            const subtotal = total - vatAmount;
-
             receiptDiv.innerHTML = `
                 <div style="width: 300px; margin: 0 auto; padding: 15px; font-family: 'Courier New', Courier, monospace; font-size: 13px; line-height: 1.4; color: #000;">
                     <div style="text-align: center; margin-bottom: 15px;">
                         <div style="font-size: 22px; font-weight: 800; letter-spacing: 3px;">AURA</div>
                         <div style="font-size: 14px; font-weight: 600;">POS RECEIPT</div>
                     </div>
-                    
-                    <div style="border-top: 2px dashed #000; border-bottom: 2px dashed #000; padding: 10px 0;">
-                        <div><strong>Order #${orderNum}</strong></div>
+                    <div style="border-top: 2px dashed #000; border-bottom: 2px dashed #000; padding: 10px 0; margin-bottom: 12px;">
+                        <div><strong>Order #${num}</strong></div>
                         <div>Cashier: ${currentCashier.name}</div>
                         <div>Customer: In-Store Customer</div>
                         <div>${now.toLocaleDateString('en-ZA')} ${now.toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' })}</div>
+                        <div>Payment: Cash</div>
                     </div>
-
-                    <div style="margin: 15px 0;">
+                    <div style="margin: 12px 0;">
                         ${itemsHtml}
                     </div>
-
                     <div style="border-top: 2px dashed #000; padding-top: 10px;">
                         <div style="display: flex; justify-content: space-between;">
-                            <span>Subtotal</span>
-                            <span>R ${subtotal.toFixed(2)}</span>
+                            <span>Subtotal</span><span>R ${subtotal.toFixed(2)}</span>
                         </div>
                         <div style="display: flex; justify-content: space-between;">
-                            <span>VAT (15%)</span>
-                            <span>R ${vatAmount.toFixed(2)}</span>
+                            <span>VAT (15%)</span><span>R ${vatAmount.toFixed(2)}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Tendered</span><span>R ${tendered.toFixed(2)}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Change</span><span>R ${change.toFixed(2)}</span>
                         </div>
                         <div style="display: flex; justify-content: space-between; font-size: 16px; font-weight: 800; margin-top: 8px; padding-top: 8px; border-top: 2px solid #000;">
-                            <span>TOTAL</span>
-                            <span>R ${total.toFixed(2)}</span>
+                            <span>TOTAL</span><span>R ${total.toFixed(2)}</span>
                         </div>
                     </div>
-
                     <div style="text-align: center; margin-top: 25px; font-size: 12px;">
                         Paid in Cash<br>
                         Thank you for shopping with us!<br>
-                        Please come again
+                        Please come again<br>
+                        AuraPOS · Pretoria, ZA
                     </div>
                 </div>
             `;
             window.print();
-        }
+        };
+
         window.triggerReceiptPrint = function() {
             if(lastOrderDetails) {
-                printReceipt(
+                showReceiptPreview(
                     lastOrderDetails.num,
                     lastOrderDetails.items,
                     lastOrderDetails.total
                 );
             }
         };
+
         window.closeSuccessModal = function() {
             document.getElementById('successModal').style.display = 'none';
             lastOrderDetails = null;
