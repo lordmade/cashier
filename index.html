@@ -320,7 +320,7 @@
         <div class="login-card">
             <h2 style="margin-bottom: 20px; color: var(--accent);">AuraPOS Login</h2>
             <input type="text" id="cashierID" placeholder="Employee ID" onkeypress="if(event.key==='Enter') handleLogin()">
-            <button class="btn-login" id="loginBtn" onclick="handleLogin()">Enter System</button>
+            <button type="button" class="btn-login" id="loginBtn" onclick="handleLogin()" disabled>Enter System</button>
         </div>
     </div>
     <!-- Access Denied Modal -->
@@ -820,7 +820,7 @@
                     cell: "Walk-in",
                     source: "Cashier",
                     cashierName: currentCashier.name,
-                    cashierID: currentCashier.id,   <!-- ID still saved in database (for internal use) -->
+                    cashierID: currentCashier.id,
                     status: "Completed",
                     orderNumber: orderNumber
                 });
@@ -907,6 +907,19 @@
                 update(ref(db, `sales/${key}`), { status: 'Completed' });
             });
         };
+
+        // ── Login Button Fully Functional ──
+        // Button is now disabled until Employee ID is entered (prevents empty submissions)
+        const cashierIDInput = document.getElementById('cashierID');
+        const loginBtnEl = document.getElementById('loginBtn');
+        if (cashierIDInput && loginBtnEl) {
+            const updateButtonState = () => {
+                loginBtnEl.disabled = cashierIDInput.value.trim() === '';
+            };
+            cashierIDInput.addEventListener('input', updateButtonState);
+            // Set initial state
+            updateButtonState();
+        }
     </script>
 </body>
 </html>
