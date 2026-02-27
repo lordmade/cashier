@@ -21,7 +21,7 @@
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; user-select: none; }
         body { display: flex; height: 100vh; background-color: var(--bg-light); color: var(--text-dark); overflow: hidden; }
-     
+    
         /* Login Overlay */
         #loginOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -30,7 +30,7 @@
         }
         .login-card { background: var(--secondary); padding: 40px; border-radius: 20px; width: 350px; text-align: center; }
         .login-card input { width: 100%; padding: 12px; margin: 10px 0; border-radius: 8px; border: none; font-size: 16px; outline: none; }
-      
+     
         /* Pill-shaped buttons */
         .btn-login,
         .nav-btn,
@@ -120,7 +120,7 @@
         .view-section.active { display: flex; }
         .pos-menu-area { flex: 1; display: flex; flex-direction: column; padding: 20px; overflow-y: auto; }
         .header-title { font-size: 24px; font-weight: 800; margin-bottom: 20px; }
-     
+    
         .category-scroll { display: flex; gap: 10px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 10px; }
         .category-scroll::-webkit-scrollbar { height: 4px; }
         .category-scroll::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
@@ -150,7 +150,7 @@
             font-weight: 600;
             padding: 8px 16px;
         }
-     
+    
         .cart-items { flex: 1; overflow-y: auto; padding: 20px; list-style: none; }
         .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed var(--border); }
         .cart-item-details { flex: 1; }
@@ -161,7 +161,7 @@
         .cart-totals { padding: 20px; background: var(--bg-light); }
         .total-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: var(--text-muted); }
         .total-row.grand-total { font-size: 24px; font-weight: 800; color: var(--text-dark); margin-top: 10px; padding-top: 10px; border-top: 2px solid #ddd; }
-     
+    
         .pay-btn {
             width: 100%;
             padding: 18px;
@@ -296,16 +296,16 @@
             font-size: 16px;
         }
         .btn-cash:active { background: var(--accent); border-color: var(--accent); }
-     
+    
         .input-group { margin-bottom: 20px; }
         .input-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 5px; }
         .tender-input { width: 100%; padding: 15px; font-size: 24px; font-weight: 800; border: 2px solid var(--border); border-radius: 10px; text-align: right; outline: none; }
         .tender-input:focus { border-color: var(--accent); }
-     
+    
         .change-display { background: #e8f5e9; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
         .change-display span { display: block; font-size: 14px; color: var(--success); font-weight: 600; }
         .change-display h3 { font-size: 32px; color: var(--success); font-weight: 800; }
-     
+    
         .success-icon { font-size: 50px; color: var(--success); margin-bottom: 10px; }
         .order-number-display { font-size: 40px; font-weight: 800; color: var(--primary); margin: 15px 0; letter-spacing: 2px; }
         @media print {
@@ -323,7 +323,6 @@
             <button class="btn-login" id="loginBtn" onclick="handleLogin()">Enter System</button>
         </div>
     </div>
-
     <!-- Access Denied Modal -->
     <div id="accessDeniedModal" class="modal">
         <div class="modal-content">
@@ -339,7 +338,6 @@
             </div>
         </div>
     </div>
-
     <!-- Custom Message / Logout Confirmation Modal -->
     <div id="messageModal" class="modal">
         <div class="modal-content">
@@ -378,7 +376,7 @@
             <div class="category-scroll" id="posCategories"></div>
             <div class="menu-grid" id="posMenuGrid"></div>
         </div>
-     
+    
         <aside class="pos-cart-area">
             <div class="cart-header">
                 <h2>Current Order</h2>
@@ -453,7 +451,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, onValue, push, update, set, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-     
+    
         const firebaseConfig = {
             apiKey: "AIzaSyAxBT0oESoL62oz_x_Z8cMtdENWZPx4tMI",
             authDomain: "pinotp-d7ef5.firebaseapp.com",
@@ -491,7 +489,7 @@
         window.handleLogin = async function() {
             const loginBtn = document.getElementById('loginBtn');
             const id = document.getElementById('cashierID').value.trim().toUpperCase();
-          
+         
             if(!id) {
                 showAccessDeniedModal("");
                 return;
@@ -502,7 +500,7 @@
             try {
                 const employeeSnapshot = await get(employeesRef);
                 let employeeFound = null;
-              
+             
                 if (employeeSnapshot.exists()) {
                     const employees = employeeSnapshot.val();
                     Object.values(employees).forEach(emp => {
@@ -511,7 +509,7 @@
                         }
                     });
                 }
-              
+             
                 if(employeeFound) {
                     const name = employeeFound.name;
                     if(name) {
@@ -587,8 +585,6 @@
                             document.getElementById('loginOverlay').style.display = 'none';
                             showMessageModal("Welcome Back", `Logged in as ${currentCashier.name}`, 'success');
                         } else {
-                            // Employee no longer exists or was deleted → just go back to clean login screen
-                            // NO Access Denied modal (this was the bug)
                             localStorage.removeItem('aura_cashier');
                             document.getElementById('loginOverlay').style.display = 'flex';
                         }
@@ -600,7 +596,7 @@
             }
         });
         // ════════════════════════════════════════════════════════════════════════════════
-        // POS SYSTEM FUNCTIONS (unchanged)
+        // POS SYSTEM FUNCTIONS
         // ════════════════════════════════════════════════════════════════════════════════
         window.switchTab = function(tab) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
@@ -619,7 +615,7 @@
             container.innerHTML = '';
             const categories = new Set();
             Object.values(inventoryData).forEach(item => categories.add(item.category || 'General'));
-         
+        
             const allBtn = document.createElement('button');
             allBtn.className = `cat-btn ${!selectedCategory ? 'active' : ''}`;
             allBtn.innerText = "All";
@@ -640,7 +636,7 @@
             Object.entries(inventoryData).forEach(([key, item]) => {
                 const cat = item.category || 'General';
                 if (selectedCategory && cat !== selectedCategory) return;
-             
+            
                 const finalPrice = item.discount > 0 ? (item.price - (item.price * item.discount / 100)) : item.price;
                 const card = document.createElement('div');
                 card.className = 'menu-item';
@@ -667,7 +663,7 @@
             const list = document.getElementById('posCartList');
             list.innerHTML = '';
             let total = 0;
-         
+        
             Object.entries(cart).forEach(([key, item]) => {
                 const sub = item.price * item.qty;
                 total += sub;
@@ -728,7 +724,7 @@
             const change = tendered - currentTotal;
             const changeDisplay = document.getElementById('changeDue');
             const confirmBtn = document.getElementById('btnConfirmPayment');
-         
+        
             if (change >= 0) {
                 changeDisplay.innerText = change.toFixed(2);
                 confirmBtn.disabled = false;
@@ -740,32 +736,56 @@
         function printReceipt(orderNum, items, total) {
             const receiptDiv = document.getElementById('receipt-print');
             const now = new Date();
+            
             let itemsHtml = items.map(i => `
-                <div style="display:flex; justify-content:space-between; margin-bottom:4px; font-size:13px;">
+                <div style="display:flex; justify-content:space-between; margin:4px 0; font-size:13px;">
                     <span>${i.qty} × ${i.name}</span>
-                    <span>R${(i.price * i.qty).toFixed(2)}</span>
-                </div>`).join('');
-         
+                    <span>R ${(i.price * i.qty).toFixed(2)}</span>
+                </div>
+            `).join('');
+
+            const vatAmount = (total * 15) / 115;
+            const subtotal = total - vatAmount;
+
             receiptDiv.innerHTML = `
-                <div style="font-weight:bold; font-size:16px;">AURAPOS RECEIPT</div>
-                <div style="margin:6px 0; font-size:13px;">Order #${orderNum}</div>
-                <hr style="border-top:1px dashed #000; margin:8px 0;">
-                <div style="text-align:left; font-size:13px; line-height:1.4;">
-                    <div><strong>Cashier:</strong> ${currentCashier.name} (ID: ${currentCashier.id})</div>
-                    <div><strong>Date:</strong> ${now.toLocaleDateString('en-ZA')}</div>
-                    <div><strong>Time:</strong> ${now.toLocaleTimeString('en-ZA', {hour12:false})}</div>
+                <div style="width: 300px; margin: 0 auto; padding: 15px; font-family: 'Courier New', Courier, monospace; font-size: 13px; line-height: 1.4; color: #000;">
+                    <div style="text-align: center; margin-bottom: 15px;">
+                        <div style="font-size: 22px; font-weight: 800; letter-spacing: 3px;">AURA</div>
+                        <div style="font-size: 14px; font-weight: 600;">POS RECEIPT</div>
+                    </div>
+                    
+                    <div style="border-top: 2px dashed #000; border-bottom: 2px dashed #000; padding: 10px 0;">
+                        <div><strong>Order #${orderNum}</strong></div>
+                        <div>Cashier: ${currentCashier.name}</div>
+                        <div>Customer: In-Store Customer</div>
+                        <div>${now.toLocaleDateString('en-ZA')} ${now.toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' })}</div>
+                    </div>
+
+                    <div style="margin: 15px 0;">
+                        ${itemsHtml}
+                    </div>
+
+                    <div style="border-top: 2px dashed #000; padding-top: 10px;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Subtotal</span>
+                            <span>R ${subtotal.toFixed(2)}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>VAT (15%)</span>
+                            <span>R ${vatAmount.toFixed(2)}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 16px; font-weight: 800; margin-top: 8px; padding-top: 8px; border-top: 2px solid #000;">
+                            <span>TOTAL</span>
+                            <span>R ${total.toFixed(2)}</span>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 25px; font-size: 12px;">
+                        Paid in Cash<br>
+                        Thank you for shopping with us!<br>
+                        Please come again
+                    </div>
                 </div>
-                <hr style="border-top:1px dashed #000; margin:10px 0;">
-                <div style="text-align:left;">
-                    ${itemsHtml}
-                </div>
-                <hr style="border-top:1px dashed #000; margin:10px 0;">
-                <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:14px;">
-                    <span>TOTAL</span>
-                    <span>R ${total.toFixed(2)}</span>
-                </div>
-                <br>
-                <div style="font-size:12px;">Thank you for shopping with us!</div>
             `;
             window.print();
         }
@@ -789,7 +809,7 @@
             Object.entries(cart).forEach(([key, item]) => {
                 const currentQty = inventoryData[key]?.qty || 0;
                 update(ref(db, `inventory/${key}`), {qty: currentQty - item.qty});
-             
+            
                 itemsList.push({name: item.name, qty: item.qty, price: item.price});
                 push(salesRef, {
                     name: item.name,
@@ -800,7 +820,7 @@
                     cell: "Walk-in",
                     source: "Cashier",
                     cashierName: currentCashier.name,
-                    cashierID: currentCashier.id,
+                    cashierID: currentCashier.id,   <!-- ID still saved in database (for internal use) -->
                     status: "Completed",
                     orderNumber: orderNumber
                 });
@@ -812,7 +832,7 @@
             };
             document.getElementById('successOrderNumber').innerText = orderNumber;
             document.getElementById('successModal').style.display = 'flex';
-         
+        
             closeTenderModal();
             clearCart();
         };
@@ -825,12 +845,12 @@
         };
         function renderOrderQueue(salesData, search = '') {
             const groupedOrders = {};
-         
+        
             Object.entries(salesData).forEach(([saleKey, sale]) => {
                 const orderId = sale.orderNumber
                     ? `order_${sale.orderNumber}`
                     : `${sale.customer || 'guest'}_${Math.floor(sale.timestamp / 1000)}`;
-             
+            
                 if (!groupedOrders[orderId]) {
                     groupedOrders[orderId] = {
                         displayId: sale.orderNumber || Math.floor((sale.timestamp % 1000000) / 100),
@@ -844,12 +864,12 @@
                         saleKeys: []
                     };
                 }
-             
+            
                 groupedOrders[orderId].items.push(`${sale.qty}x ${sale.name}`);
                 groupedOrders[orderId].total += parseFloat(sale.revenue || 0);
                 groupedOrders[orderId].saleKeys.push(saleKey);
             });
-         
+        
             const sortedOrders = Object.values(groupedOrders).sort((a, b) => b.rawTimestamp - a.rawTimestamp);
             const grid = document.getElementById('ordersGrid');
             if(!grid) return;
@@ -861,11 +881,11 @@
                 const isPending = order.status !== 'Completed';
                 const card = document.createElement('div');
                 card.className = `order-card ${isPending ? 'pending' : 'completed'}`;
-             
+            
                 let actionButton = isPending
                     ? `<button class="btn-complete" onclick="markOrderCompleted(${JSON.stringify(order.saleKeys).replace(/"/g,'&quot;')})">Mark Complete</button>`
                     : `✓ Done`;
-             
+            
                 card.innerHTML = `
                     <div class="order-header">
                         <span class="order-id">#${order.displayId}</span>
