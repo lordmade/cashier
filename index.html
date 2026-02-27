@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AuraPOS | Cashier Terminal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400 ;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #1A1C1E;
@@ -437,13 +437,13 @@
     </div>
     <div id="receipt-print" style="display:none; font-family: monospace; font-size: 12px; text-align: center;"></div>
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, onValue, push, update, set, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js ";
+        import { getDatabase, ref, onValue, push, update, set, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js ";
      
         const firebaseConfig = {
             apiKey: "AIzaSyAxBT0oESoL62oz_x_Z8cMtdENWZPx4tMI",
             authDomain: "pinotp-d7ef5.firebaseapp.com",
-            databaseURL: "https://pinotp-d7ef5-default-rtdb.firebaseio.com",
+            databaseURL: "https://pinotp-d7ef5-default-rtdb.firebaseio.com ",
             projectId: "pinotp-d7ef5",
             storageBucket: "pinotp-d7ef5.firebasestorage.app",
             messagingSenderId: "708458917827",
@@ -631,7 +631,7 @@
                 const card = document.createElement('div');
                 card.className = 'menu-item';
                 card.innerHTML = `
-                    <img src="${item.imageURL || 'https://via.placeholder.com/150'}" alt="${item.name}">
+                    <img src="${item.imageURL || 'https://via.placeholder.com/150 '}" alt="${item.name}">
                     <h4>${item.name}</h4>
                     <p>R ${parseFloat(finalPrice).toFixed(2)}</p>
                     ${item.qty <= 0 ? '<span style="color:red; font-size:10px;">Out of Stock</span>' : ''}
@@ -875,4 +875,4 @@
         };
     </script>
 </body>
-</html>
+</html> 
