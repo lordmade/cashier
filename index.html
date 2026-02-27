@@ -748,16 +748,12 @@
             document.getElementById('cashierID').focus();
         };
         window.handleLogin = async function() {
-            const loginBtn = document.getElementById('loginBtn');
             const id = document.getElementById('cashierID').value.trim().toUpperCase();
          
             if(!id) {
                 showAccessDeniedModal("");
                 return;
             }
-            // Disable button during login
-            loginBtn.disabled = true;
-            loginBtn.innerText = 'Logging in...';
             try {
                 const employeeSnapshot = await get(employeesRef);
                 let employeeFound = null;
@@ -781,18 +777,12 @@
                         showMessageModal("Login Successful", `Welcome, ${name}!`, 'success');
                     } else {
                         showAccessDeniedModal(id);
-                        loginBtn.disabled = false;
-                        loginBtn.innerText = 'Enter System';
                     }
                 } else {
                     showAccessDeniedModal(id);
-                    loginBtn.disabled = false;
-                    loginBtn.innerText = 'Enter System';
                 }
             } catch(err) {
                 showAccessDeniedModal(id);
-                loginBtn.disabled = false;
-                loginBtn.innerText = 'Enter System';
             }
         };
         window.handleLogout = function() {
