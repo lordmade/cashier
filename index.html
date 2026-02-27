@@ -470,24 +470,6 @@
             transition: var(--transition);
         }
         .btn-receipt-close:hover { background: #e0e4e8; }
-        .btn-receipt-print {
-            flex: 2;
-            padding: 14px;
-            background: var(--primary);
-            color: var(--white);
-            border: none;
-            border-radius: 9999px;
-            font-weight: 800;
-            font-size: 14px;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .btn-receipt-print:hover { background: #000; transform: scale(1.02); }
-        .btn-receipt-print:active { transform: scale(0.98); }
         .btn-receipt-download {
             flex: 2;
             padding: 14px;
@@ -507,6 +489,63 @@
         .btn-receipt-download:hover { background: #00a381; transform: scale(1.02); }
         .btn-receipt-download:active { transform: scale(0.98); }
         .btn-receipt-download:disabled { background: #aaa; cursor: not-allowed; transform: none; }
+
+        /* ── Hover Animations for ALL interactive elements ── */
+        .menu-item:hover,
+        .order-card:hover,
+        .cart-item:hover,
+        .nav-btn:hover,
+        .cat-btn:hover,
+        .btn-cash:hover,
+        .btn-modal:hover,
+        .pay-btn:hover,
+        .clear-btn:hover,
+        .btn-complete:hover {
+            transform: scale(1.04) translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+            z-index: 10;
+        }
+        .nav-btn:hover:not(.logout) {
+            color: var(--accent);
+        }
+        .btn-receipt-close:hover,
+        .btn-receipt-download:hover {
+            transform: scale(1.05);
+        }
+
+        /* ── 10-second Shimmer Effect (subtle premium shine on key elements) ── */
+        @keyframes shimmer {
+            0% {
+                left: -150%;
+            }
+            100% {
+                left: 250%;
+            }
+        }
+        .logo-sq,
+        .pay-btn,
+        .btn-receipt-download {
+            position: relative;
+            overflow: hidden;
+        }
+        .logo-sq::before,
+        .pay-btn::before,
+        .btn-receipt-download::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -150%;
+            width: 60%;
+            height: 200%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255,255,255,0.65),
+                transparent
+            );
+            animation: shimmer 10s linear infinite;
+            pointer-events: none;
+        }
 
         @media print {
             body * { visibility: hidden; }
@@ -664,9 +703,6 @@
                 <button class="btn-receipt-close" onclick="closeReceiptPreview()">Close</button>
                 <button class="btn-receipt-download" id="btnDownloadReceipt" onclick="downloadReceiptPDF()">
                     ⬇️ Download PDF
-                </button>
-                <button class="btn-receipt-print" onclick="confirmPrintReceipt()">
-                    🖨️ Print Receipt
                 </button>
             </div>
         </div>
